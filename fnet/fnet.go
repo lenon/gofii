@@ -21,7 +21,7 @@ type Client struct {
 }
 
 type Document struct {
-	Id                          int    `json:"id"`
+	ID                          int    `json:"id"`
 	AdditionalInformation       string `json:"informacoesAdicionais"`
 	DocumentCategory            string `json:"categoriaDocumento"`
 	DocumentStatus              string `json:"situacaoDocumento"`

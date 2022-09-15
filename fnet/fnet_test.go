@@ -66,7 +66,7 @@ func TestGetFirstPage(t *testing.T) {
 
 	assert.Nil(t, err)
 	assert.Equal(t, 3, len(response.Data))
-	assert.Equal(t, 789, response.Data[0].Id)
+	assert.Equal(t, 789, response.Data[0].ID)
 	assert.Equal(t, "14/09/2022 19:35", response.Data[0].SubmissionDate)
 	assert.Equal(t, 1333, client.TotalPages())
 }
