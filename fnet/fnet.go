@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"net/url"
 	"strconv"
+	"time"
 )
 
 type HTTPClient interface {
@@ -52,7 +53,9 @@ func NewClient() *Client {
 		UserAgent:    "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:104.0) Gecko/20100101 Firefox/104.0",
 		PageSize:     100,
 		TotalRecords: 0, // total number of records is only set after the first page request
-		HTTPClient:   &http.Client{},
+		HTTPClient: &http.Client{
+			Timeout: time.Duration(30) * time.Second, // timeout after 30s
+		},
 	}
 }
 
