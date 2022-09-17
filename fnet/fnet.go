@@ -42,7 +42,7 @@ type Document struct {
 }
 
 type Page struct {
-	RecordsTotal int        `json:"recordsTotal"`
+	TotalRecords int        `json:"recordsTotal"`
 	Data         []Document `json:"data"`
 }
 
@@ -95,7 +95,7 @@ func (c *Client) GetPage(page int) (*Page, error) {
 		return nil, err
 	}
 
-	c.TotalRecords = decoded.RecordsTotal
+	c.TotalRecords = decoded.TotalRecords
 
 	return &decoded, nil
 }
