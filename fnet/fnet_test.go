@@ -6,6 +6,7 @@ import (
 	"os"
 	"path/filepath"
 	"testing"
+	"time"
 
 	"github.com/lenon/gofii/fnet"
 	"github.com/stretchr/testify/assert"
@@ -69,6 +70,14 @@ func TestGetFirstPage(t *testing.T) {
 	assert.Equal(t, 789, response.Data[0].ID)
 	assert.Equal(t, "14/09/2022 19:35", response.Data[0].SubmissionDate)
 	assert.Equal(t, 1333, client.TotalPages())
+
+	submissionDate, err := response.Data[0].ParsedSubmissionDate()
+	assert.Nil(t, err)
+	assert.Equal(t, time.Date(2022, 9, 14, 19, 35, 0, 0, time.Local), submissionDate)
+
+	referenceDate, err := response.Data[0].ParsedReferenceDate()
+	assert.Nil(t, err)
+	assert.Equal(t, time.Date(2022, 9, 14, 0, 0, 0, 0, time.Local), referenceDate)
 }
 
 func TestGetFirstPageWithError(t *testing.T) {

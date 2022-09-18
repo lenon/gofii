@@ -110,3 +110,11 @@ func (c *Client) GetFirstPage() (*Page, error) {
 func (c *Client) TotalPages() int {
 	return NumberOfPages(c.TotalRecords, c.PageSize)
 }
+
+func (d *Document) ParsedReferenceDate() (time.Time, error) {
+	return ParseDate(d.ReferenceDate, d.ReferenceDateFormat)
+}
+
+func (d *Document) ParsedSubmissionDate() (time.Time, error) {
+	return ParseDate(d.SubmissionDate, DATE_FORMAT_DMY_HM)
+}
