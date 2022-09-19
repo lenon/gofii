@@ -25,22 +25,26 @@ const (
 	FieldHighPriority = "high_priority"
 	// FieldMarketName holds the string denoting the market_name field in the database.
 	FieldMarketName = "market_name"
-	// FieldReferenceDateFormat holds the string denoting the reference_date_format field in the database.
-	FieldReferenceDateFormat = "reference_date_format"
 	// FieldReferenceDate holds the string denoting the reference_date field in the database.
 	FieldReferenceDate = "reference_date"
+	// FieldReferenceDateFormat holds the string denoting the reference_date_format field in the database.
+	FieldReferenceDateFormat = "reference_date_format"
+	// FieldReferenceDateStr holds the string denoting the reference_date_str field in the database.
+	FieldReferenceDateStr = "reference_date_str"
 	// FieldReviewed holds the string denoting the reviewed field in the database.
 	FieldReviewed = "reviewed"
-	// FieldStatusDescription holds the string denoting the status_description field in the database.
-	FieldStatusDescription = "status_description"
 	// FieldStatus holds the string denoting the status field in the database.
 	FieldStatus = "status"
+	// FieldStatusDescription holds the string denoting the status_description field in the database.
+	FieldStatusDescription = "status_description"
 	// FieldSubmissionDate holds the string denoting the submission_date field in the database.
 	FieldSubmissionDate = "submission_date"
-	// FieldSubmissionMethodDescription holds the string denoting the submission_method_description field in the database.
-	FieldSubmissionMethodDescription = "submission_method_description"
+	// FieldSubmissionDateStr holds the string denoting the submission_date_str field in the database.
+	FieldSubmissionDateStr = "submission_date_str"
 	// FieldSubmissionMethod holds the string denoting the submission_method field in the database.
 	FieldSubmissionMethod = "submission_method"
+	// FieldSubmissionMethodDescription holds the string denoting the submission_method_description field in the database.
+	FieldSubmissionMethodDescription = "submission_method_description"
 	// FieldVersion holds the string denoting the version field in the database.
 	FieldVersion = "version"
 	// Table holds the table name of the fnetdocument in the database.
@@ -59,14 +63,16 @@ var Columns = []string{
 	FieldFundDescription,
 	FieldHighPriority,
 	FieldMarketName,
-	FieldReferenceDateFormat,
 	FieldReferenceDate,
+	FieldReferenceDateFormat,
+	FieldReferenceDateStr,
 	FieldReviewed,
-	FieldStatusDescription,
 	FieldStatus,
+	FieldStatusDescription,
 	FieldSubmissionDate,
-	FieldSubmissionMethodDescription,
+	FieldSubmissionDateStr,
 	FieldSubmissionMethod,
+	FieldSubmissionMethodDescription,
 	FieldVersion,
 }
 
@@ -91,20 +97,20 @@ var (
 	FundDescriptionValidator func(string) error
 	// ReferenceDateFormatValidator is a validator for the "reference_date_format" field. It is called by the builders before save.
 	ReferenceDateFormatValidator func(string) error
-	// ReferenceDateValidator is a validator for the "reference_date" field. It is called by the builders before save.
-	ReferenceDateValidator func(string) error
+	// ReferenceDateStrValidator is a validator for the "reference_date_str" field. It is called by the builders before save.
+	ReferenceDateStrValidator func(string) error
 	// ReviewedValidator is a validator for the "reviewed" field. It is called by the builders before save.
 	ReviewedValidator func(string) error
-	// StatusDescriptionValidator is a validator for the "status_description" field. It is called by the builders before save.
-	StatusDescriptionValidator func(string) error
 	// StatusValidator is a validator for the "status" field. It is called by the builders before save.
 	StatusValidator func(string) error
-	// SubmissionDateValidator is a validator for the "submission_date" field. It is called by the builders before save.
-	SubmissionDateValidator func(string) error
-	// SubmissionMethodDescriptionValidator is a validator for the "submission_method_description" field. It is called by the builders before save.
-	SubmissionMethodDescriptionValidator func(string) error
+	// StatusDescriptionValidator is a validator for the "status_description" field. It is called by the builders before save.
+	StatusDescriptionValidator func(string) error
+	// SubmissionDateStrValidator is a validator for the "submission_date_str" field. It is called by the builders before save.
+	SubmissionDateStrValidator func(string) error
 	// SubmissionMethodValidator is a validator for the "submission_method" field. It is called by the builders before save.
 	SubmissionMethodValidator func(string) error
+	// SubmissionMethodDescriptionValidator is a validator for the "submission_method_description" field. It is called by the builders before save.
+	SubmissionMethodDescriptionValidator func(string) error
 	// VersionValidator is a validator for the "version" field. It is called by the builders before save.
 	VersionValidator func(int) error
 )

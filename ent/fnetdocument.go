@@ -5,6 +5,7 @@ package ent
 import (
 	"fmt"
 	"strings"
+	"time"
 
 	"entgo.io/ent/dialect/sql"
 	"github.com/lenon/gofii/ent/fnetdocument"
@@ -33,22 +34,26 @@ type FnetDocument struct {
 	HighPriority bool `json:"high_priority,omitempty"`
 	// MarketName holds the value of the "market_name" field.
 	MarketName string `json:"market_name,omitempty"`
+	// ReferenceDate holds the value of the "reference_date" field.
+	ReferenceDate time.Time `json:"reference_date,omitempty"`
 	// ReferenceDateFormat holds the value of the "reference_date_format" field.
 	ReferenceDateFormat string `json:"reference_date_format,omitempty"`
-	// ReferenceDate holds the value of the "reference_date" field.
-	ReferenceDate string `json:"reference_date,omitempty"`
+	// ReferenceDateStr holds the value of the "reference_date_str" field.
+	ReferenceDateStr string `json:"reference_date_str,omitempty"`
 	// Reviewed holds the value of the "reviewed" field.
 	Reviewed string `json:"reviewed,omitempty"`
-	// StatusDescription holds the value of the "status_description" field.
-	StatusDescription string `json:"status_description,omitempty"`
 	// Status holds the value of the "status" field.
 	Status string `json:"status,omitempty"`
+	// StatusDescription holds the value of the "status_description" field.
+	StatusDescription string `json:"status_description,omitempty"`
 	// SubmissionDate holds the value of the "submission_date" field.
-	SubmissionDate string `json:"submission_date,omitempty"`
-	// SubmissionMethodDescription holds the value of the "submission_method_description" field.
-	SubmissionMethodDescription string `json:"submission_method_description,omitempty"`
+	SubmissionDate time.Time `json:"submission_date,omitempty"`
+	// SubmissionDateStr holds the value of the "submission_date_str" field.
+	SubmissionDateStr string `json:"submission_date_str,omitempty"`
 	// SubmissionMethod holds the value of the "submission_method" field.
 	SubmissionMethod string `json:"submission_method,omitempty"`
+	// SubmissionMethodDescription holds the value of the "submission_method_description" field.
+	SubmissionMethodDescription string `json:"submission_method_description,omitempty"`
 	// Version holds the value of the "version" field.
 	Version int `json:"version,omitempty"`
 }
@@ -62,8 +67,10 @@ func (*FnetDocument) scanValues(columns []string) ([]interface{}, error) {
 			values[i] = new(sql.NullBool)
 		case fnetdocument.FieldID, fnetdocument.FieldFnetID, fnetdocument.FieldVersion:
 			values[i] = new(sql.NullInt64)
-		case fnetdocument.FieldAdditionalInformation, fnetdocument.FieldDocumentCategory, fnetdocument.FieldDocumentStatus, fnetdocument.FieldDocumentSubCategory1, fnetdocument.FieldDocumentSubCategory2, fnetdocument.FieldFundDescription, fnetdocument.FieldMarketName, fnetdocument.FieldReferenceDateFormat, fnetdocument.FieldReferenceDate, fnetdocument.FieldReviewed, fnetdocument.FieldStatusDescription, fnetdocument.FieldStatus, fnetdocument.FieldSubmissionDate, fnetdocument.FieldSubmissionMethodDescription, fnetdocument.FieldSubmissionMethod:
+		case fnetdocument.FieldAdditionalInformation, fnetdocument.FieldDocumentCategory, fnetdocument.FieldDocumentStatus, fnetdocument.FieldDocumentSubCategory1, fnetdocument.FieldDocumentSubCategory2, fnetdocument.FieldFundDescription, fnetdocument.FieldMarketName, fnetdocument.FieldReferenceDateFormat, fnetdocument.FieldReferenceDateStr, fnetdocument.FieldReviewed, fnetdocument.FieldStatus, fnetdocument.FieldStatusDescription, fnetdocument.FieldSubmissionDateStr, fnetdocument.FieldSubmissionMethod, fnetdocument.FieldSubmissionMethodDescription:
 			values[i] = new(sql.NullString)
+		case fnetdocument.FieldReferenceDate, fnetdocument.FieldSubmissionDate:
+			values[i] = new(sql.NullTime)
 		default:
 			return nil, fmt.Errorf("unexpected column %q for type FnetDocument", columns[i])
 		}
@@ -139,17 +146,23 @@ func (fd *FnetDocument) assignValues(columns []string, values []interface{}) err
 			} else if value.Valid {
 				fd.MarketName = value.String
 			}
+		case fnetdocument.FieldReferenceDate:
+			if value, ok := values[i].(*sql.NullTime); !ok {
+				return fmt.Errorf("unexpected type %T for field reference_date", values[i])
+			} else if value.Valid {
+				fd.ReferenceDate = value.Time
+			}
 		case fnetdocument.FieldReferenceDateFormat:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field reference_date_format", values[i])
 			} else if value.Valid {
 				fd.ReferenceDateFormat = value.String
 			}
-		case fnetdocument.FieldReferenceDate:
+		case fnetdocument.FieldReferenceDateStr:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field reference_date", values[i])
+				return fmt.Errorf("unexpected type %T for field reference_date_str", values[i])
 			} else if value.Valid {
-				fd.ReferenceDate = value.String
+				fd.ReferenceDateStr = value.String
 			}
 		case fnetdocument.FieldReviewed:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -157,35 +170,41 @@ func (fd *FnetDocument) assignValues(columns []string, values []interface{}) err
 			} else if value.Valid {
 				fd.Reviewed = value.String
 			}
-		case fnetdocument.FieldStatusDescription:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field status_description", values[i])
-			} else if value.Valid {
-				fd.StatusDescription = value.String
-			}
 		case fnetdocument.FieldStatus:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field status", values[i])
 			} else if value.Valid {
 				fd.Status = value.String
 			}
-		case fnetdocument.FieldSubmissionDate:
+		case fnetdocument.FieldStatusDescription:
 			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field status_description", values[i])
+			} else if value.Valid {
+				fd.StatusDescription = value.String
+			}
+		case fnetdocument.FieldSubmissionDate:
+			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field submission_date", values[i])
 			} else if value.Valid {
-				fd.SubmissionDate = value.String
+				fd.SubmissionDate = value.Time
 			}
-		case fnetdocument.FieldSubmissionMethodDescription:
+		case fnetdocument.FieldSubmissionDateStr:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field submission_method_description", values[i])
+				return fmt.Errorf("unexpected type %T for field submission_date_str", values[i])
 			} else if value.Valid {
-				fd.SubmissionMethodDescription = value.String
+				fd.SubmissionDateStr = value.String
 			}
 		case fnetdocument.FieldSubmissionMethod:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field submission_method", values[i])
 			} else if value.Valid {
 				fd.SubmissionMethod = value.String
+			}
+		case fnetdocument.FieldSubmissionMethodDescription:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field submission_method_description", values[i])
+			} else if value.Valid {
+				fd.SubmissionMethodDescription = value.String
 			}
 		case fnetdocument.FieldVersion:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
@@ -248,29 +267,35 @@ func (fd *FnetDocument) String() string {
 	builder.WriteString("market_name=")
 	builder.WriteString(fd.MarketName)
 	builder.WriteString(", ")
+	builder.WriteString("reference_date=")
+	builder.WriteString(fd.ReferenceDate.Format(time.ANSIC))
+	builder.WriteString(", ")
 	builder.WriteString("reference_date_format=")
 	builder.WriteString(fd.ReferenceDateFormat)
 	builder.WriteString(", ")
-	builder.WriteString("reference_date=")
-	builder.WriteString(fd.ReferenceDate)
+	builder.WriteString("reference_date_str=")
+	builder.WriteString(fd.ReferenceDateStr)
 	builder.WriteString(", ")
 	builder.WriteString("reviewed=")
 	builder.WriteString(fd.Reviewed)
 	builder.WriteString(", ")
-	builder.WriteString("status_description=")
-	builder.WriteString(fd.StatusDescription)
-	builder.WriteString(", ")
 	builder.WriteString("status=")
 	builder.WriteString(fd.Status)
 	builder.WriteString(", ")
-	builder.WriteString("submission_date=")
-	builder.WriteString(fd.SubmissionDate)
+	builder.WriteString("status_description=")
+	builder.WriteString(fd.StatusDescription)
 	builder.WriteString(", ")
-	builder.WriteString("submission_method_description=")
-	builder.WriteString(fd.SubmissionMethodDescription)
+	builder.WriteString("submission_date=")
+	builder.WriteString(fd.SubmissionDate.Format(time.ANSIC))
+	builder.WriteString(", ")
+	builder.WriteString("submission_date_str=")
+	builder.WriteString(fd.SubmissionDateStr)
 	builder.WriteString(", ")
 	builder.WriteString("submission_method=")
 	builder.WriteString(fd.SubmissionMethod)
+	builder.WriteString(", ")
+	builder.WriteString("submission_method_description=")
+	builder.WriteString(fd.SubmissionMethodDescription)
 	builder.WriteString(", ")
 	builder.WriteString("version=")
 	builder.WriteString(fmt.Sprintf("%v", fd.Version))

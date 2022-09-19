@@ -6,6 +6,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"time"
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
@@ -131,15 +132,21 @@ func (fdu *FnetDocumentUpdate) ClearMarketName() *FnetDocumentUpdate {
 	return fdu
 }
 
+// SetReferenceDate sets the "reference_date" field.
+func (fdu *FnetDocumentUpdate) SetReferenceDate(t time.Time) *FnetDocumentUpdate {
+	fdu.mutation.SetReferenceDate(t)
+	return fdu
+}
+
 // SetReferenceDateFormat sets the "reference_date_format" field.
 func (fdu *FnetDocumentUpdate) SetReferenceDateFormat(s string) *FnetDocumentUpdate {
 	fdu.mutation.SetReferenceDateFormat(s)
 	return fdu
 }
 
-// SetReferenceDate sets the "reference_date" field.
-func (fdu *FnetDocumentUpdate) SetReferenceDate(s string) *FnetDocumentUpdate {
-	fdu.mutation.SetReferenceDate(s)
+// SetReferenceDateStr sets the "reference_date_str" field.
+func (fdu *FnetDocumentUpdate) SetReferenceDateStr(s string) *FnetDocumentUpdate {
+	fdu.mutation.SetReferenceDateStr(s)
 	return fdu
 }
 
@@ -149,33 +156,39 @@ func (fdu *FnetDocumentUpdate) SetReviewed(s string) *FnetDocumentUpdate {
 	return fdu
 }
 
-// SetStatusDescription sets the "status_description" field.
-func (fdu *FnetDocumentUpdate) SetStatusDescription(s string) *FnetDocumentUpdate {
-	fdu.mutation.SetStatusDescription(s)
-	return fdu
-}
-
 // SetStatus sets the "status" field.
 func (fdu *FnetDocumentUpdate) SetStatus(s string) *FnetDocumentUpdate {
 	fdu.mutation.SetStatus(s)
 	return fdu
 }
 
-// SetSubmissionDate sets the "submission_date" field.
-func (fdu *FnetDocumentUpdate) SetSubmissionDate(s string) *FnetDocumentUpdate {
-	fdu.mutation.SetSubmissionDate(s)
+// SetStatusDescription sets the "status_description" field.
+func (fdu *FnetDocumentUpdate) SetStatusDescription(s string) *FnetDocumentUpdate {
+	fdu.mutation.SetStatusDescription(s)
 	return fdu
 }
 
-// SetSubmissionMethodDescription sets the "submission_method_description" field.
-func (fdu *FnetDocumentUpdate) SetSubmissionMethodDescription(s string) *FnetDocumentUpdate {
-	fdu.mutation.SetSubmissionMethodDescription(s)
+// SetSubmissionDate sets the "submission_date" field.
+func (fdu *FnetDocumentUpdate) SetSubmissionDate(t time.Time) *FnetDocumentUpdate {
+	fdu.mutation.SetSubmissionDate(t)
+	return fdu
+}
+
+// SetSubmissionDateStr sets the "submission_date_str" field.
+func (fdu *FnetDocumentUpdate) SetSubmissionDateStr(s string) *FnetDocumentUpdate {
+	fdu.mutation.SetSubmissionDateStr(s)
 	return fdu
 }
 
 // SetSubmissionMethod sets the "submission_method" field.
 func (fdu *FnetDocumentUpdate) SetSubmissionMethod(s string) *FnetDocumentUpdate {
 	fdu.mutation.SetSubmissionMethod(s)
+	return fdu
+}
+
+// SetSubmissionMethodDescription sets the "submission_method_description" field.
+func (fdu *FnetDocumentUpdate) SetSubmissionMethodDescription(s string) *FnetDocumentUpdate {
+	fdu.mutation.SetSubmissionMethodDescription(s)
 	return fdu
 }
 
@@ -279,9 +292,9 @@ func (fdu *FnetDocumentUpdate) check() error {
 			return &ValidationError{Name: "reference_date_format", err: fmt.Errorf(`ent: validator failed for field "FnetDocument.reference_date_format": %w`, err)}
 		}
 	}
-	if v, ok := fdu.mutation.ReferenceDate(); ok {
-		if err := fnetdocument.ReferenceDateValidator(v); err != nil {
-			return &ValidationError{Name: "reference_date", err: fmt.Errorf(`ent: validator failed for field "FnetDocument.reference_date": %w`, err)}
+	if v, ok := fdu.mutation.ReferenceDateStr(); ok {
+		if err := fnetdocument.ReferenceDateStrValidator(v); err != nil {
+			return &ValidationError{Name: "reference_date_str", err: fmt.Errorf(`ent: validator failed for field "FnetDocument.reference_date_str": %w`, err)}
 		}
 	}
 	if v, ok := fdu.mutation.Reviewed(); ok {
@@ -289,29 +302,29 @@ func (fdu *FnetDocumentUpdate) check() error {
 			return &ValidationError{Name: "reviewed", err: fmt.Errorf(`ent: validator failed for field "FnetDocument.reviewed": %w`, err)}
 		}
 	}
-	if v, ok := fdu.mutation.StatusDescription(); ok {
-		if err := fnetdocument.StatusDescriptionValidator(v); err != nil {
-			return &ValidationError{Name: "status_description", err: fmt.Errorf(`ent: validator failed for field "FnetDocument.status_description": %w`, err)}
-		}
-	}
 	if v, ok := fdu.mutation.Status(); ok {
 		if err := fnetdocument.StatusValidator(v); err != nil {
 			return &ValidationError{Name: "status", err: fmt.Errorf(`ent: validator failed for field "FnetDocument.status": %w`, err)}
 		}
 	}
-	if v, ok := fdu.mutation.SubmissionDate(); ok {
-		if err := fnetdocument.SubmissionDateValidator(v); err != nil {
-			return &ValidationError{Name: "submission_date", err: fmt.Errorf(`ent: validator failed for field "FnetDocument.submission_date": %w`, err)}
+	if v, ok := fdu.mutation.StatusDescription(); ok {
+		if err := fnetdocument.StatusDescriptionValidator(v); err != nil {
+			return &ValidationError{Name: "status_description", err: fmt.Errorf(`ent: validator failed for field "FnetDocument.status_description": %w`, err)}
 		}
 	}
-	if v, ok := fdu.mutation.SubmissionMethodDescription(); ok {
-		if err := fnetdocument.SubmissionMethodDescriptionValidator(v); err != nil {
-			return &ValidationError{Name: "submission_method_description", err: fmt.Errorf(`ent: validator failed for field "FnetDocument.submission_method_description": %w`, err)}
+	if v, ok := fdu.mutation.SubmissionDateStr(); ok {
+		if err := fnetdocument.SubmissionDateStrValidator(v); err != nil {
+			return &ValidationError{Name: "submission_date_str", err: fmt.Errorf(`ent: validator failed for field "FnetDocument.submission_date_str": %w`, err)}
 		}
 	}
 	if v, ok := fdu.mutation.SubmissionMethod(); ok {
 		if err := fnetdocument.SubmissionMethodValidator(v); err != nil {
 			return &ValidationError{Name: "submission_method", err: fmt.Errorf(`ent: validator failed for field "FnetDocument.submission_method": %w`, err)}
+		}
+	}
+	if v, ok := fdu.mutation.SubmissionMethodDescription(); ok {
+		if err := fnetdocument.SubmissionMethodDescriptionValidator(v); err != nil {
+			return &ValidationError{Name: "submission_method_description", err: fmt.Errorf(`ent: validator failed for field "FnetDocument.submission_method_description": %w`, err)}
 		}
 	}
 	if v, ok := fdu.mutation.Version(); ok {
@@ -420,6 +433,13 @@ func (fdu *FnetDocumentUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Column: fnetdocument.FieldMarketName,
 		})
 	}
+	if value, ok := fdu.mutation.ReferenceDate(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeTime,
+			Value:  value,
+			Column: fnetdocument.FieldReferenceDate,
+		})
+	}
 	if value, ok := fdu.mutation.ReferenceDateFormat(); ok {
 		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
 			Type:   field.TypeString,
@@ -427,11 +447,11 @@ func (fdu *FnetDocumentUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Column: fnetdocument.FieldReferenceDateFormat,
 		})
 	}
-	if value, ok := fdu.mutation.ReferenceDate(); ok {
+	if value, ok := fdu.mutation.ReferenceDateStr(); ok {
 		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
 			Type:   field.TypeString,
 			Value:  value,
-			Column: fnetdocument.FieldReferenceDate,
+			Column: fnetdocument.FieldReferenceDateStr,
 		})
 	}
 	if value, ok := fdu.mutation.Reviewed(); ok {
@@ -441,13 +461,6 @@ func (fdu *FnetDocumentUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Column: fnetdocument.FieldReviewed,
 		})
 	}
-	if value, ok := fdu.mutation.StatusDescription(); ok {
-		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeString,
-			Value:  value,
-			Column: fnetdocument.FieldStatusDescription,
-		})
-	}
 	if value, ok := fdu.mutation.Status(); ok {
 		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
 			Type:   field.TypeString,
@@ -455,18 +468,25 @@ func (fdu *FnetDocumentUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Column: fnetdocument.FieldStatus,
 		})
 	}
-	if value, ok := fdu.mutation.SubmissionDate(); ok {
+	if value, ok := fdu.mutation.StatusDescription(); ok {
 		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
 			Type:   field.TypeString,
+			Value:  value,
+			Column: fnetdocument.FieldStatusDescription,
+		})
+	}
+	if value, ok := fdu.mutation.SubmissionDate(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeTime,
 			Value:  value,
 			Column: fnetdocument.FieldSubmissionDate,
 		})
 	}
-	if value, ok := fdu.mutation.SubmissionMethodDescription(); ok {
+	if value, ok := fdu.mutation.SubmissionDateStr(); ok {
 		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
 			Type:   field.TypeString,
 			Value:  value,
-			Column: fnetdocument.FieldSubmissionMethodDescription,
+			Column: fnetdocument.FieldSubmissionDateStr,
 		})
 	}
 	if value, ok := fdu.mutation.SubmissionMethod(); ok {
@@ -474,6 +494,13 @@ func (fdu *FnetDocumentUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Type:   field.TypeString,
 			Value:  value,
 			Column: fnetdocument.FieldSubmissionMethod,
+		})
+	}
+	if value, ok := fdu.mutation.SubmissionMethodDescription(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Value:  value,
+			Column: fnetdocument.FieldSubmissionMethodDescription,
 		})
 	}
 	if value, ok := fdu.mutation.Version(); ok {
@@ -613,15 +640,21 @@ func (fduo *FnetDocumentUpdateOne) ClearMarketName() *FnetDocumentUpdateOne {
 	return fduo
 }
 
+// SetReferenceDate sets the "reference_date" field.
+func (fduo *FnetDocumentUpdateOne) SetReferenceDate(t time.Time) *FnetDocumentUpdateOne {
+	fduo.mutation.SetReferenceDate(t)
+	return fduo
+}
+
 // SetReferenceDateFormat sets the "reference_date_format" field.
 func (fduo *FnetDocumentUpdateOne) SetReferenceDateFormat(s string) *FnetDocumentUpdateOne {
 	fduo.mutation.SetReferenceDateFormat(s)
 	return fduo
 }
 
-// SetReferenceDate sets the "reference_date" field.
-func (fduo *FnetDocumentUpdateOne) SetReferenceDate(s string) *FnetDocumentUpdateOne {
-	fduo.mutation.SetReferenceDate(s)
+// SetReferenceDateStr sets the "reference_date_str" field.
+func (fduo *FnetDocumentUpdateOne) SetReferenceDateStr(s string) *FnetDocumentUpdateOne {
+	fduo.mutation.SetReferenceDateStr(s)
 	return fduo
 }
 
@@ -631,33 +664,39 @@ func (fduo *FnetDocumentUpdateOne) SetReviewed(s string) *FnetDocumentUpdateOne 
 	return fduo
 }
 
-// SetStatusDescription sets the "status_description" field.
-func (fduo *FnetDocumentUpdateOne) SetStatusDescription(s string) *FnetDocumentUpdateOne {
-	fduo.mutation.SetStatusDescription(s)
-	return fduo
-}
-
 // SetStatus sets the "status" field.
 func (fduo *FnetDocumentUpdateOne) SetStatus(s string) *FnetDocumentUpdateOne {
 	fduo.mutation.SetStatus(s)
 	return fduo
 }
 
-// SetSubmissionDate sets the "submission_date" field.
-func (fduo *FnetDocumentUpdateOne) SetSubmissionDate(s string) *FnetDocumentUpdateOne {
-	fduo.mutation.SetSubmissionDate(s)
+// SetStatusDescription sets the "status_description" field.
+func (fduo *FnetDocumentUpdateOne) SetStatusDescription(s string) *FnetDocumentUpdateOne {
+	fduo.mutation.SetStatusDescription(s)
 	return fduo
 }
 
-// SetSubmissionMethodDescription sets the "submission_method_description" field.
-func (fduo *FnetDocumentUpdateOne) SetSubmissionMethodDescription(s string) *FnetDocumentUpdateOne {
-	fduo.mutation.SetSubmissionMethodDescription(s)
+// SetSubmissionDate sets the "submission_date" field.
+func (fduo *FnetDocumentUpdateOne) SetSubmissionDate(t time.Time) *FnetDocumentUpdateOne {
+	fduo.mutation.SetSubmissionDate(t)
+	return fduo
+}
+
+// SetSubmissionDateStr sets the "submission_date_str" field.
+func (fduo *FnetDocumentUpdateOne) SetSubmissionDateStr(s string) *FnetDocumentUpdateOne {
+	fduo.mutation.SetSubmissionDateStr(s)
 	return fduo
 }
 
 // SetSubmissionMethod sets the "submission_method" field.
 func (fduo *FnetDocumentUpdateOne) SetSubmissionMethod(s string) *FnetDocumentUpdateOne {
 	fduo.mutation.SetSubmissionMethod(s)
+	return fduo
+}
+
+// SetSubmissionMethodDescription sets the "submission_method_description" field.
+func (fduo *FnetDocumentUpdateOne) SetSubmissionMethodDescription(s string) *FnetDocumentUpdateOne {
+	fduo.mutation.SetSubmissionMethodDescription(s)
 	return fduo
 }
 
@@ -774,9 +813,9 @@ func (fduo *FnetDocumentUpdateOne) check() error {
 			return &ValidationError{Name: "reference_date_format", err: fmt.Errorf(`ent: validator failed for field "FnetDocument.reference_date_format": %w`, err)}
 		}
 	}
-	if v, ok := fduo.mutation.ReferenceDate(); ok {
-		if err := fnetdocument.ReferenceDateValidator(v); err != nil {
-			return &ValidationError{Name: "reference_date", err: fmt.Errorf(`ent: validator failed for field "FnetDocument.reference_date": %w`, err)}
+	if v, ok := fduo.mutation.ReferenceDateStr(); ok {
+		if err := fnetdocument.ReferenceDateStrValidator(v); err != nil {
+			return &ValidationError{Name: "reference_date_str", err: fmt.Errorf(`ent: validator failed for field "FnetDocument.reference_date_str": %w`, err)}
 		}
 	}
 	if v, ok := fduo.mutation.Reviewed(); ok {
@@ -784,29 +823,29 @@ func (fduo *FnetDocumentUpdateOne) check() error {
 			return &ValidationError{Name: "reviewed", err: fmt.Errorf(`ent: validator failed for field "FnetDocument.reviewed": %w`, err)}
 		}
 	}
-	if v, ok := fduo.mutation.StatusDescription(); ok {
-		if err := fnetdocument.StatusDescriptionValidator(v); err != nil {
-			return &ValidationError{Name: "status_description", err: fmt.Errorf(`ent: validator failed for field "FnetDocument.status_description": %w`, err)}
-		}
-	}
 	if v, ok := fduo.mutation.Status(); ok {
 		if err := fnetdocument.StatusValidator(v); err != nil {
 			return &ValidationError{Name: "status", err: fmt.Errorf(`ent: validator failed for field "FnetDocument.status": %w`, err)}
 		}
 	}
-	if v, ok := fduo.mutation.SubmissionDate(); ok {
-		if err := fnetdocument.SubmissionDateValidator(v); err != nil {
-			return &ValidationError{Name: "submission_date", err: fmt.Errorf(`ent: validator failed for field "FnetDocument.submission_date": %w`, err)}
+	if v, ok := fduo.mutation.StatusDescription(); ok {
+		if err := fnetdocument.StatusDescriptionValidator(v); err != nil {
+			return &ValidationError{Name: "status_description", err: fmt.Errorf(`ent: validator failed for field "FnetDocument.status_description": %w`, err)}
 		}
 	}
-	if v, ok := fduo.mutation.SubmissionMethodDescription(); ok {
-		if err := fnetdocument.SubmissionMethodDescriptionValidator(v); err != nil {
-			return &ValidationError{Name: "submission_method_description", err: fmt.Errorf(`ent: validator failed for field "FnetDocument.submission_method_description": %w`, err)}
+	if v, ok := fduo.mutation.SubmissionDateStr(); ok {
+		if err := fnetdocument.SubmissionDateStrValidator(v); err != nil {
+			return &ValidationError{Name: "submission_date_str", err: fmt.Errorf(`ent: validator failed for field "FnetDocument.submission_date_str": %w`, err)}
 		}
 	}
 	if v, ok := fduo.mutation.SubmissionMethod(); ok {
 		if err := fnetdocument.SubmissionMethodValidator(v); err != nil {
 			return &ValidationError{Name: "submission_method", err: fmt.Errorf(`ent: validator failed for field "FnetDocument.submission_method": %w`, err)}
+		}
+	}
+	if v, ok := fduo.mutation.SubmissionMethodDescription(); ok {
+		if err := fnetdocument.SubmissionMethodDescriptionValidator(v); err != nil {
+			return &ValidationError{Name: "submission_method_description", err: fmt.Errorf(`ent: validator failed for field "FnetDocument.submission_method_description": %w`, err)}
 		}
 	}
 	if v, ok := fduo.mutation.Version(); ok {
@@ -932,6 +971,13 @@ func (fduo *FnetDocumentUpdateOne) sqlSave(ctx context.Context) (_node *FnetDocu
 			Column: fnetdocument.FieldMarketName,
 		})
 	}
+	if value, ok := fduo.mutation.ReferenceDate(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeTime,
+			Value:  value,
+			Column: fnetdocument.FieldReferenceDate,
+		})
+	}
 	if value, ok := fduo.mutation.ReferenceDateFormat(); ok {
 		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
 			Type:   field.TypeString,
@@ -939,11 +985,11 @@ func (fduo *FnetDocumentUpdateOne) sqlSave(ctx context.Context) (_node *FnetDocu
 			Column: fnetdocument.FieldReferenceDateFormat,
 		})
 	}
-	if value, ok := fduo.mutation.ReferenceDate(); ok {
+	if value, ok := fduo.mutation.ReferenceDateStr(); ok {
 		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
 			Type:   field.TypeString,
 			Value:  value,
-			Column: fnetdocument.FieldReferenceDate,
+			Column: fnetdocument.FieldReferenceDateStr,
 		})
 	}
 	if value, ok := fduo.mutation.Reviewed(); ok {
@@ -953,13 +999,6 @@ func (fduo *FnetDocumentUpdateOne) sqlSave(ctx context.Context) (_node *FnetDocu
 			Column: fnetdocument.FieldReviewed,
 		})
 	}
-	if value, ok := fduo.mutation.StatusDescription(); ok {
-		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeString,
-			Value:  value,
-			Column: fnetdocument.FieldStatusDescription,
-		})
-	}
 	if value, ok := fduo.mutation.Status(); ok {
 		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
 			Type:   field.TypeString,
@@ -967,18 +1006,25 @@ func (fduo *FnetDocumentUpdateOne) sqlSave(ctx context.Context) (_node *FnetDocu
 			Column: fnetdocument.FieldStatus,
 		})
 	}
-	if value, ok := fduo.mutation.SubmissionDate(); ok {
+	if value, ok := fduo.mutation.StatusDescription(); ok {
 		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
 			Type:   field.TypeString,
+			Value:  value,
+			Column: fnetdocument.FieldStatusDescription,
+		})
+	}
+	if value, ok := fduo.mutation.SubmissionDate(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeTime,
 			Value:  value,
 			Column: fnetdocument.FieldSubmissionDate,
 		})
 	}
-	if value, ok := fduo.mutation.SubmissionMethodDescription(); ok {
+	if value, ok := fduo.mutation.SubmissionDateStr(); ok {
 		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
 			Type:   field.TypeString,
 			Value:  value,
-			Column: fnetdocument.FieldSubmissionMethodDescription,
+			Column: fnetdocument.FieldSubmissionDateStr,
 		})
 	}
 	if value, ok := fduo.mutation.SubmissionMethod(); ok {
@@ -986,6 +1032,13 @@ func (fduo *FnetDocumentUpdateOne) sqlSave(ctx context.Context) (_node *FnetDocu
 			Type:   field.TypeString,
 			Value:  value,
 			Column: fnetdocument.FieldSubmissionMethod,
+		})
+	}
+	if value, ok := fduo.mutation.SubmissionMethodDescription(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Value:  value,
+			Column: fnetdocument.FieldSubmissionMethodDescription,
 		})
 	}
 	if value, ok := fduo.mutation.Version(); ok {

@@ -6,6 +6,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"time"
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
@@ -107,15 +108,21 @@ func (fdc *FnetDocumentCreate) SetNillableMarketName(s *string) *FnetDocumentCre
 	return fdc
 }
 
+// SetReferenceDate sets the "reference_date" field.
+func (fdc *FnetDocumentCreate) SetReferenceDate(t time.Time) *FnetDocumentCreate {
+	fdc.mutation.SetReferenceDate(t)
+	return fdc
+}
+
 // SetReferenceDateFormat sets the "reference_date_format" field.
 func (fdc *FnetDocumentCreate) SetReferenceDateFormat(s string) *FnetDocumentCreate {
 	fdc.mutation.SetReferenceDateFormat(s)
 	return fdc
 }
 
-// SetReferenceDate sets the "reference_date" field.
-func (fdc *FnetDocumentCreate) SetReferenceDate(s string) *FnetDocumentCreate {
-	fdc.mutation.SetReferenceDate(s)
+// SetReferenceDateStr sets the "reference_date_str" field.
+func (fdc *FnetDocumentCreate) SetReferenceDateStr(s string) *FnetDocumentCreate {
+	fdc.mutation.SetReferenceDateStr(s)
 	return fdc
 }
 
@@ -125,33 +132,39 @@ func (fdc *FnetDocumentCreate) SetReviewed(s string) *FnetDocumentCreate {
 	return fdc
 }
 
-// SetStatusDescription sets the "status_description" field.
-func (fdc *FnetDocumentCreate) SetStatusDescription(s string) *FnetDocumentCreate {
-	fdc.mutation.SetStatusDescription(s)
-	return fdc
-}
-
 // SetStatus sets the "status" field.
 func (fdc *FnetDocumentCreate) SetStatus(s string) *FnetDocumentCreate {
 	fdc.mutation.SetStatus(s)
 	return fdc
 }
 
-// SetSubmissionDate sets the "submission_date" field.
-func (fdc *FnetDocumentCreate) SetSubmissionDate(s string) *FnetDocumentCreate {
-	fdc.mutation.SetSubmissionDate(s)
+// SetStatusDescription sets the "status_description" field.
+func (fdc *FnetDocumentCreate) SetStatusDescription(s string) *FnetDocumentCreate {
+	fdc.mutation.SetStatusDescription(s)
 	return fdc
 }
 
-// SetSubmissionMethodDescription sets the "submission_method_description" field.
-func (fdc *FnetDocumentCreate) SetSubmissionMethodDescription(s string) *FnetDocumentCreate {
-	fdc.mutation.SetSubmissionMethodDescription(s)
+// SetSubmissionDate sets the "submission_date" field.
+func (fdc *FnetDocumentCreate) SetSubmissionDate(t time.Time) *FnetDocumentCreate {
+	fdc.mutation.SetSubmissionDate(t)
+	return fdc
+}
+
+// SetSubmissionDateStr sets the "submission_date_str" field.
+func (fdc *FnetDocumentCreate) SetSubmissionDateStr(s string) *FnetDocumentCreate {
+	fdc.mutation.SetSubmissionDateStr(s)
 	return fdc
 }
 
 // SetSubmissionMethod sets the "submission_method" field.
 func (fdc *FnetDocumentCreate) SetSubmissionMethod(s string) *FnetDocumentCreate {
 	fdc.mutation.SetSubmissionMethod(s)
+	return fdc
+}
+
+// SetSubmissionMethodDescription sets the "submission_method_description" field.
+func (fdc *FnetDocumentCreate) SetSubmissionMethodDescription(s string) *FnetDocumentCreate {
+	fdc.mutation.SetSubmissionMethodDescription(s)
 	return fdc
 }
 
@@ -272,6 +285,9 @@ func (fdc *FnetDocumentCreate) check() error {
 	if _, ok := fdc.mutation.HighPriority(); !ok {
 		return &ValidationError{Name: "high_priority", err: errors.New(`ent: missing required field "FnetDocument.high_priority"`)}
 	}
+	if _, ok := fdc.mutation.ReferenceDate(); !ok {
+		return &ValidationError{Name: "reference_date", err: errors.New(`ent: missing required field "FnetDocument.reference_date"`)}
+	}
 	if _, ok := fdc.mutation.ReferenceDateFormat(); !ok {
 		return &ValidationError{Name: "reference_date_format", err: errors.New(`ent: missing required field "FnetDocument.reference_date_format"`)}
 	}
@@ -280,12 +296,12 @@ func (fdc *FnetDocumentCreate) check() error {
 			return &ValidationError{Name: "reference_date_format", err: fmt.Errorf(`ent: validator failed for field "FnetDocument.reference_date_format": %w`, err)}
 		}
 	}
-	if _, ok := fdc.mutation.ReferenceDate(); !ok {
-		return &ValidationError{Name: "reference_date", err: errors.New(`ent: missing required field "FnetDocument.reference_date"`)}
+	if _, ok := fdc.mutation.ReferenceDateStr(); !ok {
+		return &ValidationError{Name: "reference_date_str", err: errors.New(`ent: missing required field "FnetDocument.reference_date_str"`)}
 	}
-	if v, ok := fdc.mutation.ReferenceDate(); ok {
-		if err := fnetdocument.ReferenceDateValidator(v); err != nil {
-			return &ValidationError{Name: "reference_date", err: fmt.Errorf(`ent: validator failed for field "FnetDocument.reference_date": %w`, err)}
+	if v, ok := fdc.mutation.ReferenceDateStr(); ok {
+		if err := fnetdocument.ReferenceDateStrValidator(v); err != nil {
+			return &ValidationError{Name: "reference_date_str", err: fmt.Errorf(`ent: validator failed for field "FnetDocument.reference_date_str": %w`, err)}
 		}
 	}
 	if _, ok := fdc.mutation.Reviewed(); !ok {
@@ -296,14 +312,6 @@ func (fdc *FnetDocumentCreate) check() error {
 			return &ValidationError{Name: "reviewed", err: fmt.Errorf(`ent: validator failed for field "FnetDocument.reviewed": %w`, err)}
 		}
 	}
-	if _, ok := fdc.mutation.StatusDescription(); !ok {
-		return &ValidationError{Name: "status_description", err: errors.New(`ent: missing required field "FnetDocument.status_description"`)}
-	}
-	if v, ok := fdc.mutation.StatusDescription(); ok {
-		if err := fnetdocument.StatusDescriptionValidator(v); err != nil {
-			return &ValidationError{Name: "status_description", err: fmt.Errorf(`ent: validator failed for field "FnetDocument.status_description": %w`, err)}
-		}
-	}
 	if _, ok := fdc.mutation.Status(); !ok {
 		return &ValidationError{Name: "status", err: errors.New(`ent: missing required field "FnetDocument.status"`)}
 	}
@@ -312,20 +320,23 @@ func (fdc *FnetDocumentCreate) check() error {
 			return &ValidationError{Name: "status", err: fmt.Errorf(`ent: validator failed for field "FnetDocument.status": %w`, err)}
 		}
 	}
+	if _, ok := fdc.mutation.StatusDescription(); !ok {
+		return &ValidationError{Name: "status_description", err: errors.New(`ent: missing required field "FnetDocument.status_description"`)}
+	}
+	if v, ok := fdc.mutation.StatusDescription(); ok {
+		if err := fnetdocument.StatusDescriptionValidator(v); err != nil {
+			return &ValidationError{Name: "status_description", err: fmt.Errorf(`ent: validator failed for field "FnetDocument.status_description": %w`, err)}
+		}
+	}
 	if _, ok := fdc.mutation.SubmissionDate(); !ok {
 		return &ValidationError{Name: "submission_date", err: errors.New(`ent: missing required field "FnetDocument.submission_date"`)}
 	}
-	if v, ok := fdc.mutation.SubmissionDate(); ok {
-		if err := fnetdocument.SubmissionDateValidator(v); err != nil {
-			return &ValidationError{Name: "submission_date", err: fmt.Errorf(`ent: validator failed for field "FnetDocument.submission_date": %w`, err)}
-		}
+	if _, ok := fdc.mutation.SubmissionDateStr(); !ok {
+		return &ValidationError{Name: "submission_date_str", err: errors.New(`ent: missing required field "FnetDocument.submission_date_str"`)}
 	}
-	if _, ok := fdc.mutation.SubmissionMethodDescription(); !ok {
-		return &ValidationError{Name: "submission_method_description", err: errors.New(`ent: missing required field "FnetDocument.submission_method_description"`)}
-	}
-	if v, ok := fdc.mutation.SubmissionMethodDescription(); ok {
-		if err := fnetdocument.SubmissionMethodDescriptionValidator(v); err != nil {
-			return &ValidationError{Name: "submission_method_description", err: fmt.Errorf(`ent: validator failed for field "FnetDocument.submission_method_description": %w`, err)}
+	if v, ok := fdc.mutation.SubmissionDateStr(); ok {
+		if err := fnetdocument.SubmissionDateStrValidator(v); err != nil {
+			return &ValidationError{Name: "submission_date_str", err: fmt.Errorf(`ent: validator failed for field "FnetDocument.submission_date_str": %w`, err)}
 		}
 	}
 	if _, ok := fdc.mutation.SubmissionMethod(); !ok {
@@ -334,6 +345,14 @@ func (fdc *FnetDocumentCreate) check() error {
 	if v, ok := fdc.mutation.SubmissionMethod(); ok {
 		if err := fnetdocument.SubmissionMethodValidator(v); err != nil {
 			return &ValidationError{Name: "submission_method", err: fmt.Errorf(`ent: validator failed for field "FnetDocument.submission_method": %w`, err)}
+		}
+	}
+	if _, ok := fdc.mutation.SubmissionMethodDescription(); !ok {
+		return &ValidationError{Name: "submission_method_description", err: errors.New(`ent: missing required field "FnetDocument.submission_method_description"`)}
+	}
+	if v, ok := fdc.mutation.SubmissionMethodDescription(); ok {
+		if err := fnetdocument.SubmissionMethodDescriptionValidator(v); err != nil {
+			return &ValidationError{Name: "submission_method_description", err: fmt.Errorf(`ent: validator failed for field "FnetDocument.submission_method_description": %w`, err)}
 		}
 	}
 	if _, ok := fdc.mutation.Version(); !ok {
@@ -444,6 +463,14 @@ func (fdc *FnetDocumentCreate) createSpec() (*FnetDocument, *sqlgraph.CreateSpec
 		})
 		_node.MarketName = value
 	}
+	if value, ok := fdc.mutation.ReferenceDate(); ok {
+		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
+			Type:   field.TypeTime,
+			Value:  value,
+			Column: fnetdocument.FieldReferenceDate,
+		})
+		_node.ReferenceDate = value
+	}
 	if value, ok := fdc.mutation.ReferenceDateFormat(); ok {
 		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
 			Type:   field.TypeString,
@@ -452,13 +479,13 @@ func (fdc *FnetDocumentCreate) createSpec() (*FnetDocument, *sqlgraph.CreateSpec
 		})
 		_node.ReferenceDateFormat = value
 	}
-	if value, ok := fdc.mutation.ReferenceDate(); ok {
+	if value, ok := fdc.mutation.ReferenceDateStr(); ok {
 		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
 			Type:   field.TypeString,
 			Value:  value,
-			Column: fnetdocument.FieldReferenceDate,
+			Column: fnetdocument.FieldReferenceDateStr,
 		})
-		_node.ReferenceDate = value
+		_node.ReferenceDateStr = value
 	}
 	if value, ok := fdc.mutation.Reviewed(); ok {
 		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
@@ -468,14 +495,6 @@ func (fdc *FnetDocumentCreate) createSpec() (*FnetDocument, *sqlgraph.CreateSpec
 		})
 		_node.Reviewed = value
 	}
-	if value, ok := fdc.mutation.StatusDescription(); ok {
-		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
-			Type:   field.TypeString,
-			Value:  value,
-			Column: fnetdocument.FieldStatusDescription,
-		})
-		_node.StatusDescription = value
-	}
 	if value, ok := fdc.mutation.Status(); ok {
 		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
 			Type:   field.TypeString,
@@ -484,21 +503,29 @@ func (fdc *FnetDocumentCreate) createSpec() (*FnetDocument, *sqlgraph.CreateSpec
 		})
 		_node.Status = value
 	}
-	if value, ok := fdc.mutation.SubmissionDate(); ok {
+	if value, ok := fdc.mutation.StatusDescription(); ok {
 		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
 			Type:   field.TypeString,
+			Value:  value,
+			Column: fnetdocument.FieldStatusDescription,
+		})
+		_node.StatusDescription = value
+	}
+	if value, ok := fdc.mutation.SubmissionDate(); ok {
+		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
+			Type:   field.TypeTime,
 			Value:  value,
 			Column: fnetdocument.FieldSubmissionDate,
 		})
 		_node.SubmissionDate = value
 	}
-	if value, ok := fdc.mutation.SubmissionMethodDescription(); ok {
+	if value, ok := fdc.mutation.SubmissionDateStr(); ok {
 		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
 			Type:   field.TypeString,
 			Value:  value,
-			Column: fnetdocument.FieldSubmissionMethodDescription,
+			Column: fnetdocument.FieldSubmissionDateStr,
 		})
-		_node.SubmissionMethodDescription = value
+		_node.SubmissionDateStr = value
 	}
 	if value, ok := fdc.mutation.SubmissionMethod(); ok {
 		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
@@ -507,6 +534,14 @@ func (fdc *FnetDocumentCreate) createSpec() (*FnetDocument, *sqlgraph.CreateSpec
 			Column: fnetdocument.FieldSubmissionMethod,
 		})
 		_node.SubmissionMethod = value
+	}
+	if value, ok := fdc.mutation.SubmissionMethodDescription(); ok {
+		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Value:  value,
+			Column: fnetdocument.FieldSubmissionMethodDescription,
+		})
+		_node.SubmissionMethodDescription = value
 	}
 	if value, ok := fdc.mutation.Version(); ok {
 		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
@@ -706,6 +741,18 @@ func (u *FnetDocumentUpsert) ClearMarketName() *FnetDocumentUpsert {
 	return u
 }
 
+// SetReferenceDate sets the "reference_date" field.
+func (u *FnetDocumentUpsert) SetReferenceDate(v time.Time) *FnetDocumentUpsert {
+	u.Set(fnetdocument.FieldReferenceDate, v)
+	return u
+}
+
+// UpdateReferenceDate sets the "reference_date" field to the value that was provided on create.
+func (u *FnetDocumentUpsert) UpdateReferenceDate() *FnetDocumentUpsert {
+	u.SetExcluded(fnetdocument.FieldReferenceDate)
+	return u
+}
+
 // SetReferenceDateFormat sets the "reference_date_format" field.
 func (u *FnetDocumentUpsert) SetReferenceDateFormat(v string) *FnetDocumentUpsert {
 	u.Set(fnetdocument.FieldReferenceDateFormat, v)
@@ -718,15 +765,15 @@ func (u *FnetDocumentUpsert) UpdateReferenceDateFormat() *FnetDocumentUpsert {
 	return u
 }
 
-// SetReferenceDate sets the "reference_date" field.
-func (u *FnetDocumentUpsert) SetReferenceDate(v string) *FnetDocumentUpsert {
-	u.Set(fnetdocument.FieldReferenceDate, v)
+// SetReferenceDateStr sets the "reference_date_str" field.
+func (u *FnetDocumentUpsert) SetReferenceDateStr(v string) *FnetDocumentUpsert {
+	u.Set(fnetdocument.FieldReferenceDateStr, v)
 	return u
 }
 
-// UpdateReferenceDate sets the "reference_date" field to the value that was provided on create.
-func (u *FnetDocumentUpsert) UpdateReferenceDate() *FnetDocumentUpsert {
-	u.SetExcluded(fnetdocument.FieldReferenceDate)
+// UpdateReferenceDateStr sets the "reference_date_str" field to the value that was provided on create.
+func (u *FnetDocumentUpsert) UpdateReferenceDateStr() *FnetDocumentUpsert {
+	u.SetExcluded(fnetdocument.FieldReferenceDateStr)
 	return u
 }
 
@@ -742,18 +789,6 @@ func (u *FnetDocumentUpsert) UpdateReviewed() *FnetDocumentUpsert {
 	return u
 }
 
-// SetStatusDescription sets the "status_description" field.
-func (u *FnetDocumentUpsert) SetStatusDescription(v string) *FnetDocumentUpsert {
-	u.Set(fnetdocument.FieldStatusDescription, v)
-	return u
-}
-
-// UpdateStatusDescription sets the "status_description" field to the value that was provided on create.
-func (u *FnetDocumentUpsert) UpdateStatusDescription() *FnetDocumentUpsert {
-	u.SetExcluded(fnetdocument.FieldStatusDescription)
-	return u
-}
-
 // SetStatus sets the "status" field.
 func (u *FnetDocumentUpsert) SetStatus(v string) *FnetDocumentUpsert {
 	u.Set(fnetdocument.FieldStatus, v)
@@ -766,8 +801,20 @@ func (u *FnetDocumentUpsert) UpdateStatus() *FnetDocumentUpsert {
 	return u
 }
 
+// SetStatusDescription sets the "status_description" field.
+func (u *FnetDocumentUpsert) SetStatusDescription(v string) *FnetDocumentUpsert {
+	u.Set(fnetdocument.FieldStatusDescription, v)
+	return u
+}
+
+// UpdateStatusDescription sets the "status_description" field to the value that was provided on create.
+func (u *FnetDocumentUpsert) UpdateStatusDescription() *FnetDocumentUpsert {
+	u.SetExcluded(fnetdocument.FieldStatusDescription)
+	return u
+}
+
 // SetSubmissionDate sets the "submission_date" field.
-func (u *FnetDocumentUpsert) SetSubmissionDate(v string) *FnetDocumentUpsert {
+func (u *FnetDocumentUpsert) SetSubmissionDate(v time.Time) *FnetDocumentUpsert {
 	u.Set(fnetdocument.FieldSubmissionDate, v)
 	return u
 }
@@ -778,15 +825,15 @@ func (u *FnetDocumentUpsert) UpdateSubmissionDate() *FnetDocumentUpsert {
 	return u
 }
 
-// SetSubmissionMethodDescription sets the "submission_method_description" field.
-func (u *FnetDocumentUpsert) SetSubmissionMethodDescription(v string) *FnetDocumentUpsert {
-	u.Set(fnetdocument.FieldSubmissionMethodDescription, v)
+// SetSubmissionDateStr sets the "submission_date_str" field.
+func (u *FnetDocumentUpsert) SetSubmissionDateStr(v string) *FnetDocumentUpsert {
+	u.Set(fnetdocument.FieldSubmissionDateStr, v)
 	return u
 }
 
-// UpdateSubmissionMethodDescription sets the "submission_method_description" field to the value that was provided on create.
-func (u *FnetDocumentUpsert) UpdateSubmissionMethodDescription() *FnetDocumentUpsert {
-	u.SetExcluded(fnetdocument.FieldSubmissionMethodDescription)
+// UpdateSubmissionDateStr sets the "submission_date_str" field to the value that was provided on create.
+func (u *FnetDocumentUpsert) UpdateSubmissionDateStr() *FnetDocumentUpsert {
+	u.SetExcluded(fnetdocument.FieldSubmissionDateStr)
 	return u
 }
 
@@ -799,6 +846,18 @@ func (u *FnetDocumentUpsert) SetSubmissionMethod(v string) *FnetDocumentUpsert {
 // UpdateSubmissionMethod sets the "submission_method" field to the value that was provided on create.
 func (u *FnetDocumentUpsert) UpdateSubmissionMethod() *FnetDocumentUpsert {
 	u.SetExcluded(fnetdocument.FieldSubmissionMethod)
+	return u
+}
+
+// SetSubmissionMethodDescription sets the "submission_method_description" field.
+func (u *FnetDocumentUpsert) SetSubmissionMethodDescription(v string) *FnetDocumentUpsert {
+	u.Set(fnetdocument.FieldSubmissionMethodDescription, v)
+	return u
+}
+
+// UpdateSubmissionMethodDescription sets the "submission_method_description" field to the value that was provided on create.
+func (u *FnetDocumentUpsert) UpdateSubmissionMethodDescription() *FnetDocumentUpsert {
+	u.SetExcluded(fnetdocument.FieldSubmissionMethodDescription)
 	return u
 }
 
@@ -1026,6 +1085,20 @@ func (u *FnetDocumentUpsertOne) ClearMarketName() *FnetDocumentUpsertOne {
 	})
 }
 
+// SetReferenceDate sets the "reference_date" field.
+func (u *FnetDocumentUpsertOne) SetReferenceDate(v time.Time) *FnetDocumentUpsertOne {
+	return u.Update(func(s *FnetDocumentUpsert) {
+		s.SetReferenceDate(v)
+	})
+}
+
+// UpdateReferenceDate sets the "reference_date" field to the value that was provided on create.
+func (u *FnetDocumentUpsertOne) UpdateReferenceDate() *FnetDocumentUpsertOne {
+	return u.Update(func(s *FnetDocumentUpsert) {
+		s.UpdateReferenceDate()
+	})
+}
+
 // SetReferenceDateFormat sets the "reference_date_format" field.
 func (u *FnetDocumentUpsertOne) SetReferenceDateFormat(v string) *FnetDocumentUpsertOne {
 	return u.Update(func(s *FnetDocumentUpsert) {
@@ -1040,17 +1113,17 @@ func (u *FnetDocumentUpsertOne) UpdateReferenceDateFormat() *FnetDocumentUpsertO
 	})
 }
 
-// SetReferenceDate sets the "reference_date" field.
-func (u *FnetDocumentUpsertOne) SetReferenceDate(v string) *FnetDocumentUpsertOne {
+// SetReferenceDateStr sets the "reference_date_str" field.
+func (u *FnetDocumentUpsertOne) SetReferenceDateStr(v string) *FnetDocumentUpsertOne {
 	return u.Update(func(s *FnetDocumentUpsert) {
-		s.SetReferenceDate(v)
+		s.SetReferenceDateStr(v)
 	})
 }
 
-// UpdateReferenceDate sets the "reference_date" field to the value that was provided on create.
-func (u *FnetDocumentUpsertOne) UpdateReferenceDate() *FnetDocumentUpsertOne {
+// UpdateReferenceDateStr sets the "reference_date_str" field to the value that was provided on create.
+func (u *FnetDocumentUpsertOne) UpdateReferenceDateStr() *FnetDocumentUpsertOne {
 	return u.Update(func(s *FnetDocumentUpsert) {
-		s.UpdateReferenceDate()
+		s.UpdateReferenceDateStr()
 	})
 }
 
@@ -1068,20 +1141,6 @@ func (u *FnetDocumentUpsertOne) UpdateReviewed() *FnetDocumentUpsertOne {
 	})
 }
 
-// SetStatusDescription sets the "status_description" field.
-func (u *FnetDocumentUpsertOne) SetStatusDescription(v string) *FnetDocumentUpsertOne {
-	return u.Update(func(s *FnetDocumentUpsert) {
-		s.SetStatusDescription(v)
-	})
-}
-
-// UpdateStatusDescription sets the "status_description" field to the value that was provided on create.
-func (u *FnetDocumentUpsertOne) UpdateStatusDescription() *FnetDocumentUpsertOne {
-	return u.Update(func(s *FnetDocumentUpsert) {
-		s.UpdateStatusDescription()
-	})
-}
-
 // SetStatus sets the "status" field.
 func (u *FnetDocumentUpsertOne) SetStatus(v string) *FnetDocumentUpsertOne {
 	return u.Update(func(s *FnetDocumentUpsert) {
@@ -1096,8 +1155,22 @@ func (u *FnetDocumentUpsertOne) UpdateStatus() *FnetDocumentUpsertOne {
 	})
 }
 
+// SetStatusDescription sets the "status_description" field.
+func (u *FnetDocumentUpsertOne) SetStatusDescription(v string) *FnetDocumentUpsertOne {
+	return u.Update(func(s *FnetDocumentUpsert) {
+		s.SetStatusDescription(v)
+	})
+}
+
+// UpdateStatusDescription sets the "status_description" field to the value that was provided on create.
+func (u *FnetDocumentUpsertOne) UpdateStatusDescription() *FnetDocumentUpsertOne {
+	return u.Update(func(s *FnetDocumentUpsert) {
+		s.UpdateStatusDescription()
+	})
+}
+
 // SetSubmissionDate sets the "submission_date" field.
-func (u *FnetDocumentUpsertOne) SetSubmissionDate(v string) *FnetDocumentUpsertOne {
+func (u *FnetDocumentUpsertOne) SetSubmissionDate(v time.Time) *FnetDocumentUpsertOne {
 	return u.Update(func(s *FnetDocumentUpsert) {
 		s.SetSubmissionDate(v)
 	})
@@ -1110,17 +1183,17 @@ func (u *FnetDocumentUpsertOne) UpdateSubmissionDate() *FnetDocumentUpsertOne {
 	})
 }
 
-// SetSubmissionMethodDescription sets the "submission_method_description" field.
-func (u *FnetDocumentUpsertOne) SetSubmissionMethodDescription(v string) *FnetDocumentUpsertOne {
+// SetSubmissionDateStr sets the "submission_date_str" field.
+func (u *FnetDocumentUpsertOne) SetSubmissionDateStr(v string) *FnetDocumentUpsertOne {
 	return u.Update(func(s *FnetDocumentUpsert) {
-		s.SetSubmissionMethodDescription(v)
+		s.SetSubmissionDateStr(v)
 	})
 }
 
-// UpdateSubmissionMethodDescription sets the "submission_method_description" field to the value that was provided on create.
-func (u *FnetDocumentUpsertOne) UpdateSubmissionMethodDescription() *FnetDocumentUpsertOne {
+// UpdateSubmissionDateStr sets the "submission_date_str" field to the value that was provided on create.
+func (u *FnetDocumentUpsertOne) UpdateSubmissionDateStr() *FnetDocumentUpsertOne {
 	return u.Update(func(s *FnetDocumentUpsert) {
-		s.UpdateSubmissionMethodDescription()
+		s.UpdateSubmissionDateStr()
 	})
 }
 
@@ -1135,6 +1208,20 @@ func (u *FnetDocumentUpsertOne) SetSubmissionMethod(v string) *FnetDocumentUpser
 func (u *FnetDocumentUpsertOne) UpdateSubmissionMethod() *FnetDocumentUpsertOne {
 	return u.Update(func(s *FnetDocumentUpsert) {
 		s.UpdateSubmissionMethod()
+	})
+}
+
+// SetSubmissionMethodDescription sets the "submission_method_description" field.
+func (u *FnetDocumentUpsertOne) SetSubmissionMethodDescription(v string) *FnetDocumentUpsertOne {
+	return u.Update(func(s *FnetDocumentUpsert) {
+		s.SetSubmissionMethodDescription(v)
+	})
+}
+
+// UpdateSubmissionMethodDescription sets the "submission_method_description" field to the value that was provided on create.
+func (u *FnetDocumentUpsertOne) UpdateSubmissionMethodDescription() *FnetDocumentUpsertOne {
+	return u.Update(func(s *FnetDocumentUpsert) {
+		s.UpdateSubmissionMethodDescription()
 	})
 }
 
@@ -1526,6 +1613,20 @@ func (u *FnetDocumentUpsertBulk) ClearMarketName() *FnetDocumentUpsertBulk {
 	})
 }
 
+// SetReferenceDate sets the "reference_date" field.
+func (u *FnetDocumentUpsertBulk) SetReferenceDate(v time.Time) *FnetDocumentUpsertBulk {
+	return u.Update(func(s *FnetDocumentUpsert) {
+		s.SetReferenceDate(v)
+	})
+}
+
+// UpdateReferenceDate sets the "reference_date" field to the value that was provided on create.
+func (u *FnetDocumentUpsertBulk) UpdateReferenceDate() *FnetDocumentUpsertBulk {
+	return u.Update(func(s *FnetDocumentUpsert) {
+		s.UpdateReferenceDate()
+	})
+}
+
 // SetReferenceDateFormat sets the "reference_date_format" field.
 func (u *FnetDocumentUpsertBulk) SetReferenceDateFormat(v string) *FnetDocumentUpsertBulk {
 	return u.Update(func(s *FnetDocumentUpsert) {
@@ -1540,17 +1641,17 @@ func (u *FnetDocumentUpsertBulk) UpdateReferenceDateFormat() *FnetDocumentUpsert
 	})
 }
 
-// SetReferenceDate sets the "reference_date" field.
-func (u *FnetDocumentUpsertBulk) SetReferenceDate(v string) *FnetDocumentUpsertBulk {
+// SetReferenceDateStr sets the "reference_date_str" field.
+func (u *FnetDocumentUpsertBulk) SetReferenceDateStr(v string) *FnetDocumentUpsertBulk {
 	return u.Update(func(s *FnetDocumentUpsert) {
-		s.SetReferenceDate(v)
+		s.SetReferenceDateStr(v)
 	})
 }
 
-// UpdateReferenceDate sets the "reference_date" field to the value that was provided on create.
-func (u *FnetDocumentUpsertBulk) UpdateReferenceDate() *FnetDocumentUpsertBulk {
+// UpdateReferenceDateStr sets the "reference_date_str" field to the value that was provided on create.
+func (u *FnetDocumentUpsertBulk) UpdateReferenceDateStr() *FnetDocumentUpsertBulk {
 	return u.Update(func(s *FnetDocumentUpsert) {
-		s.UpdateReferenceDate()
+		s.UpdateReferenceDateStr()
 	})
 }
 
@@ -1568,20 +1669,6 @@ func (u *FnetDocumentUpsertBulk) UpdateReviewed() *FnetDocumentUpsertBulk {
 	})
 }
 
-// SetStatusDescription sets the "status_description" field.
-func (u *FnetDocumentUpsertBulk) SetStatusDescription(v string) *FnetDocumentUpsertBulk {
-	return u.Update(func(s *FnetDocumentUpsert) {
-		s.SetStatusDescription(v)
-	})
-}
-
-// UpdateStatusDescription sets the "status_description" field to the value that was provided on create.
-func (u *FnetDocumentUpsertBulk) UpdateStatusDescription() *FnetDocumentUpsertBulk {
-	return u.Update(func(s *FnetDocumentUpsert) {
-		s.UpdateStatusDescription()
-	})
-}
-
 // SetStatus sets the "status" field.
 func (u *FnetDocumentUpsertBulk) SetStatus(v string) *FnetDocumentUpsertBulk {
 	return u.Update(func(s *FnetDocumentUpsert) {
@@ -1596,8 +1683,22 @@ func (u *FnetDocumentUpsertBulk) UpdateStatus() *FnetDocumentUpsertBulk {
 	})
 }
 
+// SetStatusDescription sets the "status_description" field.
+func (u *FnetDocumentUpsertBulk) SetStatusDescription(v string) *FnetDocumentUpsertBulk {
+	return u.Update(func(s *FnetDocumentUpsert) {
+		s.SetStatusDescription(v)
+	})
+}
+
+// UpdateStatusDescription sets the "status_description" field to the value that was provided on create.
+func (u *FnetDocumentUpsertBulk) UpdateStatusDescription() *FnetDocumentUpsertBulk {
+	return u.Update(func(s *FnetDocumentUpsert) {
+		s.UpdateStatusDescription()
+	})
+}
+
 // SetSubmissionDate sets the "submission_date" field.
-func (u *FnetDocumentUpsertBulk) SetSubmissionDate(v string) *FnetDocumentUpsertBulk {
+func (u *FnetDocumentUpsertBulk) SetSubmissionDate(v time.Time) *FnetDocumentUpsertBulk {
 	return u.Update(func(s *FnetDocumentUpsert) {
 		s.SetSubmissionDate(v)
 	})
@@ -1610,17 +1711,17 @@ func (u *FnetDocumentUpsertBulk) UpdateSubmissionDate() *FnetDocumentUpsertBulk 
 	})
 }
 
-// SetSubmissionMethodDescription sets the "submission_method_description" field.
-func (u *FnetDocumentUpsertBulk) SetSubmissionMethodDescription(v string) *FnetDocumentUpsertBulk {
+// SetSubmissionDateStr sets the "submission_date_str" field.
+func (u *FnetDocumentUpsertBulk) SetSubmissionDateStr(v string) *FnetDocumentUpsertBulk {
 	return u.Update(func(s *FnetDocumentUpsert) {
-		s.SetSubmissionMethodDescription(v)
+		s.SetSubmissionDateStr(v)
 	})
 }
 
-// UpdateSubmissionMethodDescription sets the "submission_method_description" field to the value that was provided on create.
-func (u *FnetDocumentUpsertBulk) UpdateSubmissionMethodDescription() *FnetDocumentUpsertBulk {
+// UpdateSubmissionDateStr sets the "submission_date_str" field to the value that was provided on create.
+func (u *FnetDocumentUpsertBulk) UpdateSubmissionDateStr() *FnetDocumentUpsertBulk {
 	return u.Update(func(s *FnetDocumentUpsert) {
-		s.UpdateSubmissionMethodDescription()
+		s.UpdateSubmissionDateStr()
 	})
 }
 
@@ -1635,6 +1736,20 @@ func (u *FnetDocumentUpsertBulk) SetSubmissionMethod(v string) *FnetDocumentUpse
 func (u *FnetDocumentUpsertBulk) UpdateSubmissionMethod() *FnetDocumentUpsertBulk {
 	return u.Update(func(s *FnetDocumentUpsert) {
 		s.UpdateSubmissionMethod()
+	})
+}
+
+// SetSubmissionMethodDescription sets the "submission_method_description" field.
+func (u *FnetDocumentUpsertBulk) SetSubmissionMethodDescription(v string) *FnetDocumentUpsertBulk {
+	return u.Update(func(s *FnetDocumentUpsert) {
+		s.SetSubmissionMethodDescription(v)
+	})
+}
+
+// UpdateSubmissionMethodDescription sets the "submission_method_description" field to the value that was provided on create.
+func (u *FnetDocumentUpsertBulk) UpdateSubmissionMethodDescription() *FnetDocumentUpsertBulk {
+	return u.Update(func(s *FnetDocumentUpsert) {
+		s.UpdateSubmissionMethodDescription()
 	})
 }
 

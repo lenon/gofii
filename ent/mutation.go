@@ -7,6 +7,7 @@ import (
 	"errors"
 	"fmt"
 	"sync"
+	"time"
 
 	"github.com/lenon/gofii/ent/fnetdocument"
 	"github.com/lenon/gofii/ent/predicate"
@@ -42,14 +43,16 @@ type FnetDocumentMutation struct {
 	fund_description              *string
 	high_priority                 *bool
 	market_name                   *string
+	reference_date                *time.Time
 	reference_date_format         *string
-	reference_date                *string
+	reference_date_str            *string
 	reviewed                      *string
-	status_description            *string
 	status                        *string
-	submission_date               *string
-	submission_method_description *string
+	status_description            *string
+	submission_date               *time.Time
+	submission_date_str           *string
 	submission_method             *string
+	submission_method_description *string
 	version                       *int
 	addversion                    *int
 	clearedFields                 map[string]struct{}
@@ -552,6 +555,42 @@ func (m *FnetDocumentMutation) ResetMarketName() {
 	delete(m.clearedFields, fnetdocument.FieldMarketName)
 }
 
+// SetReferenceDate sets the "reference_date" field.
+func (m *FnetDocumentMutation) SetReferenceDate(t time.Time) {
+	m.reference_date = &t
+}
+
+// ReferenceDate returns the value of the "reference_date" field in the mutation.
+func (m *FnetDocumentMutation) ReferenceDate() (r time.Time, exists bool) {
+	v := m.reference_date
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldReferenceDate returns the old "reference_date" field's value of the FnetDocument entity.
+// If the FnetDocument object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *FnetDocumentMutation) OldReferenceDate(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldReferenceDate is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldReferenceDate requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldReferenceDate: %w", err)
+	}
+	return oldValue.ReferenceDate, nil
+}
+
+// ResetReferenceDate resets all changes to the "reference_date" field.
+func (m *FnetDocumentMutation) ResetReferenceDate() {
+	m.reference_date = nil
+}
+
 // SetReferenceDateFormat sets the "reference_date_format" field.
 func (m *FnetDocumentMutation) SetReferenceDateFormat(s string) {
 	m.reference_date_format = &s
@@ -588,40 +627,40 @@ func (m *FnetDocumentMutation) ResetReferenceDateFormat() {
 	m.reference_date_format = nil
 }
 
-// SetReferenceDate sets the "reference_date" field.
-func (m *FnetDocumentMutation) SetReferenceDate(s string) {
-	m.reference_date = &s
+// SetReferenceDateStr sets the "reference_date_str" field.
+func (m *FnetDocumentMutation) SetReferenceDateStr(s string) {
+	m.reference_date_str = &s
 }
 
-// ReferenceDate returns the value of the "reference_date" field in the mutation.
-func (m *FnetDocumentMutation) ReferenceDate() (r string, exists bool) {
-	v := m.reference_date
+// ReferenceDateStr returns the value of the "reference_date_str" field in the mutation.
+func (m *FnetDocumentMutation) ReferenceDateStr() (r string, exists bool) {
+	v := m.reference_date_str
 	if v == nil {
 		return
 	}
 	return *v, true
 }
 
-// OldReferenceDate returns the old "reference_date" field's value of the FnetDocument entity.
+// OldReferenceDateStr returns the old "reference_date_str" field's value of the FnetDocument entity.
 // If the FnetDocument object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *FnetDocumentMutation) OldReferenceDate(ctx context.Context) (v string, err error) {
+func (m *FnetDocumentMutation) OldReferenceDateStr(ctx context.Context) (v string, err error) {
 	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldReferenceDate is only allowed on UpdateOne operations")
+		return v, errors.New("OldReferenceDateStr is only allowed on UpdateOne operations")
 	}
 	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldReferenceDate requires an ID field in the mutation")
+		return v, errors.New("OldReferenceDateStr requires an ID field in the mutation")
 	}
 	oldValue, err := m.oldValue(ctx)
 	if err != nil {
-		return v, fmt.Errorf("querying old value for OldReferenceDate: %w", err)
+		return v, fmt.Errorf("querying old value for OldReferenceDateStr: %w", err)
 	}
-	return oldValue.ReferenceDate, nil
+	return oldValue.ReferenceDateStr, nil
 }
 
-// ResetReferenceDate resets all changes to the "reference_date" field.
-func (m *FnetDocumentMutation) ResetReferenceDate() {
-	m.reference_date = nil
+// ResetReferenceDateStr resets all changes to the "reference_date_str" field.
+func (m *FnetDocumentMutation) ResetReferenceDateStr() {
+	m.reference_date_str = nil
 }
 
 // SetReviewed sets the "reviewed" field.
@@ -660,42 +699,6 @@ func (m *FnetDocumentMutation) ResetReviewed() {
 	m.reviewed = nil
 }
 
-// SetStatusDescription sets the "status_description" field.
-func (m *FnetDocumentMutation) SetStatusDescription(s string) {
-	m.status_description = &s
-}
-
-// StatusDescription returns the value of the "status_description" field in the mutation.
-func (m *FnetDocumentMutation) StatusDescription() (r string, exists bool) {
-	v := m.status_description
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// OldStatusDescription returns the old "status_description" field's value of the FnetDocument entity.
-// If the FnetDocument object wasn't provided to the builder, the object is fetched from the database.
-// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *FnetDocumentMutation) OldStatusDescription(ctx context.Context) (v string, err error) {
-	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldStatusDescription is only allowed on UpdateOne operations")
-	}
-	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldStatusDescription requires an ID field in the mutation")
-	}
-	oldValue, err := m.oldValue(ctx)
-	if err != nil {
-		return v, fmt.Errorf("querying old value for OldStatusDescription: %w", err)
-	}
-	return oldValue.StatusDescription, nil
-}
-
-// ResetStatusDescription resets all changes to the "status_description" field.
-func (m *FnetDocumentMutation) ResetStatusDescription() {
-	m.status_description = nil
-}
-
 // SetStatus sets the "status" field.
 func (m *FnetDocumentMutation) SetStatus(s string) {
 	m.status = &s
@@ -732,13 +735,49 @@ func (m *FnetDocumentMutation) ResetStatus() {
 	m.status = nil
 }
 
+// SetStatusDescription sets the "status_description" field.
+func (m *FnetDocumentMutation) SetStatusDescription(s string) {
+	m.status_description = &s
+}
+
+// StatusDescription returns the value of the "status_description" field in the mutation.
+func (m *FnetDocumentMutation) StatusDescription() (r string, exists bool) {
+	v := m.status_description
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldStatusDescription returns the old "status_description" field's value of the FnetDocument entity.
+// If the FnetDocument object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *FnetDocumentMutation) OldStatusDescription(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldStatusDescription is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldStatusDescription requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldStatusDescription: %w", err)
+	}
+	return oldValue.StatusDescription, nil
+}
+
+// ResetStatusDescription resets all changes to the "status_description" field.
+func (m *FnetDocumentMutation) ResetStatusDescription() {
+	m.status_description = nil
+}
+
 // SetSubmissionDate sets the "submission_date" field.
-func (m *FnetDocumentMutation) SetSubmissionDate(s string) {
-	m.submission_date = &s
+func (m *FnetDocumentMutation) SetSubmissionDate(t time.Time) {
+	m.submission_date = &t
 }
 
 // SubmissionDate returns the value of the "submission_date" field in the mutation.
-func (m *FnetDocumentMutation) SubmissionDate() (r string, exists bool) {
+func (m *FnetDocumentMutation) SubmissionDate() (r time.Time, exists bool) {
 	v := m.submission_date
 	if v == nil {
 		return
@@ -749,7 +788,7 @@ func (m *FnetDocumentMutation) SubmissionDate() (r string, exists bool) {
 // OldSubmissionDate returns the old "submission_date" field's value of the FnetDocument entity.
 // If the FnetDocument object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *FnetDocumentMutation) OldSubmissionDate(ctx context.Context) (v string, err error) {
+func (m *FnetDocumentMutation) OldSubmissionDate(ctx context.Context) (v time.Time, err error) {
 	if !m.op.Is(OpUpdateOne) {
 		return v, errors.New("OldSubmissionDate is only allowed on UpdateOne operations")
 	}
@@ -768,40 +807,40 @@ func (m *FnetDocumentMutation) ResetSubmissionDate() {
 	m.submission_date = nil
 }
 
-// SetSubmissionMethodDescription sets the "submission_method_description" field.
-func (m *FnetDocumentMutation) SetSubmissionMethodDescription(s string) {
-	m.submission_method_description = &s
+// SetSubmissionDateStr sets the "submission_date_str" field.
+func (m *FnetDocumentMutation) SetSubmissionDateStr(s string) {
+	m.submission_date_str = &s
 }
 
-// SubmissionMethodDescription returns the value of the "submission_method_description" field in the mutation.
-func (m *FnetDocumentMutation) SubmissionMethodDescription() (r string, exists bool) {
-	v := m.submission_method_description
+// SubmissionDateStr returns the value of the "submission_date_str" field in the mutation.
+func (m *FnetDocumentMutation) SubmissionDateStr() (r string, exists bool) {
+	v := m.submission_date_str
 	if v == nil {
 		return
 	}
 	return *v, true
 }
 
-// OldSubmissionMethodDescription returns the old "submission_method_description" field's value of the FnetDocument entity.
+// OldSubmissionDateStr returns the old "submission_date_str" field's value of the FnetDocument entity.
 // If the FnetDocument object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *FnetDocumentMutation) OldSubmissionMethodDescription(ctx context.Context) (v string, err error) {
+func (m *FnetDocumentMutation) OldSubmissionDateStr(ctx context.Context) (v string, err error) {
 	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldSubmissionMethodDescription is only allowed on UpdateOne operations")
+		return v, errors.New("OldSubmissionDateStr is only allowed on UpdateOne operations")
 	}
 	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldSubmissionMethodDescription requires an ID field in the mutation")
+		return v, errors.New("OldSubmissionDateStr requires an ID field in the mutation")
 	}
 	oldValue, err := m.oldValue(ctx)
 	if err != nil {
-		return v, fmt.Errorf("querying old value for OldSubmissionMethodDescription: %w", err)
+		return v, fmt.Errorf("querying old value for OldSubmissionDateStr: %w", err)
 	}
-	return oldValue.SubmissionMethodDescription, nil
+	return oldValue.SubmissionDateStr, nil
 }
 
-// ResetSubmissionMethodDescription resets all changes to the "submission_method_description" field.
-func (m *FnetDocumentMutation) ResetSubmissionMethodDescription() {
-	m.submission_method_description = nil
+// ResetSubmissionDateStr resets all changes to the "submission_date_str" field.
+func (m *FnetDocumentMutation) ResetSubmissionDateStr() {
+	m.submission_date_str = nil
 }
 
 // SetSubmissionMethod sets the "submission_method" field.
@@ -838,6 +877,42 @@ func (m *FnetDocumentMutation) OldSubmissionMethod(ctx context.Context) (v strin
 // ResetSubmissionMethod resets all changes to the "submission_method" field.
 func (m *FnetDocumentMutation) ResetSubmissionMethod() {
 	m.submission_method = nil
+}
+
+// SetSubmissionMethodDescription sets the "submission_method_description" field.
+func (m *FnetDocumentMutation) SetSubmissionMethodDescription(s string) {
+	m.submission_method_description = &s
+}
+
+// SubmissionMethodDescription returns the value of the "submission_method_description" field in the mutation.
+func (m *FnetDocumentMutation) SubmissionMethodDescription() (r string, exists bool) {
+	v := m.submission_method_description
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldSubmissionMethodDescription returns the old "submission_method_description" field's value of the FnetDocument entity.
+// If the FnetDocument object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *FnetDocumentMutation) OldSubmissionMethodDescription(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldSubmissionMethodDescription is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldSubmissionMethodDescription requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldSubmissionMethodDescription: %w", err)
+	}
+	return oldValue.SubmissionMethodDescription, nil
+}
+
+// ResetSubmissionMethodDescription resets all changes to the "submission_method_description" field.
+func (m *FnetDocumentMutation) ResetSubmissionMethodDescription() {
+	m.submission_method_description = nil
 }
 
 // SetVersion sets the "version" field.
@@ -915,7 +990,7 @@ func (m *FnetDocumentMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *FnetDocumentMutation) Fields() []string {
-	fields := make([]string, 0, 18)
+	fields := make([]string, 0, 20)
 	if m.fnet_id != nil {
 		fields = append(fields, fnetdocument.FieldFnetID)
 	}
@@ -943,29 +1018,35 @@ func (m *FnetDocumentMutation) Fields() []string {
 	if m.market_name != nil {
 		fields = append(fields, fnetdocument.FieldMarketName)
 	}
+	if m.reference_date != nil {
+		fields = append(fields, fnetdocument.FieldReferenceDate)
+	}
 	if m.reference_date_format != nil {
 		fields = append(fields, fnetdocument.FieldReferenceDateFormat)
 	}
-	if m.reference_date != nil {
-		fields = append(fields, fnetdocument.FieldReferenceDate)
+	if m.reference_date_str != nil {
+		fields = append(fields, fnetdocument.FieldReferenceDateStr)
 	}
 	if m.reviewed != nil {
 		fields = append(fields, fnetdocument.FieldReviewed)
 	}
-	if m.status_description != nil {
-		fields = append(fields, fnetdocument.FieldStatusDescription)
-	}
 	if m.status != nil {
 		fields = append(fields, fnetdocument.FieldStatus)
+	}
+	if m.status_description != nil {
+		fields = append(fields, fnetdocument.FieldStatusDescription)
 	}
 	if m.submission_date != nil {
 		fields = append(fields, fnetdocument.FieldSubmissionDate)
 	}
-	if m.submission_method_description != nil {
-		fields = append(fields, fnetdocument.FieldSubmissionMethodDescription)
+	if m.submission_date_str != nil {
+		fields = append(fields, fnetdocument.FieldSubmissionDateStr)
 	}
 	if m.submission_method != nil {
 		fields = append(fields, fnetdocument.FieldSubmissionMethod)
+	}
+	if m.submission_method_description != nil {
+		fields = append(fields, fnetdocument.FieldSubmissionMethodDescription)
 	}
 	if m.version != nil {
 		fields = append(fields, fnetdocument.FieldVersion)
@@ -996,22 +1077,26 @@ func (m *FnetDocumentMutation) Field(name string) (ent.Value, bool) {
 		return m.HighPriority()
 	case fnetdocument.FieldMarketName:
 		return m.MarketName()
-	case fnetdocument.FieldReferenceDateFormat:
-		return m.ReferenceDateFormat()
 	case fnetdocument.FieldReferenceDate:
 		return m.ReferenceDate()
+	case fnetdocument.FieldReferenceDateFormat:
+		return m.ReferenceDateFormat()
+	case fnetdocument.FieldReferenceDateStr:
+		return m.ReferenceDateStr()
 	case fnetdocument.FieldReviewed:
 		return m.Reviewed()
-	case fnetdocument.FieldStatusDescription:
-		return m.StatusDescription()
 	case fnetdocument.FieldStatus:
 		return m.Status()
+	case fnetdocument.FieldStatusDescription:
+		return m.StatusDescription()
 	case fnetdocument.FieldSubmissionDate:
 		return m.SubmissionDate()
-	case fnetdocument.FieldSubmissionMethodDescription:
-		return m.SubmissionMethodDescription()
+	case fnetdocument.FieldSubmissionDateStr:
+		return m.SubmissionDateStr()
 	case fnetdocument.FieldSubmissionMethod:
 		return m.SubmissionMethod()
+	case fnetdocument.FieldSubmissionMethodDescription:
+		return m.SubmissionMethodDescription()
 	case fnetdocument.FieldVersion:
 		return m.Version()
 	}
@@ -1041,22 +1126,26 @@ func (m *FnetDocumentMutation) OldField(ctx context.Context, name string) (ent.V
 		return m.OldHighPriority(ctx)
 	case fnetdocument.FieldMarketName:
 		return m.OldMarketName(ctx)
-	case fnetdocument.FieldReferenceDateFormat:
-		return m.OldReferenceDateFormat(ctx)
 	case fnetdocument.FieldReferenceDate:
 		return m.OldReferenceDate(ctx)
+	case fnetdocument.FieldReferenceDateFormat:
+		return m.OldReferenceDateFormat(ctx)
+	case fnetdocument.FieldReferenceDateStr:
+		return m.OldReferenceDateStr(ctx)
 	case fnetdocument.FieldReviewed:
 		return m.OldReviewed(ctx)
-	case fnetdocument.FieldStatusDescription:
-		return m.OldStatusDescription(ctx)
 	case fnetdocument.FieldStatus:
 		return m.OldStatus(ctx)
+	case fnetdocument.FieldStatusDescription:
+		return m.OldStatusDescription(ctx)
 	case fnetdocument.FieldSubmissionDate:
 		return m.OldSubmissionDate(ctx)
-	case fnetdocument.FieldSubmissionMethodDescription:
-		return m.OldSubmissionMethodDescription(ctx)
+	case fnetdocument.FieldSubmissionDateStr:
+		return m.OldSubmissionDateStr(ctx)
 	case fnetdocument.FieldSubmissionMethod:
 		return m.OldSubmissionMethod(ctx)
+	case fnetdocument.FieldSubmissionMethodDescription:
+		return m.OldSubmissionMethodDescription(ctx)
 	case fnetdocument.FieldVersion:
 		return m.OldVersion(ctx)
 	}
@@ -1131,6 +1220,13 @@ func (m *FnetDocumentMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetMarketName(v)
 		return nil
+	case fnetdocument.FieldReferenceDate:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetReferenceDate(v)
+		return nil
 	case fnetdocument.FieldReferenceDateFormat:
 		v, ok := value.(string)
 		if !ok {
@@ -1138,12 +1234,12 @@ func (m *FnetDocumentMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetReferenceDateFormat(v)
 		return nil
-	case fnetdocument.FieldReferenceDate:
+	case fnetdocument.FieldReferenceDateStr:
 		v, ok := value.(string)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
-		m.SetReferenceDate(v)
+		m.SetReferenceDateStr(v)
 		return nil
 	case fnetdocument.FieldReviewed:
 		v, ok := value.(string)
@@ -1152,13 +1248,6 @@ func (m *FnetDocumentMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetReviewed(v)
 		return nil
-	case fnetdocument.FieldStatusDescription:
-		v, ok := value.(string)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.SetStatusDescription(v)
-		return nil
 	case fnetdocument.FieldStatus:
 		v, ok := value.(string)
 		if !ok {
@@ -1166,19 +1255,26 @@ func (m *FnetDocumentMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetStatus(v)
 		return nil
-	case fnetdocument.FieldSubmissionDate:
+	case fnetdocument.FieldStatusDescription:
 		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetStatusDescription(v)
+		return nil
+	case fnetdocument.FieldSubmissionDate:
+		v, ok := value.(time.Time)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetSubmissionDate(v)
 		return nil
-	case fnetdocument.FieldSubmissionMethodDescription:
+	case fnetdocument.FieldSubmissionDateStr:
 		v, ok := value.(string)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
-		m.SetSubmissionMethodDescription(v)
+		m.SetSubmissionDateStr(v)
 		return nil
 	case fnetdocument.FieldSubmissionMethod:
 		v, ok := value.(string)
@@ -1186,6 +1282,13 @@ func (m *FnetDocumentMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetSubmissionMethod(v)
+		return nil
+	case fnetdocument.FieldSubmissionMethodDescription:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetSubmissionMethodDescription(v)
 		return nil
 	case fnetdocument.FieldVersion:
 		v, ok := value.(int)
@@ -1324,29 +1427,35 @@ func (m *FnetDocumentMutation) ResetField(name string) error {
 	case fnetdocument.FieldMarketName:
 		m.ResetMarketName()
 		return nil
+	case fnetdocument.FieldReferenceDate:
+		m.ResetReferenceDate()
+		return nil
 	case fnetdocument.FieldReferenceDateFormat:
 		m.ResetReferenceDateFormat()
 		return nil
-	case fnetdocument.FieldReferenceDate:
-		m.ResetReferenceDate()
+	case fnetdocument.FieldReferenceDateStr:
+		m.ResetReferenceDateStr()
 		return nil
 	case fnetdocument.FieldReviewed:
 		m.ResetReviewed()
 		return nil
-	case fnetdocument.FieldStatusDescription:
-		m.ResetStatusDescription()
-		return nil
 	case fnetdocument.FieldStatus:
 		m.ResetStatus()
+		return nil
+	case fnetdocument.FieldStatusDescription:
+		m.ResetStatusDescription()
 		return nil
 	case fnetdocument.FieldSubmissionDate:
 		m.ResetSubmissionDate()
 		return nil
-	case fnetdocument.FieldSubmissionMethodDescription:
-		m.ResetSubmissionMethodDescription()
+	case fnetdocument.FieldSubmissionDateStr:
+		m.ResetSubmissionDateStr()
 		return nil
 	case fnetdocument.FieldSubmissionMethod:
 		m.ResetSubmissionMethod()
+		return nil
+	case fnetdocument.FieldSubmissionMethodDescription:
+		m.ResetSubmissionMethodDescription()
 		return nil
 	case fnetdocument.FieldVersion:
 		m.ResetVersion()
