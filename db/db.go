@@ -40,13 +40,22 @@ func (c *Connection) UpsertDocument(doc *fnet.Document) error {
 		return nil
 	}
 
-	return c.Client.FnetDocument.Create().
+	category_id, err := c.Client.FnetCategory.Create().
+		SetName(doc.Category).
+		OnConflict().
+		UpdateNewValues().
+		ID(c.Context)
+
+	if err != nil {
+		return err
+	}
+
+	create := c.Client.FnetDocument.Create().
 		SetFnetID(doc.ID).
 		SetAdditionalInformation(doc.AdditionalInformation).
-		SetDocumentCategory(doc.DocumentCategory).
+		SetCategoryID(category_id).
+		SetCategoryStr(doc.Category).
 		SetDocumentStatus(doc.DocumentStatus).
-		SetDocumentSubCategory1(doc.DocumentSubCategory1).
-		SetDocumentSubCategory2(doc.DocumentSubCategory2).
 		SetFundDescription(doc.FundDescription).
 		SetHighPriority(doc.HighPriority).
 		SetMarketName(doc.MarketName).
@@ -56,12 +65,43 @@ func (c *Connection) UpsertDocument(doc *fnet.Document) error {
 		SetReviewed(doc.Reviewed).
 		SetStatus(doc.Status).
 		SetStatusDescription(doc.StatusDescription).
+		SetSubCategory1Str(doc.SubCategory1).
+		SetSubCategory2Str(doc.SubCategory2).
 		SetSubmissionDate(submissionDate).
 		SetSubmissionDateStr(doc.SubmissionDate).
 		SetSubmissionMethod(doc.SubmissionMethod).
 		SetSubmissionMethodDescription(doc.SubmissionMethodDescription).
-		SetVersion(doc.Version).
-		OnConflict().
+		SetVersion(doc.Version)
+
+	if doc.SubCategory1 != "" {
+		sub_category1_id, err := c.Client.FnetSubCategory1.Create().
+			SetName(doc.SubCategory1).
+			OnConflict().
+			UpdateNewValues().
+			ID(c.Context)
+
+		if err != nil {
+			return err
+		}
+
+		create.SetSubCategory1ID(sub_category1_id)
+	}
+
+	if doc.SubCategory2 != "" {
+		sub_category2_id, err := c.Client.FnetSubCategory2.Create().
+			SetName(doc.SubCategory2).
+			OnConflict().
+			UpdateNewValues().
+			ID(c.Context)
+
+		if err != nil {
+			return err
+		}
+
+		create.SetSubCategory2ID(sub_category2_id)
+	}
+
+	return create.OnConflict().
 		UpdateNewValues().
 		Exec(c.Context)
 }

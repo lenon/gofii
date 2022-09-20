@@ -35,10 +35,10 @@ func TestUpsertNewDocument(t *testing.T) {
 	document := &fnet.Document{
 		ID:                          123,
 		AdditionalInformation:       "my info",
-		DocumentCategory:            "my category",
+		Category:                    "my category",
 		DocumentStatus:              "AC",
-		DocumentSubCategory1:        "my subcategory 1",
-		DocumentSubCategory2:        "my subcategory 2",
+		SubCategory1:                "my subcategory 1",
+		SubCategory2:                "my subcategory 2",
 		FundDescription:             "my fii",
 		HighPriority:                false,
 		MarketName:                  "my fii name",
@@ -56,16 +56,20 @@ func TestUpsertNewDocument(t *testing.T) {
 	err = db.UpsertDocument(document)
 	require.Nil(t, err)
 
-	entity, err := db.Client.FnetDocument.Query().First(db.Context)
+	entity, err := db.Client.FnetDocument.Query().
+		WithCategory().
+		WithSubCategory1().
+		WithSubCategory2().
+		First(db.Context)
 	require.Nil(t, err)
 
 	assert.Equal(t, 1, entity.ID)
 	assert.Equal(t, 123, entity.FnetID)
 	assert.Equal(t, "my info", entity.AdditionalInformation)
-	assert.Equal(t, "my category", entity.DocumentCategory)
+	assert.Equal(t, "my category", entity.CategoryStr)
 	assert.Equal(t, "AC", entity.DocumentStatus)
-	assert.Equal(t, "my subcategory 1", entity.DocumentSubCategory1)
-	assert.Equal(t, "my subcategory 2", entity.DocumentSubCategory2)
+	assert.Equal(t, "my subcategory 1", entity.SubCategory1Str)
+	assert.Equal(t, "my subcategory 2", entity.SubCategory2Str)
 	assert.Equal(t, "my fii", entity.FundDescription)
 	assert.Equal(t, false, entity.HighPriority)
 	assert.Equal(t, "my fii name", entity.MarketName)
@@ -80,6 +84,21 @@ func TestUpsertNewDocument(t *testing.T) {
 	assert.Equal(t, "Apresentação", entity.SubmissionMethodDescription)
 	assert.Equal(t, "AP", entity.SubmissionMethod)
 	assert.Equal(t, 2, entity.Version)
+
+	category, err := entity.Edges.CategoryOrErr()
+	require.Nil(t, err)
+
+	assert.Equal(t, "my category", category.Name)
+
+	sub_category1, err := entity.Edges.SubCategory1OrErr()
+	require.Nil(t, err)
+
+	assert.Equal(t, "my subcategory 1", sub_category1.Name)
+
+	sub_category2, err := entity.Edges.SubCategory2OrErr()
+	require.Nil(t, err)
+
+	assert.Equal(t, "my subcategory 2", sub_category2.Name)
 }
 
 func TestUpsertAlreadyCreatedDocument(t *testing.T) {
@@ -90,10 +109,10 @@ func TestUpsertAlreadyCreatedDocument(t *testing.T) {
 	document := fnet.Document{
 		ID:                          123,
 		AdditionalInformation:       "my info",
-		DocumentCategory:            "my category",
+		Category:                    "my category",
 		DocumentStatus:              "AC",
-		DocumentSubCategory1:        "my subcategory 1",
-		DocumentSubCategory2:        "my subcategory 2",
+		SubCategory1:                "my subcategory 1",
+		SubCategory2:                "my subcategory 2",
 		FundDescription:             "my fii",
 		HighPriority:                false,
 		MarketName:                  "my fii name",
@@ -112,7 +131,7 @@ func TestUpsertAlreadyCreatedDocument(t *testing.T) {
 	require.Nil(t, err)
 
 	documentCopy := document
-	documentCopy.DocumentCategory = "my updated category"
+	documentCopy.Category = "my updated category"
 	documentCopy.Version = 3
 
 	// upsert the same fnet document again with updated fields
@@ -127,7 +146,7 @@ func TestUpsertAlreadyCreatedDocument(t *testing.T) {
 
 	assert.Equal(t, 1, entity.ID)
 	assert.Equal(t, 123, entity.FnetID)
-	assert.Equal(t, "my updated category", entity.DocumentCategory)
+	assert.Equal(t, "my updated category", entity.CategoryStr)
 	assert.Equal(t, 3, entity.Version)
 }
 
@@ -139,10 +158,10 @@ func TestUpsertInvalidDocument(t *testing.T) {
 	document := fnet.Document{
 		ID:                          123,
 		AdditionalInformation:       "my info",
-		DocumentCategory:            "",
+		Category:                    "",
 		DocumentStatus:              "AC",
-		DocumentSubCategory1:        "my subcategory 1",
-		DocumentSubCategory2:        "my subcategory 2",
+		SubCategory1:                "my subcategory 1",
+		SubCategory2:                "my subcategory 2",
 		FundDescription:             "",
 		HighPriority:                false,
 		MarketName:                  "my fii name",
@@ -158,5 +177,5 @@ func TestUpsertInvalidDocument(t *testing.T) {
 	}
 
 	err = db.UpsertDocument(&document)
-	assert.EqualError(t, err, "ent: validator failed for field \"FnetDocument.document_category\": value is less than the required length")
+	assert.EqualError(t, err, "ent: validator failed for field \"FnetDocument.category_str\": value is less than the required length")
 }
