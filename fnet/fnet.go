@@ -24,10 +24,8 @@ type Client struct {
 type Document struct {
 	ID                          int    `json:"id"`
 	AdditionalInformation       string `json:"informacoesAdicionais"`
-	DocumentCategory            string `json:"categoriaDocumento"`
+	Category                    string `json:"categoriaDocumento"`
 	DocumentStatus              string `json:"situacaoDocumento"`
-	DocumentSubCategory1        string `json:"tipoDocumento"`
-	DocumentSubCategory2        string `json:"especieDocumento"`
 	FundDescription             string `json:"descricaoFundo"`
 	HighPriority                bool   `json:"altaPrioridade"`
 	MarketName                  string `json:"nomePregao"`
@@ -36,6 +34,8 @@ type Document struct {
 	Reviewed                    string `json:"analisado"`
 	Status                      string `json:"status"`
 	StatusDescription           string `json:"descricaoStatus"`
+	SubCategory1                string `json:"tipoDocumento"`
+	SubCategory2                string `json:"especieDocumento"`
 	SubmissionDate              string `json:"dataEntrega"`
 	SubmissionMethod            string `json:"modalidade"`
 	SubmissionMethodDescription string `json:"descricaoModalidade"`
