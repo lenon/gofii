@@ -12,8 +12,14 @@ import (
 // Tx is a transactional client that is created by calling Client.Tx().
 type Tx struct {
 	config
+	// FnetCategory is the client for interacting with the FnetCategory builders.
+	FnetCategory *FnetCategoryClient
 	// FnetDocument is the client for interacting with the FnetDocument builders.
 	FnetDocument *FnetDocumentClient
+	// FnetSubCategory1 is the client for interacting with the FnetSubCategory1 builders.
+	FnetSubCategory1 *FnetSubCategory1Client
+	// FnetSubCategory2 is the client for interacting with the FnetSubCategory2 builders.
+	FnetSubCategory2 *FnetSubCategory2Client
 
 	// lazily loaded.
 	client     *Client
@@ -149,7 +155,10 @@ func (tx *Tx) Client() *Client {
 }
 
 func (tx *Tx) init() {
+	tx.FnetCategory = NewFnetCategoryClient(tx.config)
 	tx.FnetDocument = NewFnetDocumentClient(tx.config)
+	tx.FnetSubCategory1 = NewFnetSubCategory1Client(tx.config)
+	tx.FnetSubCategory2 = NewFnetSubCategory2Client(tx.config)
 }
 
 // txDriver wraps the given dialect.Tx with a nop dialect.Driver implementation.
@@ -159,7 +168,7 @@ func (tx *Tx) init() {
 // of them in order to commit or rollback the transaction.
 //
 // If a closed transaction is embedded in one of the generated entities, and the entity
-// applies a query, for example: FnetDocument.QueryXXX(), the query will be executed
+// applies a query, for example: FnetCategory.QueryXXX(), the query will be executed
 // through the driver which created this transaction.
 //
 // Note that txDriver is not goroutine safe.

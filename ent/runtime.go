@@ -4,6 +4,8 @@ package ent
 
 import (
 	"github.com/lenon/gofii/ent/fnetdocument"
+	"github.com/lenon/gofii/ent/fnetsubcategory1"
+	"github.com/lenon/gofii/ent/fnetsubcategory2"
 	"github.com/lenon/gofii/ent/schema"
 )
 
@@ -17,36 +19,36 @@ func init() {
 	fnetdocumentDescFnetID := fnetdocumentFields[0].Descriptor()
 	// fnetdocument.FnetIDValidator is a validator for the "fnet_id" field. It is called by the builders before save.
 	fnetdocument.FnetIDValidator = fnetdocumentDescFnetID.Validators[0].(func(int) error)
-	// fnetdocumentDescDocumentCategory is the schema descriptor for document_category field.
-	fnetdocumentDescDocumentCategory := fnetdocumentFields[2].Descriptor()
-	// fnetdocument.DocumentCategoryValidator is a validator for the "document_category" field. It is called by the builders before save.
-	fnetdocument.DocumentCategoryValidator = fnetdocumentDescDocumentCategory.Validators[0].(func(string) error)
+	// fnetdocumentDescCategoryStr is the schema descriptor for category_str field.
+	fnetdocumentDescCategoryStr := fnetdocumentFields[2].Descriptor()
+	// fnetdocument.CategoryStrValidator is a validator for the "category_str" field. It is called by the builders before save.
+	fnetdocument.CategoryStrValidator = fnetdocumentDescCategoryStr.Validators[0].(func(string) error)
 	// fnetdocumentDescDocumentStatus is the schema descriptor for document_status field.
 	fnetdocumentDescDocumentStatus := fnetdocumentFields[3].Descriptor()
 	// fnetdocument.DocumentStatusValidator is a validator for the "document_status" field. It is called by the builders before save.
 	fnetdocument.DocumentStatusValidator = fnetdocumentDescDocumentStatus.Validators[0].(func(string) error)
 	// fnetdocumentDescFundDescription is the schema descriptor for fund_description field.
-	fnetdocumentDescFundDescription := fnetdocumentFields[6].Descriptor()
+	fnetdocumentDescFundDescription := fnetdocumentFields[4].Descriptor()
 	// fnetdocument.FundDescriptionValidator is a validator for the "fund_description" field. It is called by the builders before save.
 	fnetdocument.FundDescriptionValidator = fnetdocumentDescFundDescription.Validators[0].(func(string) error)
 	// fnetdocumentDescReferenceDateFormat is the schema descriptor for reference_date_format field.
-	fnetdocumentDescReferenceDateFormat := fnetdocumentFields[10].Descriptor()
+	fnetdocumentDescReferenceDateFormat := fnetdocumentFields[8].Descriptor()
 	// fnetdocument.ReferenceDateFormatValidator is a validator for the "reference_date_format" field. It is called by the builders before save.
 	fnetdocument.ReferenceDateFormatValidator = fnetdocumentDescReferenceDateFormat.Validators[0].(func(string) error)
 	// fnetdocumentDescReferenceDateStr is the schema descriptor for reference_date_str field.
-	fnetdocumentDescReferenceDateStr := fnetdocumentFields[11].Descriptor()
+	fnetdocumentDescReferenceDateStr := fnetdocumentFields[9].Descriptor()
 	// fnetdocument.ReferenceDateStrValidator is a validator for the "reference_date_str" field. It is called by the builders before save.
 	fnetdocument.ReferenceDateStrValidator = fnetdocumentDescReferenceDateStr.Validators[0].(func(string) error)
 	// fnetdocumentDescReviewed is the schema descriptor for reviewed field.
-	fnetdocumentDescReviewed := fnetdocumentFields[12].Descriptor()
+	fnetdocumentDescReviewed := fnetdocumentFields[10].Descriptor()
 	// fnetdocument.ReviewedValidator is a validator for the "reviewed" field. It is called by the builders before save.
 	fnetdocument.ReviewedValidator = fnetdocumentDescReviewed.Validators[0].(func(string) error)
 	// fnetdocumentDescStatus is the schema descriptor for status field.
-	fnetdocumentDescStatus := fnetdocumentFields[13].Descriptor()
+	fnetdocumentDescStatus := fnetdocumentFields[11].Descriptor()
 	// fnetdocument.StatusValidator is a validator for the "status" field. It is called by the builders before save.
 	fnetdocument.StatusValidator = fnetdocumentDescStatus.Validators[0].(func(string) error)
 	// fnetdocumentDescStatusDescription is the schema descriptor for status_description field.
-	fnetdocumentDescStatusDescription := fnetdocumentFields[14].Descriptor()
+	fnetdocumentDescStatusDescription := fnetdocumentFields[12].Descriptor()
 	// fnetdocument.StatusDescriptionValidator is a validator for the "status_description" field. It is called by the builders before save.
 	fnetdocument.StatusDescriptionValidator = fnetdocumentDescStatusDescription.Validators[0].(func(string) error)
 	// fnetdocumentDescSubmissionDateStr is the schema descriptor for submission_date_str field.
@@ -65,4 +67,16 @@ func init() {
 	fnetdocumentDescVersion := fnetdocumentFields[19].Descriptor()
 	// fnetdocument.VersionValidator is a validator for the "version" field. It is called by the builders before save.
 	fnetdocument.VersionValidator = fnetdocumentDescVersion.Validators[0].(func(int) error)
+	fnetsubcategory1Fields := schema.FnetSubCategory1{}.Fields()
+	_ = fnetsubcategory1Fields
+	// fnetsubcategory1DescName is the schema descriptor for name field.
+	fnetsubcategory1DescName := fnetsubcategory1Fields[0].Descriptor()
+	// fnetsubcategory1.NameValidator is a validator for the "name" field. It is called by the builders before save.
+	fnetsubcategory1.NameValidator = fnetsubcategory1DescName.Validators[0].(func(string) error)
+	fnetsubcategory2Fields := schema.FnetSubCategory2{}.Fields()
+	_ = fnetsubcategory2Fields
+	// fnetsubcategory2DescName is the schema descriptor for name field.
+	fnetsubcategory2DescName := fnetsubcategory2Fields[0].Descriptor()
+	// fnetsubcategory2.NameValidator is a validator for the "name" field. It is called by the builders before save.
+	fnetsubcategory2.NameValidator = fnetsubcategory2DescName.Validators[0].(func(string) error)
 }

@@ -11,7 +11,10 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/lenon/gofii/ent/fnetcategory"
 	"github.com/lenon/gofii/ent/fnetdocument"
+	"github.com/lenon/gofii/ent/fnetsubcategory1"
+	"github.com/lenon/gofii/ent/fnetsubcategory2"
 	"github.com/lenon/gofii/ent/predicate"
 )
 
@@ -48,55 +51,15 @@ func (fdu *FnetDocumentUpdate) ClearAdditionalInformation() *FnetDocumentUpdate 
 	return fdu
 }
 
-// SetDocumentCategory sets the "document_category" field.
-func (fdu *FnetDocumentUpdate) SetDocumentCategory(s string) *FnetDocumentUpdate {
-	fdu.mutation.SetDocumentCategory(s)
+// SetCategoryStr sets the "category_str" field.
+func (fdu *FnetDocumentUpdate) SetCategoryStr(s string) *FnetDocumentUpdate {
+	fdu.mutation.SetCategoryStr(s)
 	return fdu
 }
 
 // SetDocumentStatus sets the "document_status" field.
 func (fdu *FnetDocumentUpdate) SetDocumentStatus(s string) *FnetDocumentUpdate {
 	fdu.mutation.SetDocumentStatus(s)
-	return fdu
-}
-
-// SetDocumentSubCategory1 sets the "document_sub_category1" field.
-func (fdu *FnetDocumentUpdate) SetDocumentSubCategory1(s string) *FnetDocumentUpdate {
-	fdu.mutation.SetDocumentSubCategory1(s)
-	return fdu
-}
-
-// SetNillableDocumentSubCategory1 sets the "document_sub_category1" field if the given value is not nil.
-func (fdu *FnetDocumentUpdate) SetNillableDocumentSubCategory1(s *string) *FnetDocumentUpdate {
-	if s != nil {
-		fdu.SetDocumentSubCategory1(*s)
-	}
-	return fdu
-}
-
-// ClearDocumentSubCategory1 clears the value of the "document_sub_category1" field.
-func (fdu *FnetDocumentUpdate) ClearDocumentSubCategory1() *FnetDocumentUpdate {
-	fdu.mutation.ClearDocumentSubCategory1()
-	return fdu
-}
-
-// SetDocumentSubCategory2 sets the "document_sub_category2" field.
-func (fdu *FnetDocumentUpdate) SetDocumentSubCategory2(s string) *FnetDocumentUpdate {
-	fdu.mutation.SetDocumentSubCategory2(s)
-	return fdu
-}
-
-// SetNillableDocumentSubCategory2 sets the "document_sub_category2" field if the given value is not nil.
-func (fdu *FnetDocumentUpdate) SetNillableDocumentSubCategory2(s *string) *FnetDocumentUpdate {
-	if s != nil {
-		fdu.SetDocumentSubCategory2(*s)
-	}
-	return fdu
-}
-
-// ClearDocumentSubCategory2 clears the value of the "document_sub_category2" field.
-func (fdu *FnetDocumentUpdate) ClearDocumentSubCategory2() *FnetDocumentUpdate {
-	fdu.mutation.ClearDocumentSubCategory2()
 	return fdu
 }
 
@@ -168,6 +131,46 @@ func (fdu *FnetDocumentUpdate) SetStatusDescription(s string) *FnetDocumentUpdat
 	return fdu
 }
 
+// SetSubCategory1Str sets the "sub_category1_str" field.
+func (fdu *FnetDocumentUpdate) SetSubCategory1Str(s string) *FnetDocumentUpdate {
+	fdu.mutation.SetSubCategory1Str(s)
+	return fdu
+}
+
+// SetNillableSubCategory1Str sets the "sub_category1_str" field if the given value is not nil.
+func (fdu *FnetDocumentUpdate) SetNillableSubCategory1Str(s *string) *FnetDocumentUpdate {
+	if s != nil {
+		fdu.SetSubCategory1Str(*s)
+	}
+	return fdu
+}
+
+// ClearSubCategory1Str clears the value of the "sub_category1_str" field.
+func (fdu *FnetDocumentUpdate) ClearSubCategory1Str() *FnetDocumentUpdate {
+	fdu.mutation.ClearSubCategory1Str()
+	return fdu
+}
+
+// SetSubCategory2Str sets the "sub_category2_str" field.
+func (fdu *FnetDocumentUpdate) SetSubCategory2Str(s string) *FnetDocumentUpdate {
+	fdu.mutation.SetSubCategory2Str(s)
+	return fdu
+}
+
+// SetNillableSubCategory2Str sets the "sub_category2_str" field if the given value is not nil.
+func (fdu *FnetDocumentUpdate) SetNillableSubCategory2Str(s *string) *FnetDocumentUpdate {
+	if s != nil {
+		fdu.SetSubCategory2Str(*s)
+	}
+	return fdu
+}
+
+// ClearSubCategory2Str clears the value of the "sub_category2_str" field.
+func (fdu *FnetDocumentUpdate) ClearSubCategory2Str() *FnetDocumentUpdate {
+	fdu.mutation.ClearSubCategory2Str()
+	return fdu
+}
+
 // SetSubmissionDate sets the "submission_date" field.
 func (fdu *FnetDocumentUpdate) SetSubmissionDate(t time.Time) *FnetDocumentUpdate {
 	fdu.mutation.SetSubmissionDate(t)
@@ -205,9 +208,76 @@ func (fdu *FnetDocumentUpdate) AddVersion(i int) *FnetDocumentUpdate {
 	return fdu
 }
 
+// SetCategoryID sets the "category" edge to the FnetCategory entity by ID.
+func (fdu *FnetDocumentUpdate) SetCategoryID(id int) *FnetDocumentUpdate {
+	fdu.mutation.SetCategoryID(id)
+	return fdu
+}
+
+// SetCategory sets the "category" edge to the FnetCategory entity.
+func (fdu *FnetDocumentUpdate) SetCategory(f *FnetCategory) *FnetDocumentUpdate {
+	return fdu.SetCategoryID(f.ID)
+}
+
+// SetSubCategory1ID sets the "sub_category1" edge to the FnetSubCategory1 entity by ID.
+func (fdu *FnetDocumentUpdate) SetSubCategory1ID(id int) *FnetDocumentUpdate {
+	fdu.mutation.SetSubCategory1ID(id)
+	return fdu
+}
+
+// SetNillableSubCategory1ID sets the "sub_category1" edge to the FnetSubCategory1 entity by ID if the given value is not nil.
+func (fdu *FnetDocumentUpdate) SetNillableSubCategory1ID(id *int) *FnetDocumentUpdate {
+	if id != nil {
+		fdu = fdu.SetSubCategory1ID(*id)
+	}
+	return fdu
+}
+
+// SetSubCategory1 sets the "sub_category1" edge to the FnetSubCategory1 entity.
+func (fdu *FnetDocumentUpdate) SetSubCategory1(f *FnetSubCategory1) *FnetDocumentUpdate {
+	return fdu.SetSubCategory1ID(f.ID)
+}
+
+// SetSubCategory2ID sets the "sub_category2" edge to the FnetSubCategory2 entity by ID.
+func (fdu *FnetDocumentUpdate) SetSubCategory2ID(id int) *FnetDocumentUpdate {
+	fdu.mutation.SetSubCategory2ID(id)
+	return fdu
+}
+
+// SetNillableSubCategory2ID sets the "sub_category2" edge to the FnetSubCategory2 entity by ID if the given value is not nil.
+func (fdu *FnetDocumentUpdate) SetNillableSubCategory2ID(id *int) *FnetDocumentUpdate {
+	if id != nil {
+		fdu = fdu.SetSubCategory2ID(*id)
+	}
+	return fdu
+}
+
+// SetSubCategory2 sets the "sub_category2" edge to the FnetSubCategory2 entity.
+func (fdu *FnetDocumentUpdate) SetSubCategory2(f *FnetSubCategory2) *FnetDocumentUpdate {
+	return fdu.SetSubCategory2ID(f.ID)
+}
+
 // Mutation returns the FnetDocumentMutation object of the builder.
 func (fdu *FnetDocumentUpdate) Mutation() *FnetDocumentMutation {
 	return fdu.mutation
+}
+
+// ClearCategory clears the "category" edge to the FnetCategory entity.
+func (fdu *FnetDocumentUpdate) ClearCategory() *FnetDocumentUpdate {
+	fdu.mutation.ClearCategory()
+	return fdu
+}
+
+// ClearSubCategory1 clears the "sub_category1" edge to the FnetSubCategory1 entity.
+func (fdu *FnetDocumentUpdate) ClearSubCategory1() *FnetDocumentUpdate {
+	fdu.mutation.ClearSubCategory1()
+	return fdu
+}
+
+// ClearSubCategory2 clears the "sub_category2" edge to the FnetSubCategory2 entity.
+func (fdu *FnetDocumentUpdate) ClearSubCategory2() *FnetDocumentUpdate {
+	fdu.mutation.ClearSubCategory2()
+	return fdu
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
@@ -272,9 +342,9 @@ func (fdu *FnetDocumentUpdate) ExecX(ctx context.Context) {
 
 // check runs all checks and user-defined validators on the builder.
 func (fdu *FnetDocumentUpdate) check() error {
-	if v, ok := fdu.mutation.DocumentCategory(); ok {
-		if err := fnetdocument.DocumentCategoryValidator(v); err != nil {
-			return &ValidationError{Name: "document_category", err: fmt.Errorf(`ent: validator failed for field "FnetDocument.document_category": %w`, err)}
+	if v, ok := fdu.mutation.CategoryStr(); ok {
+		if err := fnetdocument.CategoryStrValidator(v); err != nil {
+			return &ValidationError{Name: "category_str", err: fmt.Errorf(`ent: validator failed for field "FnetDocument.category_str": %w`, err)}
 		}
 	}
 	if v, ok := fdu.mutation.DocumentStatus(); ok {
@@ -332,6 +402,9 @@ func (fdu *FnetDocumentUpdate) check() error {
 			return &ValidationError{Name: "version", err: fmt.Errorf(`ent: validator failed for field "FnetDocument.version": %w`, err)}
 		}
 	}
+	if _, ok := fdu.mutation.CategoryID(); fdu.mutation.CategoryCleared() && !ok {
+		return errors.New(`ent: clearing a required unique edge "FnetDocument.category"`)
+	}
 	return nil
 }
 
@@ -366,11 +439,11 @@ func (fdu *FnetDocumentUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Column: fnetdocument.FieldAdditionalInformation,
 		})
 	}
-	if value, ok := fdu.mutation.DocumentCategory(); ok {
+	if value, ok := fdu.mutation.CategoryStr(); ok {
 		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
 			Type:   field.TypeString,
 			Value:  value,
-			Column: fnetdocument.FieldDocumentCategory,
+			Column: fnetdocument.FieldCategoryStr,
 		})
 	}
 	if value, ok := fdu.mutation.DocumentStatus(); ok {
@@ -378,32 +451,6 @@ func (fdu *FnetDocumentUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Type:   field.TypeString,
 			Value:  value,
 			Column: fnetdocument.FieldDocumentStatus,
-		})
-	}
-	if value, ok := fdu.mutation.DocumentSubCategory1(); ok {
-		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeString,
-			Value:  value,
-			Column: fnetdocument.FieldDocumentSubCategory1,
-		})
-	}
-	if fdu.mutation.DocumentSubCategory1Cleared() {
-		_spec.Fields.Clear = append(_spec.Fields.Clear, &sqlgraph.FieldSpec{
-			Type:   field.TypeString,
-			Column: fnetdocument.FieldDocumentSubCategory1,
-		})
-	}
-	if value, ok := fdu.mutation.DocumentSubCategory2(); ok {
-		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeString,
-			Value:  value,
-			Column: fnetdocument.FieldDocumentSubCategory2,
-		})
-	}
-	if fdu.mutation.DocumentSubCategory2Cleared() {
-		_spec.Fields.Clear = append(_spec.Fields.Clear, &sqlgraph.FieldSpec{
-			Type:   field.TypeString,
-			Column: fnetdocument.FieldDocumentSubCategory2,
 		})
 	}
 	if value, ok := fdu.mutation.FundDescription(); ok {
@@ -475,6 +522,32 @@ func (fdu *FnetDocumentUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Column: fnetdocument.FieldStatusDescription,
 		})
 	}
+	if value, ok := fdu.mutation.SubCategory1Str(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Value:  value,
+			Column: fnetdocument.FieldSubCategory1Str,
+		})
+	}
+	if fdu.mutation.SubCategory1StrCleared() {
+		_spec.Fields.Clear = append(_spec.Fields.Clear, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Column: fnetdocument.FieldSubCategory1Str,
+		})
+	}
+	if value, ok := fdu.mutation.SubCategory2Str(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Value:  value,
+			Column: fnetdocument.FieldSubCategory2Str,
+		})
+	}
+	if fdu.mutation.SubCategory2StrCleared() {
+		_spec.Fields.Clear = append(_spec.Fields.Clear, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Column: fnetdocument.FieldSubCategory2Str,
+		})
+	}
 	if value, ok := fdu.mutation.SubmissionDate(); ok {
 		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
 			Type:   field.TypeTime,
@@ -517,6 +590,111 @@ func (fdu *FnetDocumentUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Column: fnetdocument.FieldVersion,
 		})
 	}
+	if fdu.mutation.CategoryCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   fnetdocument.CategoryTable,
+			Columns: []string{fnetdocument.CategoryColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: &sqlgraph.FieldSpec{
+					Type:   field.TypeInt,
+					Column: fnetcategory.FieldID,
+				},
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := fdu.mutation.CategoryIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   fnetdocument.CategoryTable,
+			Columns: []string{fnetdocument.CategoryColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: &sqlgraph.FieldSpec{
+					Type:   field.TypeInt,
+					Column: fnetcategory.FieldID,
+				},
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if fdu.mutation.SubCategory1Cleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   fnetdocument.SubCategory1Table,
+			Columns: []string{fnetdocument.SubCategory1Column},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: &sqlgraph.FieldSpec{
+					Type:   field.TypeInt,
+					Column: fnetsubcategory1.FieldID,
+				},
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := fdu.mutation.SubCategory1IDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   fnetdocument.SubCategory1Table,
+			Columns: []string{fnetdocument.SubCategory1Column},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: &sqlgraph.FieldSpec{
+					Type:   field.TypeInt,
+					Column: fnetsubcategory1.FieldID,
+				},
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if fdu.mutation.SubCategory2Cleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   fnetdocument.SubCategory2Table,
+			Columns: []string{fnetdocument.SubCategory2Column},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: &sqlgraph.FieldSpec{
+					Type:   field.TypeInt,
+					Column: fnetsubcategory2.FieldID,
+				},
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := fdu.mutation.SubCategory2IDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   fnetdocument.SubCategory2Table,
+			Columns: []string{fnetdocument.SubCategory2Column},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: &sqlgraph.FieldSpec{
+					Type:   field.TypeInt,
+					Column: fnetsubcategory2.FieldID,
+				},
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	if n, err = sqlgraph.UpdateNodes(ctx, fdu.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{fnetdocument.Label}
@@ -556,55 +734,15 @@ func (fduo *FnetDocumentUpdateOne) ClearAdditionalInformation() *FnetDocumentUpd
 	return fduo
 }
 
-// SetDocumentCategory sets the "document_category" field.
-func (fduo *FnetDocumentUpdateOne) SetDocumentCategory(s string) *FnetDocumentUpdateOne {
-	fduo.mutation.SetDocumentCategory(s)
+// SetCategoryStr sets the "category_str" field.
+func (fduo *FnetDocumentUpdateOne) SetCategoryStr(s string) *FnetDocumentUpdateOne {
+	fduo.mutation.SetCategoryStr(s)
 	return fduo
 }
 
 // SetDocumentStatus sets the "document_status" field.
 func (fduo *FnetDocumentUpdateOne) SetDocumentStatus(s string) *FnetDocumentUpdateOne {
 	fduo.mutation.SetDocumentStatus(s)
-	return fduo
-}
-
-// SetDocumentSubCategory1 sets the "document_sub_category1" field.
-func (fduo *FnetDocumentUpdateOne) SetDocumentSubCategory1(s string) *FnetDocumentUpdateOne {
-	fduo.mutation.SetDocumentSubCategory1(s)
-	return fduo
-}
-
-// SetNillableDocumentSubCategory1 sets the "document_sub_category1" field if the given value is not nil.
-func (fduo *FnetDocumentUpdateOne) SetNillableDocumentSubCategory1(s *string) *FnetDocumentUpdateOne {
-	if s != nil {
-		fduo.SetDocumentSubCategory1(*s)
-	}
-	return fduo
-}
-
-// ClearDocumentSubCategory1 clears the value of the "document_sub_category1" field.
-func (fduo *FnetDocumentUpdateOne) ClearDocumentSubCategory1() *FnetDocumentUpdateOne {
-	fduo.mutation.ClearDocumentSubCategory1()
-	return fduo
-}
-
-// SetDocumentSubCategory2 sets the "document_sub_category2" field.
-func (fduo *FnetDocumentUpdateOne) SetDocumentSubCategory2(s string) *FnetDocumentUpdateOne {
-	fduo.mutation.SetDocumentSubCategory2(s)
-	return fduo
-}
-
-// SetNillableDocumentSubCategory2 sets the "document_sub_category2" field if the given value is not nil.
-func (fduo *FnetDocumentUpdateOne) SetNillableDocumentSubCategory2(s *string) *FnetDocumentUpdateOne {
-	if s != nil {
-		fduo.SetDocumentSubCategory2(*s)
-	}
-	return fduo
-}
-
-// ClearDocumentSubCategory2 clears the value of the "document_sub_category2" field.
-func (fduo *FnetDocumentUpdateOne) ClearDocumentSubCategory2() *FnetDocumentUpdateOne {
-	fduo.mutation.ClearDocumentSubCategory2()
 	return fduo
 }
 
@@ -676,6 +814,46 @@ func (fduo *FnetDocumentUpdateOne) SetStatusDescription(s string) *FnetDocumentU
 	return fduo
 }
 
+// SetSubCategory1Str sets the "sub_category1_str" field.
+func (fduo *FnetDocumentUpdateOne) SetSubCategory1Str(s string) *FnetDocumentUpdateOne {
+	fduo.mutation.SetSubCategory1Str(s)
+	return fduo
+}
+
+// SetNillableSubCategory1Str sets the "sub_category1_str" field if the given value is not nil.
+func (fduo *FnetDocumentUpdateOne) SetNillableSubCategory1Str(s *string) *FnetDocumentUpdateOne {
+	if s != nil {
+		fduo.SetSubCategory1Str(*s)
+	}
+	return fduo
+}
+
+// ClearSubCategory1Str clears the value of the "sub_category1_str" field.
+func (fduo *FnetDocumentUpdateOne) ClearSubCategory1Str() *FnetDocumentUpdateOne {
+	fduo.mutation.ClearSubCategory1Str()
+	return fduo
+}
+
+// SetSubCategory2Str sets the "sub_category2_str" field.
+func (fduo *FnetDocumentUpdateOne) SetSubCategory2Str(s string) *FnetDocumentUpdateOne {
+	fduo.mutation.SetSubCategory2Str(s)
+	return fduo
+}
+
+// SetNillableSubCategory2Str sets the "sub_category2_str" field if the given value is not nil.
+func (fduo *FnetDocumentUpdateOne) SetNillableSubCategory2Str(s *string) *FnetDocumentUpdateOne {
+	if s != nil {
+		fduo.SetSubCategory2Str(*s)
+	}
+	return fduo
+}
+
+// ClearSubCategory2Str clears the value of the "sub_category2_str" field.
+func (fduo *FnetDocumentUpdateOne) ClearSubCategory2Str() *FnetDocumentUpdateOne {
+	fduo.mutation.ClearSubCategory2Str()
+	return fduo
+}
+
 // SetSubmissionDate sets the "submission_date" field.
 func (fduo *FnetDocumentUpdateOne) SetSubmissionDate(t time.Time) *FnetDocumentUpdateOne {
 	fduo.mutation.SetSubmissionDate(t)
@@ -713,9 +891,76 @@ func (fduo *FnetDocumentUpdateOne) AddVersion(i int) *FnetDocumentUpdateOne {
 	return fduo
 }
 
+// SetCategoryID sets the "category" edge to the FnetCategory entity by ID.
+func (fduo *FnetDocumentUpdateOne) SetCategoryID(id int) *FnetDocumentUpdateOne {
+	fduo.mutation.SetCategoryID(id)
+	return fduo
+}
+
+// SetCategory sets the "category" edge to the FnetCategory entity.
+func (fduo *FnetDocumentUpdateOne) SetCategory(f *FnetCategory) *FnetDocumentUpdateOne {
+	return fduo.SetCategoryID(f.ID)
+}
+
+// SetSubCategory1ID sets the "sub_category1" edge to the FnetSubCategory1 entity by ID.
+func (fduo *FnetDocumentUpdateOne) SetSubCategory1ID(id int) *FnetDocumentUpdateOne {
+	fduo.mutation.SetSubCategory1ID(id)
+	return fduo
+}
+
+// SetNillableSubCategory1ID sets the "sub_category1" edge to the FnetSubCategory1 entity by ID if the given value is not nil.
+func (fduo *FnetDocumentUpdateOne) SetNillableSubCategory1ID(id *int) *FnetDocumentUpdateOne {
+	if id != nil {
+		fduo = fduo.SetSubCategory1ID(*id)
+	}
+	return fduo
+}
+
+// SetSubCategory1 sets the "sub_category1" edge to the FnetSubCategory1 entity.
+func (fduo *FnetDocumentUpdateOne) SetSubCategory1(f *FnetSubCategory1) *FnetDocumentUpdateOne {
+	return fduo.SetSubCategory1ID(f.ID)
+}
+
+// SetSubCategory2ID sets the "sub_category2" edge to the FnetSubCategory2 entity by ID.
+func (fduo *FnetDocumentUpdateOne) SetSubCategory2ID(id int) *FnetDocumentUpdateOne {
+	fduo.mutation.SetSubCategory2ID(id)
+	return fduo
+}
+
+// SetNillableSubCategory2ID sets the "sub_category2" edge to the FnetSubCategory2 entity by ID if the given value is not nil.
+func (fduo *FnetDocumentUpdateOne) SetNillableSubCategory2ID(id *int) *FnetDocumentUpdateOne {
+	if id != nil {
+		fduo = fduo.SetSubCategory2ID(*id)
+	}
+	return fduo
+}
+
+// SetSubCategory2 sets the "sub_category2" edge to the FnetSubCategory2 entity.
+func (fduo *FnetDocumentUpdateOne) SetSubCategory2(f *FnetSubCategory2) *FnetDocumentUpdateOne {
+	return fduo.SetSubCategory2ID(f.ID)
+}
+
 // Mutation returns the FnetDocumentMutation object of the builder.
 func (fduo *FnetDocumentUpdateOne) Mutation() *FnetDocumentMutation {
 	return fduo.mutation
+}
+
+// ClearCategory clears the "category" edge to the FnetCategory entity.
+func (fduo *FnetDocumentUpdateOne) ClearCategory() *FnetDocumentUpdateOne {
+	fduo.mutation.ClearCategory()
+	return fduo
+}
+
+// ClearSubCategory1 clears the "sub_category1" edge to the FnetSubCategory1 entity.
+func (fduo *FnetDocumentUpdateOne) ClearSubCategory1() *FnetDocumentUpdateOne {
+	fduo.mutation.ClearSubCategory1()
+	return fduo
+}
+
+// ClearSubCategory2 clears the "sub_category2" edge to the FnetSubCategory2 entity.
+func (fduo *FnetDocumentUpdateOne) ClearSubCategory2() *FnetDocumentUpdateOne {
+	fduo.mutation.ClearSubCategory2()
+	return fduo
 }
 
 // Select allows selecting one or more fields (columns) of the returned entity.
@@ -793,9 +1038,9 @@ func (fduo *FnetDocumentUpdateOne) ExecX(ctx context.Context) {
 
 // check runs all checks and user-defined validators on the builder.
 func (fduo *FnetDocumentUpdateOne) check() error {
-	if v, ok := fduo.mutation.DocumentCategory(); ok {
-		if err := fnetdocument.DocumentCategoryValidator(v); err != nil {
-			return &ValidationError{Name: "document_category", err: fmt.Errorf(`ent: validator failed for field "FnetDocument.document_category": %w`, err)}
+	if v, ok := fduo.mutation.CategoryStr(); ok {
+		if err := fnetdocument.CategoryStrValidator(v); err != nil {
+			return &ValidationError{Name: "category_str", err: fmt.Errorf(`ent: validator failed for field "FnetDocument.category_str": %w`, err)}
 		}
 	}
 	if v, ok := fduo.mutation.DocumentStatus(); ok {
@@ -853,6 +1098,9 @@ func (fduo *FnetDocumentUpdateOne) check() error {
 			return &ValidationError{Name: "version", err: fmt.Errorf(`ent: validator failed for field "FnetDocument.version": %w`, err)}
 		}
 	}
+	if _, ok := fduo.mutation.CategoryID(); fduo.mutation.CategoryCleared() && !ok {
+		return errors.New(`ent: clearing a required unique edge "FnetDocument.category"`)
+	}
 	return nil
 }
 
@@ -904,11 +1152,11 @@ func (fduo *FnetDocumentUpdateOne) sqlSave(ctx context.Context) (_node *FnetDocu
 			Column: fnetdocument.FieldAdditionalInformation,
 		})
 	}
-	if value, ok := fduo.mutation.DocumentCategory(); ok {
+	if value, ok := fduo.mutation.CategoryStr(); ok {
 		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
 			Type:   field.TypeString,
 			Value:  value,
-			Column: fnetdocument.FieldDocumentCategory,
+			Column: fnetdocument.FieldCategoryStr,
 		})
 	}
 	if value, ok := fduo.mutation.DocumentStatus(); ok {
@@ -916,32 +1164,6 @@ func (fduo *FnetDocumentUpdateOne) sqlSave(ctx context.Context) (_node *FnetDocu
 			Type:   field.TypeString,
 			Value:  value,
 			Column: fnetdocument.FieldDocumentStatus,
-		})
-	}
-	if value, ok := fduo.mutation.DocumentSubCategory1(); ok {
-		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeString,
-			Value:  value,
-			Column: fnetdocument.FieldDocumentSubCategory1,
-		})
-	}
-	if fduo.mutation.DocumentSubCategory1Cleared() {
-		_spec.Fields.Clear = append(_spec.Fields.Clear, &sqlgraph.FieldSpec{
-			Type:   field.TypeString,
-			Column: fnetdocument.FieldDocumentSubCategory1,
-		})
-	}
-	if value, ok := fduo.mutation.DocumentSubCategory2(); ok {
-		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeString,
-			Value:  value,
-			Column: fnetdocument.FieldDocumentSubCategory2,
-		})
-	}
-	if fduo.mutation.DocumentSubCategory2Cleared() {
-		_spec.Fields.Clear = append(_spec.Fields.Clear, &sqlgraph.FieldSpec{
-			Type:   field.TypeString,
-			Column: fnetdocument.FieldDocumentSubCategory2,
 		})
 	}
 	if value, ok := fduo.mutation.FundDescription(); ok {
@@ -1013,6 +1235,32 @@ func (fduo *FnetDocumentUpdateOne) sqlSave(ctx context.Context) (_node *FnetDocu
 			Column: fnetdocument.FieldStatusDescription,
 		})
 	}
+	if value, ok := fduo.mutation.SubCategory1Str(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Value:  value,
+			Column: fnetdocument.FieldSubCategory1Str,
+		})
+	}
+	if fduo.mutation.SubCategory1StrCleared() {
+		_spec.Fields.Clear = append(_spec.Fields.Clear, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Column: fnetdocument.FieldSubCategory1Str,
+		})
+	}
+	if value, ok := fduo.mutation.SubCategory2Str(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Value:  value,
+			Column: fnetdocument.FieldSubCategory2Str,
+		})
+	}
+	if fduo.mutation.SubCategory2StrCleared() {
+		_spec.Fields.Clear = append(_spec.Fields.Clear, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Column: fnetdocument.FieldSubCategory2Str,
+		})
+	}
 	if value, ok := fduo.mutation.SubmissionDate(); ok {
 		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
 			Type:   field.TypeTime,
@@ -1054,6 +1302,111 @@ func (fduo *FnetDocumentUpdateOne) sqlSave(ctx context.Context) (_node *FnetDocu
 			Value:  value,
 			Column: fnetdocument.FieldVersion,
 		})
+	}
+	if fduo.mutation.CategoryCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   fnetdocument.CategoryTable,
+			Columns: []string{fnetdocument.CategoryColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: &sqlgraph.FieldSpec{
+					Type:   field.TypeInt,
+					Column: fnetcategory.FieldID,
+				},
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := fduo.mutation.CategoryIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   fnetdocument.CategoryTable,
+			Columns: []string{fnetdocument.CategoryColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: &sqlgraph.FieldSpec{
+					Type:   field.TypeInt,
+					Column: fnetcategory.FieldID,
+				},
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if fduo.mutation.SubCategory1Cleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   fnetdocument.SubCategory1Table,
+			Columns: []string{fnetdocument.SubCategory1Column},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: &sqlgraph.FieldSpec{
+					Type:   field.TypeInt,
+					Column: fnetsubcategory1.FieldID,
+				},
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := fduo.mutation.SubCategory1IDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   fnetdocument.SubCategory1Table,
+			Columns: []string{fnetdocument.SubCategory1Column},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: &sqlgraph.FieldSpec{
+					Type:   field.TypeInt,
+					Column: fnetsubcategory1.FieldID,
+				},
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if fduo.mutation.SubCategory2Cleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   fnetdocument.SubCategory2Table,
+			Columns: []string{fnetdocument.SubCategory2Column},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: &sqlgraph.FieldSpec{
+					Type:   field.TypeInt,
+					Column: fnetsubcategory2.FieldID,
+				},
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := fduo.mutation.SubCategory2IDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   fnetdocument.SubCategory2Table,
+			Columns: []string{fnetdocument.SubCategory2Column},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: &sqlgraph.FieldSpec{
+					Type:   field.TypeInt,
+					Column: fnetsubcategory2.FieldID,
+				},
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	_node = &FnetDocument{config: fduo.config}
 	_spec.Assign = _node.assignValues

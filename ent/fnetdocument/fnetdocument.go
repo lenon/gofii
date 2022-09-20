@@ -11,14 +11,10 @@ const (
 	FieldFnetID = "fnet_id"
 	// FieldAdditionalInformation holds the string denoting the additional_information field in the database.
 	FieldAdditionalInformation = "additional_information"
-	// FieldDocumentCategory holds the string denoting the document_category field in the database.
-	FieldDocumentCategory = "document_category"
+	// FieldCategoryStr holds the string denoting the category_str field in the database.
+	FieldCategoryStr = "category_str"
 	// FieldDocumentStatus holds the string denoting the document_status field in the database.
 	FieldDocumentStatus = "document_status"
-	// FieldDocumentSubCategory1 holds the string denoting the document_sub_category1 field in the database.
-	FieldDocumentSubCategory1 = "document_sub_category1"
-	// FieldDocumentSubCategory2 holds the string denoting the document_sub_category2 field in the database.
-	FieldDocumentSubCategory2 = "document_sub_category2"
 	// FieldFundDescription holds the string denoting the fund_description field in the database.
 	FieldFundDescription = "fund_description"
 	// FieldHighPriority holds the string denoting the high_priority field in the database.
@@ -37,6 +33,10 @@ const (
 	FieldStatus = "status"
 	// FieldStatusDescription holds the string denoting the status_description field in the database.
 	FieldStatusDescription = "status_description"
+	// FieldSubCategory1Str holds the string denoting the sub_category1_str field in the database.
+	FieldSubCategory1Str = "sub_category1_str"
+	// FieldSubCategory2Str holds the string denoting the sub_category2_str field in the database.
+	FieldSubCategory2Str = "sub_category2_str"
 	// FieldSubmissionDate holds the string denoting the submission_date field in the database.
 	FieldSubmissionDate = "submission_date"
 	// FieldSubmissionDateStr holds the string denoting the submission_date_str field in the database.
@@ -47,8 +47,35 @@ const (
 	FieldSubmissionMethodDescription = "submission_method_description"
 	// FieldVersion holds the string denoting the version field in the database.
 	FieldVersion = "version"
+	// EdgeCategory holds the string denoting the category edge name in mutations.
+	EdgeCategory = "category"
+	// EdgeSubCategory1 holds the string denoting the sub_category1 edge name in mutations.
+	EdgeSubCategory1 = "sub_category1"
+	// EdgeSubCategory2 holds the string denoting the sub_category2 edge name in mutations.
+	EdgeSubCategory2 = "sub_category2"
 	// Table holds the table name of the fnetdocument in the database.
 	Table = "fnet_documents"
+	// CategoryTable is the table that holds the category relation/edge.
+	CategoryTable = "fnet_documents"
+	// CategoryInverseTable is the table name for the FnetCategory entity.
+	// It exists in this package in order to avoid circular dependency with the "fnetcategory" package.
+	CategoryInverseTable = "fnet_categories"
+	// CategoryColumn is the table column denoting the category relation/edge.
+	CategoryColumn = "category_id"
+	// SubCategory1Table is the table that holds the sub_category1 relation/edge.
+	SubCategory1Table = "fnet_documents"
+	// SubCategory1InverseTable is the table name for the FnetSubCategory1 entity.
+	// It exists in this package in order to avoid circular dependency with the "fnetsubcategory1" package.
+	SubCategory1InverseTable = "fnet_sub_categories1"
+	// SubCategory1Column is the table column denoting the sub_category1 relation/edge.
+	SubCategory1Column = "sub_category1_id"
+	// SubCategory2Table is the table that holds the sub_category2 relation/edge.
+	SubCategory2Table = "fnet_documents"
+	// SubCategory2InverseTable is the table name for the FnetSubCategory2 entity.
+	// It exists in this package in order to avoid circular dependency with the "fnetsubcategory2" package.
+	SubCategory2InverseTable = "fnet_sub_categories2"
+	// SubCategory2Column is the table column denoting the sub_category2 relation/edge.
+	SubCategory2Column = "sub_category2_id"
 )
 
 // Columns holds all SQL columns for fnetdocument fields.
@@ -56,10 +83,8 @@ var Columns = []string{
 	FieldID,
 	FieldFnetID,
 	FieldAdditionalInformation,
-	FieldDocumentCategory,
+	FieldCategoryStr,
 	FieldDocumentStatus,
-	FieldDocumentSubCategory1,
-	FieldDocumentSubCategory2,
 	FieldFundDescription,
 	FieldHighPriority,
 	FieldMarketName,
@@ -69,11 +94,21 @@ var Columns = []string{
 	FieldReviewed,
 	FieldStatus,
 	FieldStatusDescription,
+	FieldSubCategory1Str,
+	FieldSubCategory2Str,
 	FieldSubmissionDate,
 	FieldSubmissionDateStr,
 	FieldSubmissionMethod,
 	FieldSubmissionMethodDescription,
 	FieldVersion,
+}
+
+// ForeignKeys holds the SQL foreign-keys that are owned by the "fnet_documents"
+// table and are not defined as standalone fields in the schema.
+var ForeignKeys = []string{
+	"category_id",
+	"sub_category1_id",
+	"sub_category2_id",
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -83,14 +118,19 @@ func ValidColumn(column string) bool {
 			return true
 		}
 	}
+	for i := range ForeignKeys {
+		if column == ForeignKeys[i] {
+			return true
+		}
+	}
 	return false
 }
 
 var (
 	// FnetIDValidator is a validator for the "fnet_id" field. It is called by the builders before save.
 	FnetIDValidator func(int) error
-	// DocumentCategoryValidator is a validator for the "document_category" field. It is called by the builders before save.
-	DocumentCategoryValidator func(string) error
+	// CategoryStrValidator is a validator for the "category_str" field. It is called by the builders before save.
+	CategoryStrValidator func(string) error
 	// DocumentStatusValidator is a validator for the "document_status" field. It is called by the builders before save.
 	DocumentStatusValidator func(string) error
 	// FundDescriptionValidator is a validator for the "fund_description" field. It is called by the builders before save.

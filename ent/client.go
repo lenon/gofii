@@ -10,10 +10,14 @@ import (
 
 	"github.com/lenon/gofii/ent/migrate"
 
+	"github.com/lenon/gofii/ent/fnetcategory"
 	"github.com/lenon/gofii/ent/fnetdocument"
+	"github.com/lenon/gofii/ent/fnetsubcategory1"
+	"github.com/lenon/gofii/ent/fnetsubcategory2"
 
 	"entgo.io/ent/dialect"
 	"entgo.io/ent/dialect/sql"
+	"entgo.io/ent/dialect/sql/sqlgraph"
 )
 
 // Client is the client that holds all ent builders.
@@ -21,8 +25,14 @@ type Client struct {
 	config
 	// Schema is the client for creating, migrating and dropping schema.
 	Schema *migrate.Schema
+	// FnetCategory is the client for interacting with the FnetCategory builders.
+	FnetCategory *FnetCategoryClient
 	// FnetDocument is the client for interacting with the FnetDocument builders.
 	FnetDocument *FnetDocumentClient
+	// FnetSubCategory1 is the client for interacting with the FnetSubCategory1 builders.
+	FnetSubCategory1 *FnetSubCategory1Client
+	// FnetSubCategory2 is the client for interacting with the FnetSubCategory2 builders.
+	FnetSubCategory2 *FnetSubCategory2Client
 }
 
 // NewClient creates a new client configured with the given options.
@@ -36,7 +46,10 @@ func NewClient(opts ...Option) *Client {
 
 func (c *Client) init() {
 	c.Schema = migrate.NewSchema(c.driver)
+	c.FnetCategory = NewFnetCategoryClient(c.config)
 	c.FnetDocument = NewFnetDocumentClient(c.config)
+	c.FnetSubCategory1 = NewFnetSubCategory1Client(c.config)
+	c.FnetSubCategory2 = NewFnetSubCategory2Client(c.config)
 }
 
 // Open opens a database/sql.DB specified by the driver name and
@@ -68,9 +81,12 @@ func (c *Client) Tx(ctx context.Context) (*Tx, error) {
 	cfg := c.config
 	cfg.driver = tx
 	return &Tx{
-		ctx:          ctx,
-		config:       cfg,
-		FnetDocument: NewFnetDocumentClient(cfg),
+		ctx:              ctx,
+		config:           cfg,
+		FnetCategory:     NewFnetCategoryClient(cfg),
+		FnetDocument:     NewFnetDocumentClient(cfg),
+		FnetSubCategory1: NewFnetSubCategory1Client(cfg),
+		FnetSubCategory2: NewFnetSubCategory2Client(cfg),
 	}, nil
 }
 
@@ -88,16 +104,19 @@ func (c *Client) BeginTx(ctx context.Context, opts *sql.TxOptions) (*Tx, error) 
 	cfg := c.config
 	cfg.driver = &txDriver{tx: tx, drv: c.driver}
 	return &Tx{
-		ctx:          ctx,
-		config:       cfg,
-		FnetDocument: NewFnetDocumentClient(cfg),
+		ctx:              ctx,
+		config:           cfg,
+		FnetCategory:     NewFnetCategoryClient(cfg),
+		FnetDocument:     NewFnetDocumentClient(cfg),
+		FnetSubCategory1: NewFnetSubCategory1Client(cfg),
+		FnetSubCategory2: NewFnetSubCategory2Client(cfg),
 	}, nil
 }
 
 // Debug returns a new debug-client. It's used to get verbose logging on specific operations.
 //
 //	client.Debug().
-//		FnetDocument.
+//		FnetCategory.
 //		Query().
 //		Count(ctx)
 func (c *Client) Debug() *Client {
@@ -119,7 +138,116 @@ func (c *Client) Close() error {
 // Use adds the mutation hooks to all the entity clients.
 // In order to add hooks to a specific client, call: `client.Node.Use(...)`.
 func (c *Client) Use(hooks ...Hook) {
+	c.FnetCategory.Use(hooks...)
 	c.FnetDocument.Use(hooks...)
+	c.FnetSubCategory1.Use(hooks...)
+	c.FnetSubCategory2.Use(hooks...)
+}
+
+// FnetCategoryClient is a client for the FnetCategory schema.
+type FnetCategoryClient struct {
+	config
+}
+
+// NewFnetCategoryClient returns a client for the FnetCategory from the given config.
+func NewFnetCategoryClient(c config) *FnetCategoryClient {
+	return &FnetCategoryClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `fnetcategory.Hooks(f(g(h())))`.
+func (c *FnetCategoryClient) Use(hooks ...Hook) {
+	c.hooks.FnetCategory = append(c.hooks.FnetCategory, hooks...)
+}
+
+// Create returns a builder for creating a FnetCategory entity.
+func (c *FnetCategoryClient) Create() *FnetCategoryCreate {
+	mutation := newFnetCategoryMutation(c.config, OpCreate)
+	return &FnetCategoryCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of FnetCategory entities.
+func (c *FnetCategoryClient) CreateBulk(builders ...*FnetCategoryCreate) *FnetCategoryCreateBulk {
+	return &FnetCategoryCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for FnetCategory.
+func (c *FnetCategoryClient) Update() *FnetCategoryUpdate {
+	mutation := newFnetCategoryMutation(c.config, OpUpdate)
+	return &FnetCategoryUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *FnetCategoryClient) UpdateOne(fc *FnetCategory) *FnetCategoryUpdateOne {
+	mutation := newFnetCategoryMutation(c.config, OpUpdateOne, withFnetCategory(fc))
+	return &FnetCategoryUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *FnetCategoryClient) UpdateOneID(id int) *FnetCategoryUpdateOne {
+	mutation := newFnetCategoryMutation(c.config, OpUpdateOne, withFnetCategoryID(id))
+	return &FnetCategoryUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for FnetCategory.
+func (c *FnetCategoryClient) Delete() *FnetCategoryDelete {
+	mutation := newFnetCategoryMutation(c.config, OpDelete)
+	return &FnetCategoryDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *FnetCategoryClient) DeleteOne(fc *FnetCategory) *FnetCategoryDeleteOne {
+	return c.DeleteOneID(fc.ID)
+}
+
+// DeleteOne returns a builder for deleting the given entity by its id.
+func (c *FnetCategoryClient) DeleteOneID(id int) *FnetCategoryDeleteOne {
+	builder := c.Delete().Where(fnetcategory.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &FnetCategoryDeleteOne{builder}
+}
+
+// Query returns a query builder for FnetCategory.
+func (c *FnetCategoryClient) Query() *FnetCategoryQuery {
+	return &FnetCategoryQuery{
+		config: c.config,
+	}
+}
+
+// Get returns a FnetCategory entity by its id.
+func (c *FnetCategoryClient) Get(ctx context.Context, id int) (*FnetCategory, error) {
+	return c.Query().Where(fnetcategory.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *FnetCategoryClient) GetX(ctx context.Context, id int) *FnetCategory {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// QueryDocuments queries the documents edge of a FnetCategory.
+func (c *FnetCategoryClient) QueryDocuments(fc *FnetCategory) *FnetDocumentQuery {
+	query := &FnetDocumentQuery{config: c.config}
+	query.path = func(ctx context.Context) (fromV *sql.Selector, _ error) {
+		id := fc.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(fnetcategory.Table, fnetcategory.FieldID, id),
+			sqlgraph.To(fnetdocument.Table, fnetdocument.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, fnetcategory.DocumentsTable, fnetcategory.DocumentsColumn),
+		)
+		fromV = sqlgraph.Neighbors(fc.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// Hooks returns the client hooks.
+func (c *FnetCategoryClient) Hooks() []Hook {
+	return c.hooks.FnetCategory
 }
 
 // FnetDocumentClient is a client for the FnetDocument schema.
@@ -207,7 +335,267 @@ func (c *FnetDocumentClient) GetX(ctx context.Context, id int) *FnetDocument {
 	return obj
 }
 
+// QueryCategory queries the category edge of a FnetDocument.
+func (c *FnetDocumentClient) QueryCategory(fd *FnetDocument) *FnetCategoryQuery {
+	query := &FnetCategoryQuery{config: c.config}
+	query.path = func(ctx context.Context) (fromV *sql.Selector, _ error) {
+		id := fd.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(fnetdocument.Table, fnetdocument.FieldID, id),
+			sqlgraph.To(fnetcategory.Table, fnetcategory.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, fnetdocument.CategoryTable, fnetdocument.CategoryColumn),
+		)
+		fromV = sqlgraph.Neighbors(fd.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QuerySubCategory1 queries the sub_category1 edge of a FnetDocument.
+func (c *FnetDocumentClient) QuerySubCategory1(fd *FnetDocument) *FnetSubCategory1Query {
+	query := &FnetSubCategory1Query{config: c.config}
+	query.path = func(ctx context.Context) (fromV *sql.Selector, _ error) {
+		id := fd.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(fnetdocument.Table, fnetdocument.FieldID, id),
+			sqlgraph.To(fnetsubcategory1.Table, fnetsubcategory1.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, fnetdocument.SubCategory1Table, fnetdocument.SubCategory1Column),
+		)
+		fromV = sqlgraph.Neighbors(fd.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QuerySubCategory2 queries the sub_category2 edge of a FnetDocument.
+func (c *FnetDocumentClient) QuerySubCategory2(fd *FnetDocument) *FnetSubCategory2Query {
+	query := &FnetSubCategory2Query{config: c.config}
+	query.path = func(ctx context.Context) (fromV *sql.Selector, _ error) {
+		id := fd.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(fnetdocument.Table, fnetdocument.FieldID, id),
+			sqlgraph.To(fnetsubcategory2.Table, fnetsubcategory2.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, fnetdocument.SubCategory2Table, fnetdocument.SubCategory2Column),
+		)
+		fromV = sqlgraph.Neighbors(fd.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // Hooks returns the client hooks.
 func (c *FnetDocumentClient) Hooks() []Hook {
 	return c.hooks.FnetDocument
+}
+
+// FnetSubCategory1Client is a client for the FnetSubCategory1 schema.
+type FnetSubCategory1Client struct {
+	config
+}
+
+// NewFnetSubCategory1Client returns a client for the FnetSubCategory1 from the given config.
+func NewFnetSubCategory1Client(c config) *FnetSubCategory1Client {
+	return &FnetSubCategory1Client{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `fnetsubcategory1.Hooks(f(g(h())))`.
+func (c *FnetSubCategory1Client) Use(hooks ...Hook) {
+	c.hooks.FnetSubCategory1 = append(c.hooks.FnetSubCategory1, hooks...)
+}
+
+// Create returns a builder for creating a FnetSubCategory1 entity.
+func (c *FnetSubCategory1Client) Create() *FnetSubCategory1Create {
+	mutation := newFnetSubCategory1Mutation(c.config, OpCreate)
+	return &FnetSubCategory1Create{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of FnetSubCategory1 entities.
+func (c *FnetSubCategory1Client) CreateBulk(builders ...*FnetSubCategory1Create) *FnetSubCategory1CreateBulk {
+	return &FnetSubCategory1CreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for FnetSubCategory1.
+func (c *FnetSubCategory1Client) Update() *FnetSubCategory1Update {
+	mutation := newFnetSubCategory1Mutation(c.config, OpUpdate)
+	return &FnetSubCategory1Update{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *FnetSubCategory1Client) UpdateOne(fsc *FnetSubCategory1) *FnetSubCategory1UpdateOne {
+	mutation := newFnetSubCategory1Mutation(c.config, OpUpdateOne, withFnetSubCategory1(fsc))
+	return &FnetSubCategory1UpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *FnetSubCategory1Client) UpdateOneID(id int) *FnetSubCategory1UpdateOne {
+	mutation := newFnetSubCategory1Mutation(c.config, OpUpdateOne, withFnetSubCategory1ID(id))
+	return &FnetSubCategory1UpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for FnetSubCategory1.
+func (c *FnetSubCategory1Client) Delete() *FnetSubCategory1Delete {
+	mutation := newFnetSubCategory1Mutation(c.config, OpDelete)
+	return &FnetSubCategory1Delete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *FnetSubCategory1Client) DeleteOne(fsc *FnetSubCategory1) *FnetSubCategory1DeleteOne {
+	return c.DeleteOneID(fsc.ID)
+}
+
+// DeleteOne returns a builder for deleting the given entity by its id.
+func (c *FnetSubCategory1Client) DeleteOneID(id int) *FnetSubCategory1DeleteOne {
+	builder := c.Delete().Where(fnetsubcategory1.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &FnetSubCategory1DeleteOne{builder}
+}
+
+// Query returns a query builder for FnetSubCategory1.
+func (c *FnetSubCategory1Client) Query() *FnetSubCategory1Query {
+	return &FnetSubCategory1Query{
+		config: c.config,
+	}
+}
+
+// Get returns a FnetSubCategory1 entity by its id.
+func (c *FnetSubCategory1Client) Get(ctx context.Context, id int) (*FnetSubCategory1, error) {
+	return c.Query().Where(fnetsubcategory1.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *FnetSubCategory1Client) GetX(ctx context.Context, id int) *FnetSubCategory1 {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// QueryDocuments queries the documents edge of a FnetSubCategory1.
+func (c *FnetSubCategory1Client) QueryDocuments(fsc *FnetSubCategory1) *FnetDocumentQuery {
+	query := &FnetDocumentQuery{config: c.config}
+	query.path = func(ctx context.Context) (fromV *sql.Selector, _ error) {
+		id := fsc.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(fnetsubcategory1.Table, fnetsubcategory1.FieldID, id),
+			sqlgraph.To(fnetdocument.Table, fnetdocument.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, fnetsubcategory1.DocumentsTable, fnetsubcategory1.DocumentsColumn),
+		)
+		fromV = sqlgraph.Neighbors(fsc.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// Hooks returns the client hooks.
+func (c *FnetSubCategory1Client) Hooks() []Hook {
+	return c.hooks.FnetSubCategory1
+}
+
+// FnetSubCategory2Client is a client for the FnetSubCategory2 schema.
+type FnetSubCategory2Client struct {
+	config
+}
+
+// NewFnetSubCategory2Client returns a client for the FnetSubCategory2 from the given config.
+func NewFnetSubCategory2Client(c config) *FnetSubCategory2Client {
+	return &FnetSubCategory2Client{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `fnetsubcategory2.Hooks(f(g(h())))`.
+func (c *FnetSubCategory2Client) Use(hooks ...Hook) {
+	c.hooks.FnetSubCategory2 = append(c.hooks.FnetSubCategory2, hooks...)
+}
+
+// Create returns a builder for creating a FnetSubCategory2 entity.
+func (c *FnetSubCategory2Client) Create() *FnetSubCategory2Create {
+	mutation := newFnetSubCategory2Mutation(c.config, OpCreate)
+	return &FnetSubCategory2Create{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of FnetSubCategory2 entities.
+func (c *FnetSubCategory2Client) CreateBulk(builders ...*FnetSubCategory2Create) *FnetSubCategory2CreateBulk {
+	return &FnetSubCategory2CreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for FnetSubCategory2.
+func (c *FnetSubCategory2Client) Update() *FnetSubCategory2Update {
+	mutation := newFnetSubCategory2Mutation(c.config, OpUpdate)
+	return &FnetSubCategory2Update{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *FnetSubCategory2Client) UpdateOne(fsc *FnetSubCategory2) *FnetSubCategory2UpdateOne {
+	mutation := newFnetSubCategory2Mutation(c.config, OpUpdateOne, withFnetSubCategory2(fsc))
+	return &FnetSubCategory2UpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *FnetSubCategory2Client) UpdateOneID(id int) *FnetSubCategory2UpdateOne {
+	mutation := newFnetSubCategory2Mutation(c.config, OpUpdateOne, withFnetSubCategory2ID(id))
+	return &FnetSubCategory2UpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for FnetSubCategory2.
+func (c *FnetSubCategory2Client) Delete() *FnetSubCategory2Delete {
+	mutation := newFnetSubCategory2Mutation(c.config, OpDelete)
+	return &FnetSubCategory2Delete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *FnetSubCategory2Client) DeleteOne(fsc *FnetSubCategory2) *FnetSubCategory2DeleteOne {
+	return c.DeleteOneID(fsc.ID)
+}
+
+// DeleteOne returns a builder for deleting the given entity by its id.
+func (c *FnetSubCategory2Client) DeleteOneID(id int) *FnetSubCategory2DeleteOne {
+	builder := c.Delete().Where(fnetsubcategory2.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &FnetSubCategory2DeleteOne{builder}
+}
+
+// Query returns a query builder for FnetSubCategory2.
+func (c *FnetSubCategory2Client) Query() *FnetSubCategory2Query {
+	return &FnetSubCategory2Query{
+		config: c.config,
+	}
+}
+
+// Get returns a FnetSubCategory2 entity by its id.
+func (c *FnetSubCategory2Client) Get(ctx context.Context, id int) (*FnetSubCategory2, error) {
+	return c.Query().Where(fnetsubcategory2.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *FnetSubCategory2Client) GetX(ctx context.Context, id int) *FnetSubCategory2 {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// QueryDocuments queries the documents edge of a FnetSubCategory2.
+func (c *FnetSubCategory2Client) QueryDocuments(fsc *FnetSubCategory2) *FnetDocumentQuery {
+	query := &FnetDocumentQuery{config: c.config}
+	query.path = func(ctx context.Context) (fromV *sql.Selector, _ error) {
+		id := fsc.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(fnetsubcategory2.Table, fnetsubcategory2.FieldID, id),
+			sqlgraph.To(fnetdocument.Table, fnetdocument.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, fnetsubcategory2.DocumentsTable, fnetsubcategory2.DocumentsColumn),
+		)
+		fromV = sqlgraph.Neighbors(fsc.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// Hooks returns the client hooks.
+func (c *FnetSubCategory2Client) Hooks() []Hook {
+	return c.hooks.FnetSubCategory2
 }

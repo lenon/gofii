@@ -8,7 +8,10 @@ import (
 	"time"
 
 	"entgo.io/ent/dialect/sql"
+	"github.com/lenon/gofii/ent/fnetcategory"
 	"github.com/lenon/gofii/ent/fnetdocument"
+	"github.com/lenon/gofii/ent/fnetsubcategory1"
+	"github.com/lenon/gofii/ent/fnetsubcategory2"
 )
 
 // FnetDocument is the model entity for the FnetDocument schema.
@@ -20,14 +23,10 @@ type FnetDocument struct {
 	FnetID int `json:"fnet_id,omitempty"`
 	// AdditionalInformation holds the value of the "additional_information" field.
 	AdditionalInformation string `json:"additional_information,omitempty"`
-	// DocumentCategory holds the value of the "document_category" field.
-	DocumentCategory string `json:"document_category,omitempty"`
+	// CategoryStr holds the value of the "category_str" field.
+	CategoryStr string `json:"category_str,omitempty"`
 	// DocumentStatus holds the value of the "document_status" field.
 	DocumentStatus string `json:"document_status,omitempty"`
-	// DocumentSubCategory1 holds the value of the "document_sub_category1" field.
-	DocumentSubCategory1 string `json:"document_sub_category1,omitempty"`
-	// DocumentSubCategory2 holds the value of the "document_sub_category2" field.
-	DocumentSubCategory2 string `json:"document_sub_category2,omitempty"`
 	// FundDescription holds the value of the "fund_description" field.
 	FundDescription string `json:"fund_description,omitempty"`
 	// HighPriority holds the value of the "high_priority" field.
@@ -46,6 +45,10 @@ type FnetDocument struct {
 	Status string `json:"status,omitempty"`
 	// StatusDescription holds the value of the "status_description" field.
 	StatusDescription string `json:"status_description,omitempty"`
+	// SubCategory1Str holds the value of the "sub_category1_str" field.
+	SubCategory1Str string `json:"sub_category1_str,omitempty"`
+	// SubCategory2Str holds the value of the "sub_category2_str" field.
+	SubCategory2Str string `json:"sub_category2_str,omitempty"`
 	// SubmissionDate holds the value of the "submission_date" field.
 	SubmissionDate time.Time `json:"submission_date,omitempty"`
 	// SubmissionDateStr holds the value of the "submission_date_str" field.
@@ -56,6 +59,64 @@ type FnetDocument struct {
 	SubmissionMethodDescription string `json:"submission_method_description,omitempty"`
 	// Version holds the value of the "version" field.
 	Version int `json:"version,omitempty"`
+	// Edges holds the relations/edges for other nodes in the graph.
+	// The values are being populated by the FnetDocumentQuery when eager-loading is set.
+	Edges            FnetDocumentEdges `json:"edges"`
+	category_id      *int
+	sub_category1_id *int
+	sub_category2_id *int
+}
+
+// FnetDocumentEdges holds the relations/edges for other nodes in the graph.
+type FnetDocumentEdges struct {
+	// Category holds the value of the category edge.
+	Category *FnetCategory `json:"category,omitempty"`
+	// SubCategory1 holds the value of the sub_category1 edge.
+	SubCategory1 *FnetSubCategory1 `json:"sub_category1,omitempty"`
+	// SubCategory2 holds the value of the sub_category2 edge.
+	SubCategory2 *FnetSubCategory2 `json:"sub_category2,omitempty"`
+	// loadedTypes holds the information for reporting if a
+	// type was loaded (or requested) in eager-loading or not.
+	loadedTypes [3]bool
+}
+
+// CategoryOrErr returns the Category value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e FnetDocumentEdges) CategoryOrErr() (*FnetCategory, error) {
+	if e.loadedTypes[0] {
+		if e.Category == nil {
+			// Edge was loaded but was not found.
+			return nil, &NotFoundError{label: fnetcategory.Label}
+		}
+		return e.Category, nil
+	}
+	return nil, &NotLoadedError{edge: "category"}
+}
+
+// SubCategory1OrErr returns the SubCategory1 value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e FnetDocumentEdges) SubCategory1OrErr() (*FnetSubCategory1, error) {
+	if e.loadedTypes[1] {
+		if e.SubCategory1 == nil {
+			// Edge was loaded but was not found.
+			return nil, &NotFoundError{label: fnetsubcategory1.Label}
+		}
+		return e.SubCategory1, nil
+	}
+	return nil, &NotLoadedError{edge: "sub_category1"}
+}
+
+// SubCategory2OrErr returns the SubCategory2 value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e FnetDocumentEdges) SubCategory2OrErr() (*FnetSubCategory2, error) {
+	if e.loadedTypes[2] {
+		if e.SubCategory2 == nil {
+			// Edge was loaded but was not found.
+			return nil, &NotFoundError{label: fnetsubcategory2.Label}
+		}
+		return e.SubCategory2, nil
+	}
+	return nil, &NotLoadedError{edge: "sub_category2"}
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -67,10 +128,16 @@ func (*FnetDocument) scanValues(columns []string) ([]interface{}, error) {
 			values[i] = new(sql.NullBool)
 		case fnetdocument.FieldID, fnetdocument.FieldFnetID, fnetdocument.FieldVersion:
 			values[i] = new(sql.NullInt64)
-		case fnetdocument.FieldAdditionalInformation, fnetdocument.FieldDocumentCategory, fnetdocument.FieldDocumentStatus, fnetdocument.FieldDocumentSubCategory1, fnetdocument.FieldDocumentSubCategory2, fnetdocument.FieldFundDescription, fnetdocument.FieldMarketName, fnetdocument.FieldReferenceDateFormat, fnetdocument.FieldReferenceDateStr, fnetdocument.FieldReviewed, fnetdocument.FieldStatus, fnetdocument.FieldStatusDescription, fnetdocument.FieldSubmissionDateStr, fnetdocument.FieldSubmissionMethod, fnetdocument.FieldSubmissionMethodDescription:
+		case fnetdocument.FieldAdditionalInformation, fnetdocument.FieldCategoryStr, fnetdocument.FieldDocumentStatus, fnetdocument.FieldFundDescription, fnetdocument.FieldMarketName, fnetdocument.FieldReferenceDateFormat, fnetdocument.FieldReferenceDateStr, fnetdocument.FieldReviewed, fnetdocument.FieldStatus, fnetdocument.FieldStatusDescription, fnetdocument.FieldSubCategory1Str, fnetdocument.FieldSubCategory2Str, fnetdocument.FieldSubmissionDateStr, fnetdocument.FieldSubmissionMethod, fnetdocument.FieldSubmissionMethodDescription:
 			values[i] = new(sql.NullString)
 		case fnetdocument.FieldReferenceDate, fnetdocument.FieldSubmissionDate:
 			values[i] = new(sql.NullTime)
+		case fnetdocument.ForeignKeys[0]: // category_id
+			values[i] = new(sql.NullInt64)
+		case fnetdocument.ForeignKeys[1]: // sub_category1_id
+			values[i] = new(sql.NullInt64)
+		case fnetdocument.ForeignKeys[2]: // sub_category2_id
+			values[i] = new(sql.NullInt64)
 		default:
 			return nil, fmt.Errorf("unexpected column %q for type FnetDocument", columns[i])
 		}
@@ -104,29 +171,17 @@ func (fd *FnetDocument) assignValues(columns []string, values []interface{}) err
 			} else if value.Valid {
 				fd.AdditionalInformation = value.String
 			}
-		case fnetdocument.FieldDocumentCategory:
+		case fnetdocument.FieldCategoryStr:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field document_category", values[i])
+				return fmt.Errorf("unexpected type %T for field category_str", values[i])
 			} else if value.Valid {
-				fd.DocumentCategory = value.String
+				fd.CategoryStr = value.String
 			}
 		case fnetdocument.FieldDocumentStatus:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field document_status", values[i])
 			} else if value.Valid {
 				fd.DocumentStatus = value.String
-			}
-		case fnetdocument.FieldDocumentSubCategory1:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field document_sub_category1", values[i])
-			} else if value.Valid {
-				fd.DocumentSubCategory1 = value.String
-			}
-		case fnetdocument.FieldDocumentSubCategory2:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field document_sub_category2", values[i])
-			} else if value.Valid {
-				fd.DocumentSubCategory2 = value.String
 			}
 		case fnetdocument.FieldFundDescription:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -182,6 +237,18 @@ func (fd *FnetDocument) assignValues(columns []string, values []interface{}) err
 			} else if value.Valid {
 				fd.StatusDescription = value.String
 			}
+		case fnetdocument.FieldSubCategory1Str:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field sub_category1_str", values[i])
+			} else if value.Valid {
+				fd.SubCategory1Str = value.String
+			}
+		case fnetdocument.FieldSubCategory2Str:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field sub_category2_str", values[i])
+			} else if value.Valid {
+				fd.SubCategory2Str = value.String
+			}
 		case fnetdocument.FieldSubmissionDate:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field submission_date", values[i])
@@ -212,9 +279,45 @@ func (fd *FnetDocument) assignValues(columns []string, values []interface{}) err
 			} else if value.Valid {
 				fd.Version = int(value.Int64)
 			}
+		case fnetdocument.ForeignKeys[0]:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for edge-field category_id", value)
+			} else if value.Valid {
+				fd.category_id = new(int)
+				*fd.category_id = int(value.Int64)
+			}
+		case fnetdocument.ForeignKeys[1]:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for edge-field sub_category1_id", value)
+			} else if value.Valid {
+				fd.sub_category1_id = new(int)
+				*fd.sub_category1_id = int(value.Int64)
+			}
+		case fnetdocument.ForeignKeys[2]:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for edge-field sub_category2_id", value)
+			} else if value.Valid {
+				fd.sub_category2_id = new(int)
+				*fd.sub_category2_id = int(value.Int64)
+			}
 		}
 	}
 	return nil
+}
+
+// QueryCategory queries the "category" edge of the FnetDocument entity.
+func (fd *FnetDocument) QueryCategory() *FnetCategoryQuery {
+	return (&FnetDocumentClient{config: fd.config}).QueryCategory(fd)
+}
+
+// QuerySubCategory1 queries the "sub_category1" edge of the FnetDocument entity.
+func (fd *FnetDocument) QuerySubCategory1() *FnetSubCategory1Query {
+	return (&FnetDocumentClient{config: fd.config}).QuerySubCategory1(fd)
+}
+
+// QuerySubCategory2 queries the "sub_category2" edge of the FnetDocument entity.
+func (fd *FnetDocument) QuerySubCategory2() *FnetSubCategory2Query {
+	return (&FnetDocumentClient{config: fd.config}).QuerySubCategory2(fd)
 }
 
 // Update returns a builder for updating this FnetDocument.
@@ -246,17 +349,11 @@ func (fd *FnetDocument) String() string {
 	builder.WriteString("additional_information=")
 	builder.WriteString(fd.AdditionalInformation)
 	builder.WriteString(", ")
-	builder.WriteString("document_category=")
-	builder.WriteString(fd.DocumentCategory)
+	builder.WriteString("category_str=")
+	builder.WriteString(fd.CategoryStr)
 	builder.WriteString(", ")
 	builder.WriteString("document_status=")
 	builder.WriteString(fd.DocumentStatus)
-	builder.WriteString(", ")
-	builder.WriteString("document_sub_category1=")
-	builder.WriteString(fd.DocumentSubCategory1)
-	builder.WriteString(", ")
-	builder.WriteString("document_sub_category2=")
-	builder.WriteString(fd.DocumentSubCategory2)
 	builder.WriteString(", ")
 	builder.WriteString("fund_description=")
 	builder.WriteString(fd.FundDescription)
@@ -284,6 +381,12 @@ func (fd *FnetDocument) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("status_description=")
 	builder.WriteString(fd.StatusDescription)
+	builder.WriteString(", ")
+	builder.WriteString("sub_category1_str=")
+	builder.WriteString(fd.SubCategory1Str)
+	builder.WriteString(", ")
+	builder.WriteString("sub_category2_str=")
+	builder.WriteString(fd.SubCategory2Str)
 	builder.WriteString(", ")
 	builder.WriteString("submission_date=")
 	builder.WriteString(fd.SubmissionDate.Format(time.ANSIC))

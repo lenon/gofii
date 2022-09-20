@@ -6,6 +6,7 @@ import (
 	"time"
 
 	"entgo.io/ent/dialect/sql"
+	"entgo.io/ent/dialect/sql/sqlgraph"
 	"github.com/lenon/gofii/ent/predicate"
 )
 
@@ -94,10 +95,10 @@ func AdditionalInformation(v string) predicate.FnetDocument {
 	})
 }
 
-// DocumentCategory applies equality check predicate on the "document_category" field. It's identical to DocumentCategoryEQ.
-func DocumentCategory(v string) predicate.FnetDocument {
+// CategoryStr applies equality check predicate on the "category_str" field. It's identical to CategoryStrEQ.
+func CategoryStr(v string) predicate.FnetDocument {
 	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.EQ(s.C(FieldDocumentCategory), v))
+		s.Where(sql.EQ(s.C(FieldCategoryStr), v))
 	})
 }
 
@@ -105,20 +106,6 @@ func DocumentCategory(v string) predicate.FnetDocument {
 func DocumentStatus(v string) predicate.FnetDocument {
 	return predicate.FnetDocument(func(s *sql.Selector) {
 		s.Where(sql.EQ(s.C(FieldDocumentStatus), v))
-	})
-}
-
-// DocumentSubCategory1 applies equality check predicate on the "document_sub_category1" field. It's identical to DocumentSubCategory1EQ.
-func DocumentSubCategory1(v string) predicate.FnetDocument {
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.EQ(s.C(FieldDocumentSubCategory1), v))
-	})
-}
-
-// DocumentSubCategory2 applies equality check predicate on the "document_sub_category2" field. It's identical to DocumentSubCategory2EQ.
-func DocumentSubCategory2(v string) predicate.FnetDocument {
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.EQ(s.C(FieldDocumentSubCategory2), v))
 	})
 }
 
@@ -182,6 +169,20 @@ func Status(v string) predicate.FnetDocument {
 func StatusDescription(v string) predicate.FnetDocument {
 	return predicate.FnetDocument(func(s *sql.Selector) {
 		s.Where(sql.EQ(s.C(FieldStatusDescription), v))
+	})
+}
+
+// SubCategory1Str applies equality check predicate on the "sub_category1_str" field. It's identical to SubCategory1StrEQ.
+func SubCategory1Str(v string) predicate.FnetDocument {
+	return predicate.FnetDocument(func(s *sql.Selector) {
+		s.Where(sql.EQ(s.C(FieldSubCategory1Str), v))
+	})
+}
+
+// SubCategory2Str applies equality check predicate on the "sub_category2_str" field. It's identical to SubCategory2StrEQ.
+func SubCategory2Str(v string) predicate.FnetDocument {
+	return predicate.FnetDocument(func(s *sql.Selector) {
+		s.Where(sql.EQ(s.C(FieldSubCategory2Str), v))
 	})
 }
 
@@ -397,102 +398,102 @@ func AdditionalInformationContainsFold(v string) predicate.FnetDocument {
 	})
 }
 
-// DocumentCategoryEQ applies the EQ predicate on the "document_category" field.
-func DocumentCategoryEQ(v string) predicate.FnetDocument {
+// CategoryStrEQ applies the EQ predicate on the "category_str" field.
+func CategoryStrEQ(v string) predicate.FnetDocument {
 	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.EQ(s.C(FieldDocumentCategory), v))
+		s.Where(sql.EQ(s.C(FieldCategoryStr), v))
 	})
 }
 
-// DocumentCategoryNEQ applies the NEQ predicate on the "document_category" field.
-func DocumentCategoryNEQ(v string) predicate.FnetDocument {
+// CategoryStrNEQ applies the NEQ predicate on the "category_str" field.
+func CategoryStrNEQ(v string) predicate.FnetDocument {
 	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.NEQ(s.C(FieldDocumentCategory), v))
+		s.Where(sql.NEQ(s.C(FieldCategoryStr), v))
 	})
 }
 
-// DocumentCategoryIn applies the In predicate on the "document_category" field.
-func DocumentCategoryIn(vs ...string) predicate.FnetDocument {
+// CategoryStrIn applies the In predicate on the "category_str" field.
+func CategoryStrIn(vs ...string) predicate.FnetDocument {
 	v := make([]interface{}, len(vs))
 	for i := range v {
 		v[i] = vs[i]
 	}
 	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.In(s.C(FieldDocumentCategory), v...))
+		s.Where(sql.In(s.C(FieldCategoryStr), v...))
 	})
 }
 
-// DocumentCategoryNotIn applies the NotIn predicate on the "document_category" field.
-func DocumentCategoryNotIn(vs ...string) predicate.FnetDocument {
+// CategoryStrNotIn applies the NotIn predicate on the "category_str" field.
+func CategoryStrNotIn(vs ...string) predicate.FnetDocument {
 	v := make([]interface{}, len(vs))
 	for i := range v {
 		v[i] = vs[i]
 	}
 	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.NotIn(s.C(FieldDocumentCategory), v...))
+		s.Where(sql.NotIn(s.C(FieldCategoryStr), v...))
 	})
 }
 
-// DocumentCategoryGT applies the GT predicate on the "document_category" field.
-func DocumentCategoryGT(v string) predicate.FnetDocument {
+// CategoryStrGT applies the GT predicate on the "category_str" field.
+func CategoryStrGT(v string) predicate.FnetDocument {
 	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.GT(s.C(FieldDocumentCategory), v))
+		s.Where(sql.GT(s.C(FieldCategoryStr), v))
 	})
 }
 
-// DocumentCategoryGTE applies the GTE predicate on the "document_category" field.
-func DocumentCategoryGTE(v string) predicate.FnetDocument {
+// CategoryStrGTE applies the GTE predicate on the "category_str" field.
+func CategoryStrGTE(v string) predicate.FnetDocument {
 	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.GTE(s.C(FieldDocumentCategory), v))
+		s.Where(sql.GTE(s.C(FieldCategoryStr), v))
 	})
 }
 
-// DocumentCategoryLT applies the LT predicate on the "document_category" field.
-func DocumentCategoryLT(v string) predicate.FnetDocument {
+// CategoryStrLT applies the LT predicate on the "category_str" field.
+func CategoryStrLT(v string) predicate.FnetDocument {
 	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.LT(s.C(FieldDocumentCategory), v))
+		s.Where(sql.LT(s.C(FieldCategoryStr), v))
 	})
 }
 
-// DocumentCategoryLTE applies the LTE predicate on the "document_category" field.
-func DocumentCategoryLTE(v string) predicate.FnetDocument {
+// CategoryStrLTE applies the LTE predicate on the "category_str" field.
+func CategoryStrLTE(v string) predicate.FnetDocument {
 	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.LTE(s.C(FieldDocumentCategory), v))
+		s.Where(sql.LTE(s.C(FieldCategoryStr), v))
 	})
 }
 
-// DocumentCategoryContains applies the Contains predicate on the "document_category" field.
-func DocumentCategoryContains(v string) predicate.FnetDocument {
+// CategoryStrContains applies the Contains predicate on the "category_str" field.
+func CategoryStrContains(v string) predicate.FnetDocument {
 	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.Contains(s.C(FieldDocumentCategory), v))
+		s.Where(sql.Contains(s.C(FieldCategoryStr), v))
 	})
 }
 
-// DocumentCategoryHasPrefix applies the HasPrefix predicate on the "document_category" field.
-func DocumentCategoryHasPrefix(v string) predicate.FnetDocument {
+// CategoryStrHasPrefix applies the HasPrefix predicate on the "category_str" field.
+func CategoryStrHasPrefix(v string) predicate.FnetDocument {
 	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.HasPrefix(s.C(FieldDocumentCategory), v))
+		s.Where(sql.HasPrefix(s.C(FieldCategoryStr), v))
 	})
 }
 
-// DocumentCategoryHasSuffix applies the HasSuffix predicate on the "document_category" field.
-func DocumentCategoryHasSuffix(v string) predicate.FnetDocument {
+// CategoryStrHasSuffix applies the HasSuffix predicate on the "category_str" field.
+func CategoryStrHasSuffix(v string) predicate.FnetDocument {
 	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.HasSuffix(s.C(FieldDocumentCategory), v))
+		s.Where(sql.HasSuffix(s.C(FieldCategoryStr), v))
 	})
 }
 
-// DocumentCategoryEqualFold applies the EqualFold predicate on the "document_category" field.
-func DocumentCategoryEqualFold(v string) predicate.FnetDocument {
+// CategoryStrEqualFold applies the EqualFold predicate on the "category_str" field.
+func CategoryStrEqualFold(v string) predicate.FnetDocument {
 	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.EqualFold(s.C(FieldDocumentCategory), v))
+		s.Where(sql.EqualFold(s.C(FieldCategoryStr), v))
 	})
 }
 
-// DocumentCategoryContainsFold applies the ContainsFold predicate on the "document_category" field.
-func DocumentCategoryContainsFold(v string) predicate.FnetDocument {
+// CategoryStrContainsFold applies the ContainsFold predicate on the "category_str" field.
+func CategoryStrContainsFold(v string) predicate.FnetDocument {
 	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.ContainsFold(s.C(FieldDocumentCategory), v))
+		s.Where(sql.ContainsFold(s.C(FieldCategoryStr), v))
 	})
 }
 
@@ -592,232 +593,6 @@ func DocumentStatusEqualFold(v string) predicate.FnetDocument {
 func DocumentStatusContainsFold(v string) predicate.FnetDocument {
 	return predicate.FnetDocument(func(s *sql.Selector) {
 		s.Where(sql.ContainsFold(s.C(FieldDocumentStatus), v))
-	})
-}
-
-// DocumentSubCategory1EQ applies the EQ predicate on the "document_sub_category1" field.
-func DocumentSubCategory1EQ(v string) predicate.FnetDocument {
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.EQ(s.C(FieldDocumentSubCategory1), v))
-	})
-}
-
-// DocumentSubCategory1NEQ applies the NEQ predicate on the "document_sub_category1" field.
-func DocumentSubCategory1NEQ(v string) predicate.FnetDocument {
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.NEQ(s.C(FieldDocumentSubCategory1), v))
-	})
-}
-
-// DocumentSubCategory1In applies the In predicate on the "document_sub_category1" field.
-func DocumentSubCategory1In(vs ...string) predicate.FnetDocument {
-	v := make([]interface{}, len(vs))
-	for i := range v {
-		v[i] = vs[i]
-	}
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.In(s.C(FieldDocumentSubCategory1), v...))
-	})
-}
-
-// DocumentSubCategory1NotIn applies the NotIn predicate on the "document_sub_category1" field.
-func DocumentSubCategory1NotIn(vs ...string) predicate.FnetDocument {
-	v := make([]interface{}, len(vs))
-	for i := range v {
-		v[i] = vs[i]
-	}
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.NotIn(s.C(FieldDocumentSubCategory1), v...))
-	})
-}
-
-// DocumentSubCategory1GT applies the GT predicate on the "document_sub_category1" field.
-func DocumentSubCategory1GT(v string) predicate.FnetDocument {
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.GT(s.C(FieldDocumentSubCategory1), v))
-	})
-}
-
-// DocumentSubCategory1GTE applies the GTE predicate on the "document_sub_category1" field.
-func DocumentSubCategory1GTE(v string) predicate.FnetDocument {
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.GTE(s.C(FieldDocumentSubCategory1), v))
-	})
-}
-
-// DocumentSubCategory1LT applies the LT predicate on the "document_sub_category1" field.
-func DocumentSubCategory1LT(v string) predicate.FnetDocument {
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.LT(s.C(FieldDocumentSubCategory1), v))
-	})
-}
-
-// DocumentSubCategory1LTE applies the LTE predicate on the "document_sub_category1" field.
-func DocumentSubCategory1LTE(v string) predicate.FnetDocument {
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.LTE(s.C(FieldDocumentSubCategory1), v))
-	})
-}
-
-// DocumentSubCategory1Contains applies the Contains predicate on the "document_sub_category1" field.
-func DocumentSubCategory1Contains(v string) predicate.FnetDocument {
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.Contains(s.C(FieldDocumentSubCategory1), v))
-	})
-}
-
-// DocumentSubCategory1HasPrefix applies the HasPrefix predicate on the "document_sub_category1" field.
-func DocumentSubCategory1HasPrefix(v string) predicate.FnetDocument {
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.HasPrefix(s.C(FieldDocumentSubCategory1), v))
-	})
-}
-
-// DocumentSubCategory1HasSuffix applies the HasSuffix predicate on the "document_sub_category1" field.
-func DocumentSubCategory1HasSuffix(v string) predicate.FnetDocument {
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.HasSuffix(s.C(FieldDocumentSubCategory1), v))
-	})
-}
-
-// DocumentSubCategory1IsNil applies the IsNil predicate on the "document_sub_category1" field.
-func DocumentSubCategory1IsNil() predicate.FnetDocument {
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.IsNull(s.C(FieldDocumentSubCategory1)))
-	})
-}
-
-// DocumentSubCategory1NotNil applies the NotNil predicate on the "document_sub_category1" field.
-func DocumentSubCategory1NotNil() predicate.FnetDocument {
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.NotNull(s.C(FieldDocumentSubCategory1)))
-	})
-}
-
-// DocumentSubCategory1EqualFold applies the EqualFold predicate on the "document_sub_category1" field.
-func DocumentSubCategory1EqualFold(v string) predicate.FnetDocument {
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.EqualFold(s.C(FieldDocumentSubCategory1), v))
-	})
-}
-
-// DocumentSubCategory1ContainsFold applies the ContainsFold predicate on the "document_sub_category1" field.
-func DocumentSubCategory1ContainsFold(v string) predicate.FnetDocument {
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.ContainsFold(s.C(FieldDocumentSubCategory1), v))
-	})
-}
-
-// DocumentSubCategory2EQ applies the EQ predicate on the "document_sub_category2" field.
-func DocumentSubCategory2EQ(v string) predicate.FnetDocument {
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.EQ(s.C(FieldDocumentSubCategory2), v))
-	})
-}
-
-// DocumentSubCategory2NEQ applies the NEQ predicate on the "document_sub_category2" field.
-func DocumentSubCategory2NEQ(v string) predicate.FnetDocument {
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.NEQ(s.C(FieldDocumentSubCategory2), v))
-	})
-}
-
-// DocumentSubCategory2In applies the In predicate on the "document_sub_category2" field.
-func DocumentSubCategory2In(vs ...string) predicate.FnetDocument {
-	v := make([]interface{}, len(vs))
-	for i := range v {
-		v[i] = vs[i]
-	}
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.In(s.C(FieldDocumentSubCategory2), v...))
-	})
-}
-
-// DocumentSubCategory2NotIn applies the NotIn predicate on the "document_sub_category2" field.
-func DocumentSubCategory2NotIn(vs ...string) predicate.FnetDocument {
-	v := make([]interface{}, len(vs))
-	for i := range v {
-		v[i] = vs[i]
-	}
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.NotIn(s.C(FieldDocumentSubCategory2), v...))
-	})
-}
-
-// DocumentSubCategory2GT applies the GT predicate on the "document_sub_category2" field.
-func DocumentSubCategory2GT(v string) predicate.FnetDocument {
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.GT(s.C(FieldDocumentSubCategory2), v))
-	})
-}
-
-// DocumentSubCategory2GTE applies the GTE predicate on the "document_sub_category2" field.
-func DocumentSubCategory2GTE(v string) predicate.FnetDocument {
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.GTE(s.C(FieldDocumentSubCategory2), v))
-	})
-}
-
-// DocumentSubCategory2LT applies the LT predicate on the "document_sub_category2" field.
-func DocumentSubCategory2LT(v string) predicate.FnetDocument {
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.LT(s.C(FieldDocumentSubCategory2), v))
-	})
-}
-
-// DocumentSubCategory2LTE applies the LTE predicate on the "document_sub_category2" field.
-func DocumentSubCategory2LTE(v string) predicate.FnetDocument {
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.LTE(s.C(FieldDocumentSubCategory2), v))
-	})
-}
-
-// DocumentSubCategory2Contains applies the Contains predicate on the "document_sub_category2" field.
-func DocumentSubCategory2Contains(v string) predicate.FnetDocument {
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.Contains(s.C(FieldDocumentSubCategory2), v))
-	})
-}
-
-// DocumentSubCategory2HasPrefix applies the HasPrefix predicate on the "document_sub_category2" field.
-func DocumentSubCategory2HasPrefix(v string) predicate.FnetDocument {
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.HasPrefix(s.C(FieldDocumentSubCategory2), v))
-	})
-}
-
-// DocumentSubCategory2HasSuffix applies the HasSuffix predicate on the "document_sub_category2" field.
-func DocumentSubCategory2HasSuffix(v string) predicate.FnetDocument {
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.HasSuffix(s.C(FieldDocumentSubCategory2), v))
-	})
-}
-
-// DocumentSubCategory2IsNil applies the IsNil predicate on the "document_sub_category2" field.
-func DocumentSubCategory2IsNil() predicate.FnetDocument {
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.IsNull(s.C(FieldDocumentSubCategory2)))
-	})
-}
-
-// DocumentSubCategory2NotNil applies the NotNil predicate on the "document_sub_category2" field.
-func DocumentSubCategory2NotNil() predicate.FnetDocument {
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.NotNull(s.C(FieldDocumentSubCategory2)))
-	})
-}
-
-// DocumentSubCategory2EqualFold applies the EqualFold predicate on the "document_sub_category2" field.
-func DocumentSubCategory2EqualFold(v string) predicate.FnetDocument {
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.EqualFold(s.C(FieldDocumentSubCategory2), v))
-	})
-}
-
-// DocumentSubCategory2ContainsFold applies the ContainsFold predicate on the "document_sub_category2" field.
-func DocumentSubCategory2ContainsFold(v string) predicate.FnetDocument {
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.ContainsFold(s.C(FieldDocumentSubCategory2), v))
 	})
 }
 
@@ -1606,6 +1381,232 @@ func StatusDescriptionContainsFold(v string) predicate.FnetDocument {
 	})
 }
 
+// SubCategory1StrEQ applies the EQ predicate on the "sub_category1_str" field.
+func SubCategory1StrEQ(v string) predicate.FnetDocument {
+	return predicate.FnetDocument(func(s *sql.Selector) {
+		s.Where(sql.EQ(s.C(FieldSubCategory1Str), v))
+	})
+}
+
+// SubCategory1StrNEQ applies the NEQ predicate on the "sub_category1_str" field.
+func SubCategory1StrNEQ(v string) predicate.FnetDocument {
+	return predicate.FnetDocument(func(s *sql.Selector) {
+		s.Where(sql.NEQ(s.C(FieldSubCategory1Str), v))
+	})
+}
+
+// SubCategory1StrIn applies the In predicate on the "sub_category1_str" field.
+func SubCategory1StrIn(vs ...string) predicate.FnetDocument {
+	v := make([]interface{}, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.FnetDocument(func(s *sql.Selector) {
+		s.Where(sql.In(s.C(FieldSubCategory1Str), v...))
+	})
+}
+
+// SubCategory1StrNotIn applies the NotIn predicate on the "sub_category1_str" field.
+func SubCategory1StrNotIn(vs ...string) predicate.FnetDocument {
+	v := make([]interface{}, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.FnetDocument(func(s *sql.Selector) {
+		s.Where(sql.NotIn(s.C(FieldSubCategory1Str), v...))
+	})
+}
+
+// SubCategory1StrGT applies the GT predicate on the "sub_category1_str" field.
+func SubCategory1StrGT(v string) predicate.FnetDocument {
+	return predicate.FnetDocument(func(s *sql.Selector) {
+		s.Where(sql.GT(s.C(FieldSubCategory1Str), v))
+	})
+}
+
+// SubCategory1StrGTE applies the GTE predicate on the "sub_category1_str" field.
+func SubCategory1StrGTE(v string) predicate.FnetDocument {
+	return predicate.FnetDocument(func(s *sql.Selector) {
+		s.Where(sql.GTE(s.C(FieldSubCategory1Str), v))
+	})
+}
+
+// SubCategory1StrLT applies the LT predicate on the "sub_category1_str" field.
+func SubCategory1StrLT(v string) predicate.FnetDocument {
+	return predicate.FnetDocument(func(s *sql.Selector) {
+		s.Where(sql.LT(s.C(FieldSubCategory1Str), v))
+	})
+}
+
+// SubCategory1StrLTE applies the LTE predicate on the "sub_category1_str" field.
+func SubCategory1StrLTE(v string) predicate.FnetDocument {
+	return predicate.FnetDocument(func(s *sql.Selector) {
+		s.Where(sql.LTE(s.C(FieldSubCategory1Str), v))
+	})
+}
+
+// SubCategory1StrContains applies the Contains predicate on the "sub_category1_str" field.
+func SubCategory1StrContains(v string) predicate.FnetDocument {
+	return predicate.FnetDocument(func(s *sql.Selector) {
+		s.Where(sql.Contains(s.C(FieldSubCategory1Str), v))
+	})
+}
+
+// SubCategory1StrHasPrefix applies the HasPrefix predicate on the "sub_category1_str" field.
+func SubCategory1StrHasPrefix(v string) predicate.FnetDocument {
+	return predicate.FnetDocument(func(s *sql.Selector) {
+		s.Where(sql.HasPrefix(s.C(FieldSubCategory1Str), v))
+	})
+}
+
+// SubCategory1StrHasSuffix applies the HasSuffix predicate on the "sub_category1_str" field.
+func SubCategory1StrHasSuffix(v string) predicate.FnetDocument {
+	return predicate.FnetDocument(func(s *sql.Selector) {
+		s.Where(sql.HasSuffix(s.C(FieldSubCategory1Str), v))
+	})
+}
+
+// SubCategory1StrIsNil applies the IsNil predicate on the "sub_category1_str" field.
+func SubCategory1StrIsNil() predicate.FnetDocument {
+	return predicate.FnetDocument(func(s *sql.Selector) {
+		s.Where(sql.IsNull(s.C(FieldSubCategory1Str)))
+	})
+}
+
+// SubCategory1StrNotNil applies the NotNil predicate on the "sub_category1_str" field.
+func SubCategory1StrNotNil() predicate.FnetDocument {
+	return predicate.FnetDocument(func(s *sql.Selector) {
+		s.Where(sql.NotNull(s.C(FieldSubCategory1Str)))
+	})
+}
+
+// SubCategory1StrEqualFold applies the EqualFold predicate on the "sub_category1_str" field.
+func SubCategory1StrEqualFold(v string) predicate.FnetDocument {
+	return predicate.FnetDocument(func(s *sql.Selector) {
+		s.Where(sql.EqualFold(s.C(FieldSubCategory1Str), v))
+	})
+}
+
+// SubCategory1StrContainsFold applies the ContainsFold predicate on the "sub_category1_str" field.
+func SubCategory1StrContainsFold(v string) predicate.FnetDocument {
+	return predicate.FnetDocument(func(s *sql.Selector) {
+		s.Where(sql.ContainsFold(s.C(FieldSubCategory1Str), v))
+	})
+}
+
+// SubCategory2StrEQ applies the EQ predicate on the "sub_category2_str" field.
+func SubCategory2StrEQ(v string) predicate.FnetDocument {
+	return predicate.FnetDocument(func(s *sql.Selector) {
+		s.Where(sql.EQ(s.C(FieldSubCategory2Str), v))
+	})
+}
+
+// SubCategory2StrNEQ applies the NEQ predicate on the "sub_category2_str" field.
+func SubCategory2StrNEQ(v string) predicate.FnetDocument {
+	return predicate.FnetDocument(func(s *sql.Selector) {
+		s.Where(sql.NEQ(s.C(FieldSubCategory2Str), v))
+	})
+}
+
+// SubCategory2StrIn applies the In predicate on the "sub_category2_str" field.
+func SubCategory2StrIn(vs ...string) predicate.FnetDocument {
+	v := make([]interface{}, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.FnetDocument(func(s *sql.Selector) {
+		s.Where(sql.In(s.C(FieldSubCategory2Str), v...))
+	})
+}
+
+// SubCategory2StrNotIn applies the NotIn predicate on the "sub_category2_str" field.
+func SubCategory2StrNotIn(vs ...string) predicate.FnetDocument {
+	v := make([]interface{}, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.FnetDocument(func(s *sql.Selector) {
+		s.Where(sql.NotIn(s.C(FieldSubCategory2Str), v...))
+	})
+}
+
+// SubCategory2StrGT applies the GT predicate on the "sub_category2_str" field.
+func SubCategory2StrGT(v string) predicate.FnetDocument {
+	return predicate.FnetDocument(func(s *sql.Selector) {
+		s.Where(sql.GT(s.C(FieldSubCategory2Str), v))
+	})
+}
+
+// SubCategory2StrGTE applies the GTE predicate on the "sub_category2_str" field.
+func SubCategory2StrGTE(v string) predicate.FnetDocument {
+	return predicate.FnetDocument(func(s *sql.Selector) {
+		s.Where(sql.GTE(s.C(FieldSubCategory2Str), v))
+	})
+}
+
+// SubCategory2StrLT applies the LT predicate on the "sub_category2_str" field.
+func SubCategory2StrLT(v string) predicate.FnetDocument {
+	return predicate.FnetDocument(func(s *sql.Selector) {
+		s.Where(sql.LT(s.C(FieldSubCategory2Str), v))
+	})
+}
+
+// SubCategory2StrLTE applies the LTE predicate on the "sub_category2_str" field.
+func SubCategory2StrLTE(v string) predicate.FnetDocument {
+	return predicate.FnetDocument(func(s *sql.Selector) {
+		s.Where(sql.LTE(s.C(FieldSubCategory2Str), v))
+	})
+}
+
+// SubCategory2StrContains applies the Contains predicate on the "sub_category2_str" field.
+func SubCategory2StrContains(v string) predicate.FnetDocument {
+	return predicate.FnetDocument(func(s *sql.Selector) {
+		s.Where(sql.Contains(s.C(FieldSubCategory2Str), v))
+	})
+}
+
+// SubCategory2StrHasPrefix applies the HasPrefix predicate on the "sub_category2_str" field.
+func SubCategory2StrHasPrefix(v string) predicate.FnetDocument {
+	return predicate.FnetDocument(func(s *sql.Selector) {
+		s.Where(sql.HasPrefix(s.C(FieldSubCategory2Str), v))
+	})
+}
+
+// SubCategory2StrHasSuffix applies the HasSuffix predicate on the "sub_category2_str" field.
+func SubCategory2StrHasSuffix(v string) predicate.FnetDocument {
+	return predicate.FnetDocument(func(s *sql.Selector) {
+		s.Where(sql.HasSuffix(s.C(FieldSubCategory2Str), v))
+	})
+}
+
+// SubCategory2StrIsNil applies the IsNil predicate on the "sub_category2_str" field.
+func SubCategory2StrIsNil() predicate.FnetDocument {
+	return predicate.FnetDocument(func(s *sql.Selector) {
+		s.Where(sql.IsNull(s.C(FieldSubCategory2Str)))
+	})
+}
+
+// SubCategory2StrNotNil applies the NotNil predicate on the "sub_category2_str" field.
+func SubCategory2StrNotNil() predicate.FnetDocument {
+	return predicate.FnetDocument(func(s *sql.Selector) {
+		s.Where(sql.NotNull(s.C(FieldSubCategory2Str)))
+	})
+}
+
+// SubCategory2StrEqualFold applies the EqualFold predicate on the "sub_category2_str" field.
+func SubCategory2StrEqualFold(v string) predicate.FnetDocument {
+	return predicate.FnetDocument(func(s *sql.Selector) {
+		s.Where(sql.EqualFold(s.C(FieldSubCategory2Str), v))
+	})
+}
+
+// SubCategory2StrContainsFold applies the ContainsFold predicate on the "sub_category2_str" field.
+func SubCategory2StrContainsFold(v string) predicate.FnetDocument {
+	return predicate.FnetDocument(func(s *sql.Selector) {
+		s.Where(sql.ContainsFold(s.C(FieldSubCategory2Str), v))
+	})
+}
+
 // SubmissionDateEQ applies the EQ predicate on the "submission_date" field.
 func SubmissionDateEQ(v time.Time) predicate.FnetDocument {
 	return predicate.FnetDocument(func(s *sql.Selector) {
@@ -2028,6 +2029,90 @@ func VersionLT(v int) predicate.FnetDocument {
 func VersionLTE(v int) predicate.FnetDocument {
 	return predicate.FnetDocument(func(s *sql.Selector) {
 		s.Where(sql.LTE(s.C(FieldVersion), v))
+	})
+}
+
+// HasCategory applies the HasEdge predicate on the "category" edge.
+func HasCategory() predicate.FnetDocument {
+	return predicate.FnetDocument(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.To(CategoryTable, FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, CategoryTable, CategoryColumn),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasCategoryWith applies the HasEdge predicate on the "category" edge with a given conditions (other predicates).
+func HasCategoryWith(preds ...predicate.FnetCategory) predicate.FnetDocument {
+	return predicate.FnetDocument(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.To(CategoryInverseTable, FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, CategoryTable, CategoryColumn),
+		)
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasSubCategory1 applies the HasEdge predicate on the "sub_category1" edge.
+func HasSubCategory1() predicate.FnetDocument {
+	return predicate.FnetDocument(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.To(SubCategory1Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, SubCategory1Table, SubCategory1Column),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasSubCategory1With applies the HasEdge predicate on the "sub_category1" edge with a given conditions (other predicates).
+func HasSubCategory1With(preds ...predicate.FnetSubCategory1) predicate.FnetDocument {
+	return predicate.FnetDocument(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.To(SubCategory1InverseTable, FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, SubCategory1Table, SubCategory1Column),
+		)
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasSubCategory2 applies the HasEdge predicate on the "sub_category2" edge.
+func HasSubCategory2() predicate.FnetDocument {
+	return predicate.FnetDocument(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.To(SubCategory2Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, SubCategory2Table, SubCategory2Column),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasSubCategory2With applies the HasEdge predicate on the "sub_category2" edge with a given conditions (other predicates).
+func HasSubCategory2With(preds ...predicate.FnetSubCategory2) predicate.FnetDocument {
+	return predicate.FnetDocument(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.To(SubCategory2InverseTable, FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, SubCategory2Table, SubCategory2Column),
+		)
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
 	})
 }
 

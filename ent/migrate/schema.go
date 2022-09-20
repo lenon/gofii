@@ -3,20 +3,30 @@
 package migrate
 
 import (
+	"entgo.io/ent/dialect/entsql"
 	"entgo.io/ent/dialect/sql/schema"
 	"entgo.io/ent/schema/field"
 )
 
 var (
+	// FnetCategoriesColumns holds the columns for the "fnet_categories" table.
+	FnetCategoriesColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeInt, Increment: true},
+		{Name: "name", Type: field.TypeString, Unique: true},
+	}
+	// FnetCategoriesTable holds the schema information for the "fnet_categories" table.
+	FnetCategoriesTable = &schema.Table{
+		Name:       "fnet_categories",
+		Columns:    FnetCategoriesColumns,
+		PrimaryKey: []*schema.Column{FnetCategoriesColumns[0]},
+	}
 	// FnetDocumentsColumns holds the columns for the "fnet_documents" table.
 	FnetDocumentsColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt, Increment: true},
 		{Name: "fnet_id", Type: field.TypeInt, Unique: true},
 		{Name: "additional_information", Type: field.TypeString, Nullable: true},
-		{Name: "document_category", Type: field.TypeString},
+		{Name: "category_str", Type: field.TypeString},
 		{Name: "document_status", Type: field.TypeString},
-		{Name: "document_sub_category1", Type: field.TypeString, Nullable: true},
-		{Name: "document_sub_category2", Type: field.TypeString, Nullable: true},
 		{Name: "fund_description", Type: field.TypeString},
 		{Name: "high_priority", Type: field.TypeBool},
 		{Name: "market_name", Type: field.TypeString, Nullable: true},
@@ -26,23 +36,82 @@ var (
 		{Name: "reviewed", Type: field.TypeString},
 		{Name: "status", Type: field.TypeString},
 		{Name: "status_description", Type: field.TypeString},
+		{Name: "sub_category1_str", Type: field.TypeString, Nullable: true},
+		{Name: "sub_category2_str", Type: field.TypeString, Nullable: true},
 		{Name: "submission_date", Type: field.TypeTime},
 		{Name: "submission_date_str", Type: field.TypeString},
 		{Name: "submission_method", Type: field.TypeString},
 		{Name: "submission_method_description", Type: field.TypeString},
 		{Name: "version", Type: field.TypeInt},
+		{Name: "category_id", Type: field.TypeInt},
+		{Name: "sub_category1_id", Type: field.TypeInt, Nullable: true},
+		{Name: "sub_category2_id", Type: field.TypeInt, Nullable: true},
 	}
 	// FnetDocumentsTable holds the schema information for the "fnet_documents" table.
 	FnetDocumentsTable = &schema.Table{
 		Name:       "fnet_documents",
 		Columns:    FnetDocumentsColumns,
 		PrimaryKey: []*schema.Column{FnetDocumentsColumns[0]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "fnet_documents_fnet_categories_documents",
+				Columns:    []*schema.Column{FnetDocumentsColumns[21]},
+				RefColumns: []*schema.Column{FnetCategoriesColumns[0]},
+				OnDelete:   schema.NoAction,
+			},
+			{
+				Symbol:     "fnet_documents_fnet_sub_categories1_documents",
+				Columns:    []*schema.Column{FnetDocumentsColumns[22]},
+				RefColumns: []*schema.Column{FnetSubCategories1Columns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "fnet_documents_fnet_sub_categories2_documents",
+				Columns:    []*schema.Column{FnetDocumentsColumns[23]},
+				RefColumns: []*schema.Column{FnetSubCategories2Columns[0]},
+				OnDelete:   schema.SetNull,
+			},
+		},
+	}
+	// FnetSubCategories1Columns holds the columns for the "fnet_sub_categories1" table.
+	FnetSubCategories1Columns = []*schema.Column{
+		{Name: "id", Type: field.TypeInt, Increment: true},
+		{Name: "name", Type: field.TypeString, Unique: true},
+	}
+	// FnetSubCategories1Table holds the schema information for the "fnet_sub_categories1" table.
+	FnetSubCategories1Table = &schema.Table{
+		Name:       "fnet_sub_categories1",
+		Columns:    FnetSubCategories1Columns,
+		PrimaryKey: []*schema.Column{FnetSubCategories1Columns[0]},
+	}
+	// FnetSubCategories2Columns holds the columns for the "fnet_sub_categories2" table.
+	FnetSubCategories2Columns = []*schema.Column{
+		{Name: "id", Type: field.TypeInt, Increment: true},
+		{Name: "name", Type: field.TypeString, Unique: true},
+	}
+	// FnetSubCategories2Table holds the schema information for the "fnet_sub_categories2" table.
+	FnetSubCategories2Table = &schema.Table{
+		Name:       "fnet_sub_categories2",
+		Columns:    FnetSubCategories2Columns,
+		PrimaryKey: []*schema.Column{FnetSubCategories2Columns[0]},
 	}
 	// Tables holds all the tables in the schema.
 	Tables = []*schema.Table{
+		FnetCategoriesTable,
 		FnetDocumentsTable,
+		FnetSubCategories1Table,
+		FnetSubCategories2Table,
 	}
 )
 
 func init() {
+	FnetDocumentsTable.ForeignKeys[0].RefTable = FnetCategoriesTable
+	FnetDocumentsTable.ForeignKeys[1].RefTable = FnetSubCategories1Table
+	FnetDocumentsTable.ForeignKeys[2].RefTable = FnetSubCategories2Table
+	FnetSubCategories1Table.Annotation = &entsql.Annotation{
+		Table: "fnet_sub_categories1",
+	}
+	FnetSubCategories2Table.Annotation = &entsql.Annotation{
+		Table: "fnet_sub_categories2",
+	}
 }

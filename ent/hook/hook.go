@@ -9,6 +9,19 @@ import (
 	"github.com/lenon/gofii/ent"
 )
 
+// The FnetCategoryFunc type is an adapter to allow the use of ordinary
+// function as FnetCategory mutator.
+type FnetCategoryFunc func(context.Context, *ent.FnetCategoryMutation) (ent.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f FnetCategoryFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+	mv, ok := m.(*ent.FnetCategoryMutation)
+	if !ok {
+		return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.FnetCategoryMutation", m)
+	}
+	return f(ctx, mv)
+}
+
 // The FnetDocumentFunc type is an adapter to allow the use of ordinary
 // function as FnetDocument mutator.
 type FnetDocumentFunc func(context.Context, *ent.FnetDocumentMutation) (ent.Value, error)
@@ -18,6 +31,32 @@ func (f FnetDocumentFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value
 	mv, ok := m.(*ent.FnetDocumentMutation)
 	if !ok {
 		return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.FnetDocumentMutation", m)
+	}
+	return f(ctx, mv)
+}
+
+// The FnetSubCategory1Func type is an adapter to allow the use of ordinary
+// function as FnetSubCategory1 mutator.
+type FnetSubCategory1Func func(context.Context, *ent.FnetSubCategory1Mutation) (ent.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f FnetSubCategory1Func) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+	mv, ok := m.(*ent.FnetSubCategory1Mutation)
+	if !ok {
+		return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.FnetSubCategory1Mutation", m)
+	}
+	return f(ctx, mv)
+}
+
+// The FnetSubCategory2Func type is an adapter to allow the use of ordinary
+// function as FnetSubCategory2 mutator.
+type FnetSubCategory2Func func(context.Context, *ent.FnetSubCategory2Mutation) (ent.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f FnetSubCategory2Func) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+	mv, ok := m.(*ent.FnetSubCategory2Mutation)
+	if !ok {
+		return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.FnetSubCategory2Mutation", m)
 	}
 	return f(ctx, mv)
 }

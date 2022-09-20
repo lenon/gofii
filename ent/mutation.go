@@ -9,7 +9,10 @@ import (
 	"sync"
 	"time"
 
+	"github.com/lenon/gofii/ent/fnetcategory"
 	"github.com/lenon/gofii/ent/fnetdocument"
+	"github.com/lenon/gofii/ent/fnetsubcategory1"
+	"github.com/lenon/gofii/ent/fnetsubcategory2"
 	"github.com/lenon/gofii/ent/predicate"
 
 	"entgo.io/ent"
@@ -24,8 +27,415 @@ const (
 	OpUpdateOne = ent.OpUpdateOne
 
 	// Node types.
-	TypeFnetDocument = "FnetDocument"
+	TypeFnetCategory     = "FnetCategory"
+	TypeFnetDocument     = "FnetDocument"
+	TypeFnetSubCategory1 = "FnetSubCategory1"
+	TypeFnetSubCategory2 = "FnetSubCategory2"
 )
+
+// FnetCategoryMutation represents an operation that mutates the FnetCategory nodes in the graph.
+type FnetCategoryMutation struct {
+	config
+	op               Op
+	typ              string
+	id               *int
+	name             *string
+	clearedFields    map[string]struct{}
+	documents        map[int]struct{}
+	removeddocuments map[int]struct{}
+	cleareddocuments bool
+	done             bool
+	oldValue         func(context.Context) (*FnetCategory, error)
+	predicates       []predicate.FnetCategory
+}
+
+var _ ent.Mutation = (*FnetCategoryMutation)(nil)
+
+// fnetcategoryOption allows management of the mutation configuration using functional options.
+type fnetcategoryOption func(*FnetCategoryMutation)
+
+// newFnetCategoryMutation creates new mutation for the FnetCategory entity.
+func newFnetCategoryMutation(c config, op Op, opts ...fnetcategoryOption) *FnetCategoryMutation {
+	m := &FnetCategoryMutation{
+		config:        c,
+		op:            op,
+		typ:           TypeFnetCategory,
+		clearedFields: make(map[string]struct{}),
+	}
+	for _, opt := range opts {
+		opt(m)
+	}
+	return m
+}
+
+// withFnetCategoryID sets the ID field of the mutation.
+func withFnetCategoryID(id int) fnetcategoryOption {
+	return func(m *FnetCategoryMutation) {
+		var (
+			err   error
+			once  sync.Once
+			value *FnetCategory
+		)
+		m.oldValue = func(ctx context.Context) (*FnetCategory, error) {
+			once.Do(func() {
+				if m.done {
+					err = errors.New("querying old values post mutation is not allowed")
+				} else {
+					value, err = m.Client().FnetCategory.Get(ctx, id)
+				}
+			})
+			return value, err
+		}
+		m.id = &id
+	}
+}
+
+// withFnetCategory sets the old FnetCategory of the mutation.
+func withFnetCategory(node *FnetCategory) fnetcategoryOption {
+	return func(m *FnetCategoryMutation) {
+		m.oldValue = func(context.Context) (*FnetCategory, error) {
+			return node, nil
+		}
+		m.id = &node.ID
+	}
+}
+
+// Client returns a new `ent.Client` from the mutation. If the mutation was
+// executed in a transaction (ent.Tx), a transactional client is returned.
+func (m FnetCategoryMutation) Client() *Client {
+	client := &Client{config: m.config}
+	client.init()
+	return client
+}
+
+// Tx returns an `ent.Tx` for mutations that were executed in transactions;
+// it returns an error otherwise.
+func (m FnetCategoryMutation) Tx() (*Tx, error) {
+	if _, ok := m.driver.(*txDriver); !ok {
+		return nil, errors.New("ent: mutation is not running in a transaction")
+	}
+	tx := &Tx{config: m.config}
+	tx.init()
+	return tx, nil
+}
+
+// ID returns the ID value in the mutation. Note that the ID is only available
+// if it was provided to the builder or after it was returned from the database.
+func (m *FnetCategoryMutation) ID() (id int, exists bool) {
+	if m.id == nil {
+		return
+	}
+	return *m.id, true
+}
+
+// IDs queries the database and returns the entity ids that match the mutation's predicate.
+// That means, if the mutation is applied within a transaction with an isolation level such
+// as sql.LevelSerializable, the returned ids match the ids of the rows that will be updated
+// or updated by the mutation.
+func (m *FnetCategoryMutation) IDs(ctx context.Context) ([]int, error) {
+	switch {
+	case m.op.Is(OpUpdateOne | OpDeleteOne):
+		id, exists := m.ID()
+		if exists {
+			return []int{id}, nil
+		}
+		fallthrough
+	case m.op.Is(OpUpdate | OpDelete):
+		return m.Client().FnetCategory.Query().Where(m.predicates...).IDs(ctx)
+	default:
+		return nil, fmt.Errorf("IDs is not allowed on %s operations", m.op)
+	}
+}
+
+// SetName sets the "name" field.
+func (m *FnetCategoryMutation) SetName(s string) {
+	m.name = &s
+}
+
+// Name returns the value of the "name" field in the mutation.
+func (m *FnetCategoryMutation) Name() (r string, exists bool) {
+	v := m.name
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldName returns the old "name" field's value of the FnetCategory entity.
+// If the FnetCategory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *FnetCategoryMutation) OldName(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldName is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldName requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldName: %w", err)
+	}
+	return oldValue.Name, nil
+}
+
+// ResetName resets all changes to the "name" field.
+func (m *FnetCategoryMutation) ResetName() {
+	m.name = nil
+}
+
+// AddDocumentIDs adds the "documents" edge to the FnetDocument entity by ids.
+func (m *FnetCategoryMutation) AddDocumentIDs(ids ...int) {
+	if m.documents == nil {
+		m.documents = make(map[int]struct{})
+	}
+	for i := range ids {
+		m.documents[ids[i]] = struct{}{}
+	}
+}
+
+// ClearDocuments clears the "documents" edge to the FnetDocument entity.
+func (m *FnetCategoryMutation) ClearDocuments() {
+	m.cleareddocuments = true
+}
+
+// DocumentsCleared reports if the "documents" edge to the FnetDocument entity was cleared.
+func (m *FnetCategoryMutation) DocumentsCleared() bool {
+	return m.cleareddocuments
+}
+
+// RemoveDocumentIDs removes the "documents" edge to the FnetDocument entity by IDs.
+func (m *FnetCategoryMutation) RemoveDocumentIDs(ids ...int) {
+	if m.removeddocuments == nil {
+		m.removeddocuments = make(map[int]struct{})
+	}
+	for i := range ids {
+		delete(m.documents, ids[i])
+		m.removeddocuments[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedDocuments returns the removed IDs of the "documents" edge to the FnetDocument entity.
+func (m *FnetCategoryMutation) RemovedDocumentsIDs() (ids []int) {
+	for id := range m.removeddocuments {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// DocumentsIDs returns the "documents" edge IDs in the mutation.
+func (m *FnetCategoryMutation) DocumentsIDs() (ids []int) {
+	for id := range m.documents {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetDocuments resets all changes to the "documents" edge.
+func (m *FnetCategoryMutation) ResetDocuments() {
+	m.documents = nil
+	m.cleareddocuments = false
+	m.removeddocuments = nil
+}
+
+// Where appends a list predicates to the FnetCategoryMutation builder.
+func (m *FnetCategoryMutation) Where(ps ...predicate.FnetCategory) {
+	m.predicates = append(m.predicates, ps...)
+}
+
+// Op returns the operation name.
+func (m *FnetCategoryMutation) Op() Op {
+	return m.op
+}
+
+// Type returns the node type of this mutation (FnetCategory).
+func (m *FnetCategoryMutation) Type() string {
+	return m.typ
+}
+
+// Fields returns all fields that were changed during this mutation. Note that in
+// order to get all numeric fields that were incremented/decremented, call
+// AddedFields().
+func (m *FnetCategoryMutation) Fields() []string {
+	fields := make([]string, 0, 1)
+	if m.name != nil {
+		fields = append(fields, fnetcategory.FieldName)
+	}
+	return fields
+}
+
+// Field returns the value of a field with the given name. The second boolean
+// return value indicates that this field was not set, or was not defined in the
+// schema.
+func (m *FnetCategoryMutation) Field(name string) (ent.Value, bool) {
+	switch name {
+	case fnetcategory.FieldName:
+		return m.Name()
+	}
+	return nil, false
+}
+
+// OldField returns the old value of the field from the database. An error is
+// returned if the mutation operation is not UpdateOne, or the query to the
+// database failed.
+func (m *FnetCategoryMutation) OldField(ctx context.Context, name string) (ent.Value, error) {
+	switch name {
+	case fnetcategory.FieldName:
+		return m.OldName(ctx)
+	}
+	return nil, fmt.Errorf("unknown FnetCategory field %s", name)
+}
+
+// SetField sets the value of a field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *FnetCategoryMutation) SetField(name string, value ent.Value) error {
+	switch name {
+	case fnetcategory.FieldName:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetName(v)
+		return nil
+	}
+	return fmt.Errorf("unknown FnetCategory field %s", name)
+}
+
+// AddedFields returns all numeric fields that were incremented/decremented during
+// this mutation.
+func (m *FnetCategoryMutation) AddedFields() []string {
+	return nil
+}
+
+// AddedField returns the numeric value that was incremented/decremented on a field
+// with the given name. The second boolean return value indicates that this field
+// was not set, or was not defined in the schema.
+func (m *FnetCategoryMutation) AddedField(name string) (ent.Value, bool) {
+	return nil, false
+}
+
+// AddField adds the value to the field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *FnetCategoryMutation) AddField(name string, value ent.Value) error {
+	switch name {
+	}
+	return fmt.Errorf("unknown FnetCategory numeric field %s", name)
+}
+
+// ClearedFields returns all nullable fields that were cleared during this
+// mutation.
+func (m *FnetCategoryMutation) ClearedFields() []string {
+	return nil
+}
+
+// FieldCleared returns a boolean indicating if a field with the given name was
+// cleared in this mutation.
+func (m *FnetCategoryMutation) FieldCleared(name string) bool {
+	_, ok := m.clearedFields[name]
+	return ok
+}
+
+// ClearField clears the value of the field with the given name. It returns an
+// error if the field is not defined in the schema.
+func (m *FnetCategoryMutation) ClearField(name string) error {
+	return fmt.Errorf("unknown FnetCategory nullable field %s", name)
+}
+
+// ResetField resets all changes in the mutation for the field with the given name.
+// It returns an error if the field is not defined in the schema.
+func (m *FnetCategoryMutation) ResetField(name string) error {
+	switch name {
+	case fnetcategory.FieldName:
+		m.ResetName()
+		return nil
+	}
+	return fmt.Errorf("unknown FnetCategory field %s", name)
+}
+
+// AddedEdges returns all edge names that were set/added in this mutation.
+func (m *FnetCategoryMutation) AddedEdges() []string {
+	edges := make([]string, 0, 1)
+	if m.documents != nil {
+		edges = append(edges, fnetcategory.EdgeDocuments)
+	}
+	return edges
+}
+
+// AddedIDs returns all IDs (to other nodes) that were added for the given edge
+// name in this mutation.
+func (m *FnetCategoryMutation) AddedIDs(name string) []ent.Value {
+	switch name {
+	case fnetcategory.EdgeDocuments:
+		ids := make([]ent.Value, 0, len(m.documents))
+		for id := range m.documents {
+			ids = append(ids, id)
+		}
+		return ids
+	}
+	return nil
+}
+
+// RemovedEdges returns all edge names that were removed in this mutation.
+func (m *FnetCategoryMutation) RemovedEdges() []string {
+	edges := make([]string, 0, 1)
+	if m.removeddocuments != nil {
+		edges = append(edges, fnetcategory.EdgeDocuments)
+	}
+	return edges
+}
+
+// RemovedIDs returns all IDs (to other nodes) that were removed for the edge with
+// the given name in this mutation.
+func (m *FnetCategoryMutation) RemovedIDs(name string) []ent.Value {
+	switch name {
+	case fnetcategory.EdgeDocuments:
+		ids := make([]ent.Value, 0, len(m.removeddocuments))
+		for id := range m.removeddocuments {
+			ids = append(ids, id)
+		}
+		return ids
+	}
+	return nil
+}
+
+// ClearedEdges returns all edge names that were cleared in this mutation.
+func (m *FnetCategoryMutation) ClearedEdges() []string {
+	edges := make([]string, 0, 1)
+	if m.cleareddocuments {
+		edges = append(edges, fnetcategory.EdgeDocuments)
+	}
+	return edges
+}
+
+// EdgeCleared returns a boolean which indicates if the edge with the given name
+// was cleared in this mutation.
+func (m *FnetCategoryMutation) EdgeCleared(name string) bool {
+	switch name {
+	case fnetcategory.EdgeDocuments:
+		return m.cleareddocuments
+	}
+	return false
+}
+
+// ClearEdge clears the value of the edge with the given name. It returns an error
+// if that edge is not defined in the schema.
+func (m *FnetCategoryMutation) ClearEdge(name string) error {
+	switch name {
+	}
+	return fmt.Errorf("unknown FnetCategory unique edge %s", name)
+}
+
+// ResetEdge resets all changes to the edge with the given name in this mutation.
+// It returns an error if the edge is not defined in the schema.
+func (m *FnetCategoryMutation) ResetEdge(name string) error {
+	switch name {
+	case fnetcategory.EdgeDocuments:
+		m.ResetDocuments()
+		return nil
+	}
+	return fmt.Errorf("unknown FnetCategory edge %s", name)
+}
 
 // FnetDocumentMutation represents an operation that mutates the FnetDocument nodes in the graph.
 type FnetDocumentMutation struct {
@@ -36,10 +446,8 @@ type FnetDocumentMutation struct {
 	fnet_id                       *int
 	addfnet_id                    *int
 	additional_information        *string
-	document_category             *string
+	category_str                  *string
 	document_status               *string
-	document_sub_category1        *string
-	document_sub_category2        *string
 	fund_description              *string
 	high_priority                 *bool
 	market_name                   *string
@@ -49,6 +457,8 @@ type FnetDocumentMutation struct {
 	reviewed                      *string
 	status                        *string
 	status_description            *string
+	sub_category1_str             *string
+	sub_category2_str             *string
 	submission_date               *time.Time
 	submission_date_str           *string
 	submission_method             *string
@@ -56,6 +466,12 @@ type FnetDocumentMutation struct {
 	version                       *int
 	addversion                    *int
 	clearedFields                 map[string]struct{}
+	category                      *int
+	clearedcategory               bool
+	sub_category1                 *int
+	clearedsub_category1          bool
+	sub_category2                 *int
+	clearedsub_category2          bool
 	done                          bool
 	oldValue                      func(context.Context) (*FnetDocument, error)
 	predicates                    []predicate.FnetDocument
@@ -264,40 +680,40 @@ func (m *FnetDocumentMutation) ResetAdditionalInformation() {
 	delete(m.clearedFields, fnetdocument.FieldAdditionalInformation)
 }
 
-// SetDocumentCategory sets the "document_category" field.
-func (m *FnetDocumentMutation) SetDocumentCategory(s string) {
-	m.document_category = &s
+// SetCategoryStr sets the "category_str" field.
+func (m *FnetDocumentMutation) SetCategoryStr(s string) {
+	m.category_str = &s
 }
 
-// DocumentCategory returns the value of the "document_category" field in the mutation.
-func (m *FnetDocumentMutation) DocumentCategory() (r string, exists bool) {
-	v := m.document_category
+// CategoryStr returns the value of the "category_str" field in the mutation.
+func (m *FnetDocumentMutation) CategoryStr() (r string, exists bool) {
+	v := m.category_str
 	if v == nil {
 		return
 	}
 	return *v, true
 }
 
-// OldDocumentCategory returns the old "document_category" field's value of the FnetDocument entity.
+// OldCategoryStr returns the old "category_str" field's value of the FnetDocument entity.
 // If the FnetDocument object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *FnetDocumentMutation) OldDocumentCategory(ctx context.Context) (v string, err error) {
+func (m *FnetDocumentMutation) OldCategoryStr(ctx context.Context) (v string, err error) {
 	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldDocumentCategory is only allowed on UpdateOne operations")
+		return v, errors.New("OldCategoryStr is only allowed on UpdateOne operations")
 	}
 	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldDocumentCategory requires an ID field in the mutation")
+		return v, errors.New("OldCategoryStr requires an ID field in the mutation")
 	}
 	oldValue, err := m.oldValue(ctx)
 	if err != nil {
-		return v, fmt.Errorf("querying old value for OldDocumentCategory: %w", err)
+		return v, fmt.Errorf("querying old value for OldCategoryStr: %w", err)
 	}
-	return oldValue.DocumentCategory, nil
+	return oldValue.CategoryStr, nil
 }
 
-// ResetDocumentCategory resets all changes to the "document_category" field.
-func (m *FnetDocumentMutation) ResetDocumentCategory() {
-	m.document_category = nil
+// ResetCategoryStr resets all changes to the "category_str" field.
+func (m *FnetDocumentMutation) ResetCategoryStr() {
+	m.category_str = nil
 }
 
 // SetDocumentStatus sets the "document_status" field.
@@ -334,104 +750,6 @@ func (m *FnetDocumentMutation) OldDocumentStatus(ctx context.Context) (v string,
 // ResetDocumentStatus resets all changes to the "document_status" field.
 func (m *FnetDocumentMutation) ResetDocumentStatus() {
 	m.document_status = nil
-}
-
-// SetDocumentSubCategory1 sets the "document_sub_category1" field.
-func (m *FnetDocumentMutation) SetDocumentSubCategory1(s string) {
-	m.document_sub_category1 = &s
-}
-
-// DocumentSubCategory1 returns the value of the "document_sub_category1" field in the mutation.
-func (m *FnetDocumentMutation) DocumentSubCategory1() (r string, exists bool) {
-	v := m.document_sub_category1
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// OldDocumentSubCategory1 returns the old "document_sub_category1" field's value of the FnetDocument entity.
-// If the FnetDocument object wasn't provided to the builder, the object is fetched from the database.
-// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *FnetDocumentMutation) OldDocumentSubCategory1(ctx context.Context) (v string, err error) {
-	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldDocumentSubCategory1 is only allowed on UpdateOne operations")
-	}
-	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldDocumentSubCategory1 requires an ID field in the mutation")
-	}
-	oldValue, err := m.oldValue(ctx)
-	if err != nil {
-		return v, fmt.Errorf("querying old value for OldDocumentSubCategory1: %w", err)
-	}
-	return oldValue.DocumentSubCategory1, nil
-}
-
-// ClearDocumentSubCategory1 clears the value of the "document_sub_category1" field.
-func (m *FnetDocumentMutation) ClearDocumentSubCategory1() {
-	m.document_sub_category1 = nil
-	m.clearedFields[fnetdocument.FieldDocumentSubCategory1] = struct{}{}
-}
-
-// DocumentSubCategory1Cleared returns if the "document_sub_category1" field was cleared in this mutation.
-func (m *FnetDocumentMutation) DocumentSubCategory1Cleared() bool {
-	_, ok := m.clearedFields[fnetdocument.FieldDocumentSubCategory1]
-	return ok
-}
-
-// ResetDocumentSubCategory1 resets all changes to the "document_sub_category1" field.
-func (m *FnetDocumentMutation) ResetDocumentSubCategory1() {
-	m.document_sub_category1 = nil
-	delete(m.clearedFields, fnetdocument.FieldDocumentSubCategory1)
-}
-
-// SetDocumentSubCategory2 sets the "document_sub_category2" field.
-func (m *FnetDocumentMutation) SetDocumentSubCategory2(s string) {
-	m.document_sub_category2 = &s
-}
-
-// DocumentSubCategory2 returns the value of the "document_sub_category2" field in the mutation.
-func (m *FnetDocumentMutation) DocumentSubCategory2() (r string, exists bool) {
-	v := m.document_sub_category2
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// OldDocumentSubCategory2 returns the old "document_sub_category2" field's value of the FnetDocument entity.
-// If the FnetDocument object wasn't provided to the builder, the object is fetched from the database.
-// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *FnetDocumentMutation) OldDocumentSubCategory2(ctx context.Context) (v string, err error) {
-	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldDocumentSubCategory2 is only allowed on UpdateOne operations")
-	}
-	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldDocumentSubCategory2 requires an ID field in the mutation")
-	}
-	oldValue, err := m.oldValue(ctx)
-	if err != nil {
-		return v, fmt.Errorf("querying old value for OldDocumentSubCategory2: %w", err)
-	}
-	return oldValue.DocumentSubCategory2, nil
-}
-
-// ClearDocumentSubCategory2 clears the value of the "document_sub_category2" field.
-func (m *FnetDocumentMutation) ClearDocumentSubCategory2() {
-	m.document_sub_category2 = nil
-	m.clearedFields[fnetdocument.FieldDocumentSubCategory2] = struct{}{}
-}
-
-// DocumentSubCategory2Cleared returns if the "document_sub_category2" field was cleared in this mutation.
-func (m *FnetDocumentMutation) DocumentSubCategory2Cleared() bool {
-	_, ok := m.clearedFields[fnetdocument.FieldDocumentSubCategory2]
-	return ok
-}
-
-// ResetDocumentSubCategory2 resets all changes to the "document_sub_category2" field.
-func (m *FnetDocumentMutation) ResetDocumentSubCategory2() {
-	m.document_sub_category2 = nil
-	delete(m.clearedFields, fnetdocument.FieldDocumentSubCategory2)
 }
 
 // SetFundDescription sets the "fund_description" field.
@@ -771,6 +1089,104 @@ func (m *FnetDocumentMutation) ResetStatusDescription() {
 	m.status_description = nil
 }
 
+// SetSubCategory1Str sets the "sub_category1_str" field.
+func (m *FnetDocumentMutation) SetSubCategory1Str(s string) {
+	m.sub_category1_str = &s
+}
+
+// SubCategory1Str returns the value of the "sub_category1_str" field in the mutation.
+func (m *FnetDocumentMutation) SubCategory1Str() (r string, exists bool) {
+	v := m.sub_category1_str
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldSubCategory1Str returns the old "sub_category1_str" field's value of the FnetDocument entity.
+// If the FnetDocument object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *FnetDocumentMutation) OldSubCategory1Str(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldSubCategory1Str is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldSubCategory1Str requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldSubCategory1Str: %w", err)
+	}
+	return oldValue.SubCategory1Str, nil
+}
+
+// ClearSubCategory1Str clears the value of the "sub_category1_str" field.
+func (m *FnetDocumentMutation) ClearSubCategory1Str() {
+	m.sub_category1_str = nil
+	m.clearedFields[fnetdocument.FieldSubCategory1Str] = struct{}{}
+}
+
+// SubCategory1StrCleared returns if the "sub_category1_str" field was cleared in this mutation.
+func (m *FnetDocumentMutation) SubCategory1StrCleared() bool {
+	_, ok := m.clearedFields[fnetdocument.FieldSubCategory1Str]
+	return ok
+}
+
+// ResetSubCategory1Str resets all changes to the "sub_category1_str" field.
+func (m *FnetDocumentMutation) ResetSubCategory1Str() {
+	m.sub_category1_str = nil
+	delete(m.clearedFields, fnetdocument.FieldSubCategory1Str)
+}
+
+// SetSubCategory2Str sets the "sub_category2_str" field.
+func (m *FnetDocumentMutation) SetSubCategory2Str(s string) {
+	m.sub_category2_str = &s
+}
+
+// SubCategory2Str returns the value of the "sub_category2_str" field in the mutation.
+func (m *FnetDocumentMutation) SubCategory2Str() (r string, exists bool) {
+	v := m.sub_category2_str
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldSubCategory2Str returns the old "sub_category2_str" field's value of the FnetDocument entity.
+// If the FnetDocument object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *FnetDocumentMutation) OldSubCategory2Str(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldSubCategory2Str is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldSubCategory2Str requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldSubCategory2Str: %w", err)
+	}
+	return oldValue.SubCategory2Str, nil
+}
+
+// ClearSubCategory2Str clears the value of the "sub_category2_str" field.
+func (m *FnetDocumentMutation) ClearSubCategory2Str() {
+	m.sub_category2_str = nil
+	m.clearedFields[fnetdocument.FieldSubCategory2Str] = struct{}{}
+}
+
+// SubCategory2StrCleared returns if the "sub_category2_str" field was cleared in this mutation.
+func (m *FnetDocumentMutation) SubCategory2StrCleared() bool {
+	_, ok := m.clearedFields[fnetdocument.FieldSubCategory2Str]
+	return ok
+}
+
+// ResetSubCategory2Str resets all changes to the "sub_category2_str" field.
+func (m *FnetDocumentMutation) ResetSubCategory2Str() {
+	m.sub_category2_str = nil
+	delete(m.clearedFields, fnetdocument.FieldSubCategory2Str)
+}
+
 // SetSubmissionDate sets the "submission_date" field.
 func (m *FnetDocumentMutation) SetSubmissionDate(t time.Time) {
 	m.submission_date = &t
@@ -971,6 +1387,123 @@ func (m *FnetDocumentMutation) ResetVersion() {
 	m.addversion = nil
 }
 
+// SetCategoryID sets the "category" edge to the FnetCategory entity by id.
+func (m *FnetDocumentMutation) SetCategoryID(id int) {
+	m.category = &id
+}
+
+// ClearCategory clears the "category" edge to the FnetCategory entity.
+func (m *FnetDocumentMutation) ClearCategory() {
+	m.clearedcategory = true
+}
+
+// CategoryCleared reports if the "category" edge to the FnetCategory entity was cleared.
+func (m *FnetDocumentMutation) CategoryCleared() bool {
+	return m.clearedcategory
+}
+
+// CategoryID returns the "category" edge ID in the mutation.
+func (m *FnetDocumentMutation) CategoryID() (id int, exists bool) {
+	if m.category != nil {
+		return *m.category, true
+	}
+	return
+}
+
+// CategoryIDs returns the "category" edge IDs in the mutation.
+// Note that IDs always returns len(IDs) <= 1 for unique edges, and you should use
+// CategoryID instead. It exists only for internal usage by the builders.
+func (m *FnetDocumentMutation) CategoryIDs() (ids []int) {
+	if id := m.category; id != nil {
+		ids = append(ids, *id)
+	}
+	return
+}
+
+// ResetCategory resets all changes to the "category" edge.
+func (m *FnetDocumentMutation) ResetCategory() {
+	m.category = nil
+	m.clearedcategory = false
+}
+
+// SetSubCategory1ID sets the "sub_category1" edge to the FnetSubCategory1 entity by id.
+func (m *FnetDocumentMutation) SetSubCategory1ID(id int) {
+	m.sub_category1 = &id
+}
+
+// ClearSubCategory1 clears the "sub_category1" edge to the FnetSubCategory1 entity.
+func (m *FnetDocumentMutation) ClearSubCategory1() {
+	m.clearedsub_category1 = true
+}
+
+// SubCategory1Cleared reports if the "sub_category1" edge to the FnetSubCategory1 entity was cleared.
+func (m *FnetDocumentMutation) SubCategory1Cleared() bool {
+	return m.clearedsub_category1
+}
+
+// SubCategory1ID returns the "sub_category1" edge ID in the mutation.
+func (m *FnetDocumentMutation) SubCategory1ID() (id int, exists bool) {
+	if m.sub_category1 != nil {
+		return *m.sub_category1, true
+	}
+	return
+}
+
+// SubCategory1IDs returns the "sub_category1" edge IDs in the mutation.
+// Note that IDs always returns len(IDs) <= 1 for unique edges, and you should use
+// SubCategory1ID instead. It exists only for internal usage by the builders.
+func (m *FnetDocumentMutation) SubCategory1IDs() (ids []int) {
+	if id := m.sub_category1; id != nil {
+		ids = append(ids, *id)
+	}
+	return
+}
+
+// ResetSubCategory1 resets all changes to the "sub_category1" edge.
+func (m *FnetDocumentMutation) ResetSubCategory1() {
+	m.sub_category1 = nil
+	m.clearedsub_category1 = false
+}
+
+// SetSubCategory2ID sets the "sub_category2" edge to the FnetSubCategory2 entity by id.
+func (m *FnetDocumentMutation) SetSubCategory2ID(id int) {
+	m.sub_category2 = &id
+}
+
+// ClearSubCategory2 clears the "sub_category2" edge to the FnetSubCategory2 entity.
+func (m *FnetDocumentMutation) ClearSubCategory2() {
+	m.clearedsub_category2 = true
+}
+
+// SubCategory2Cleared reports if the "sub_category2" edge to the FnetSubCategory2 entity was cleared.
+func (m *FnetDocumentMutation) SubCategory2Cleared() bool {
+	return m.clearedsub_category2
+}
+
+// SubCategory2ID returns the "sub_category2" edge ID in the mutation.
+func (m *FnetDocumentMutation) SubCategory2ID() (id int, exists bool) {
+	if m.sub_category2 != nil {
+		return *m.sub_category2, true
+	}
+	return
+}
+
+// SubCategory2IDs returns the "sub_category2" edge IDs in the mutation.
+// Note that IDs always returns len(IDs) <= 1 for unique edges, and you should use
+// SubCategory2ID instead. It exists only for internal usage by the builders.
+func (m *FnetDocumentMutation) SubCategory2IDs() (ids []int) {
+	if id := m.sub_category2; id != nil {
+		ids = append(ids, *id)
+	}
+	return
+}
+
+// ResetSubCategory2 resets all changes to the "sub_category2" edge.
+func (m *FnetDocumentMutation) ResetSubCategory2() {
+	m.sub_category2 = nil
+	m.clearedsub_category2 = false
+}
+
 // Where appends a list predicates to the FnetDocumentMutation builder.
 func (m *FnetDocumentMutation) Where(ps ...predicate.FnetDocument) {
 	m.predicates = append(m.predicates, ps...)
@@ -997,17 +1530,11 @@ func (m *FnetDocumentMutation) Fields() []string {
 	if m.additional_information != nil {
 		fields = append(fields, fnetdocument.FieldAdditionalInformation)
 	}
-	if m.document_category != nil {
-		fields = append(fields, fnetdocument.FieldDocumentCategory)
+	if m.category_str != nil {
+		fields = append(fields, fnetdocument.FieldCategoryStr)
 	}
 	if m.document_status != nil {
 		fields = append(fields, fnetdocument.FieldDocumentStatus)
-	}
-	if m.document_sub_category1 != nil {
-		fields = append(fields, fnetdocument.FieldDocumentSubCategory1)
-	}
-	if m.document_sub_category2 != nil {
-		fields = append(fields, fnetdocument.FieldDocumentSubCategory2)
 	}
 	if m.fund_description != nil {
 		fields = append(fields, fnetdocument.FieldFundDescription)
@@ -1036,6 +1563,12 @@ func (m *FnetDocumentMutation) Fields() []string {
 	if m.status_description != nil {
 		fields = append(fields, fnetdocument.FieldStatusDescription)
 	}
+	if m.sub_category1_str != nil {
+		fields = append(fields, fnetdocument.FieldSubCategory1Str)
+	}
+	if m.sub_category2_str != nil {
+		fields = append(fields, fnetdocument.FieldSubCategory2Str)
+	}
 	if m.submission_date != nil {
 		fields = append(fields, fnetdocument.FieldSubmissionDate)
 	}
@@ -1063,14 +1596,10 @@ func (m *FnetDocumentMutation) Field(name string) (ent.Value, bool) {
 		return m.FnetID()
 	case fnetdocument.FieldAdditionalInformation:
 		return m.AdditionalInformation()
-	case fnetdocument.FieldDocumentCategory:
-		return m.DocumentCategory()
+	case fnetdocument.FieldCategoryStr:
+		return m.CategoryStr()
 	case fnetdocument.FieldDocumentStatus:
 		return m.DocumentStatus()
-	case fnetdocument.FieldDocumentSubCategory1:
-		return m.DocumentSubCategory1()
-	case fnetdocument.FieldDocumentSubCategory2:
-		return m.DocumentSubCategory2()
 	case fnetdocument.FieldFundDescription:
 		return m.FundDescription()
 	case fnetdocument.FieldHighPriority:
@@ -1089,6 +1618,10 @@ func (m *FnetDocumentMutation) Field(name string) (ent.Value, bool) {
 		return m.Status()
 	case fnetdocument.FieldStatusDescription:
 		return m.StatusDescription()
+	case fnetdocument.FieldSubCategory1Str:
+		return m.SubCategory1Str()
+	case fnetdocument.FieldSubCategory2Str:
+		return m.SubCategory2Str()
 	case fnetdocument.FieldSubmissionDate:
 		return m.SubmissionDate()
 	case fnetdocument.FieldSubmissionDateStr:
@@ -1112,14 +1645,10 @@ func (m *FnetDocumentMutation) OldField(ctx context.Context, name string) (ent.V
 		return m.OldFnetID(ctx)
 	case fnetdocument.FieldAdditionalInformation:
 		return m.OldAdditionalInformation(ctx)
-	case fnetdocument.FieldDocumentCategory:
-		return m.OldDocumentCategory(ctx)
+	case fnetdocument.FieldCategoryStr:
+		return m.OldCategoryStr(ctx)
 	case fnetdocument.FieldDocumentStatus:
 		return m.OldDocumentStatus(ctx)
-	case fnetdocument.FieldDocumentSubCategory1:
-		return m.OldDocumentSubCategory1(ctx)
-	case fnetdocument.FieldDocumentSubCategory2:
-		return m.OldDocumentSubCategory2(ctx)
 	case fnetdocument.FieldFundDescription:
 		return m.OldFundDescription(ctx)
 	case fnetdocument.FieldHighPriority:
@@ -1138,6 +1667,10 @@ func (m *FnetDocumentMutation) OldField(ctx context.Context, name string) (ent.V
 		return m.OldStatus(ctx)
 	case fnetdocument.FieldStatusDescription:
 		return m.OldStatusDescription(ctx)
+	case fnetdocument.FieldSubCategory1Str:
+		return m.OldSubCategory1Str(ctx)
+	case fnetdocument.FieldSubCategory2Str:
+		return m.OldSubCategory2Str(ctx)
 	case fnetdocument.FieldSubmissionDate:
 		return m.OldSubmissionDate(ctx)
 	case fnetdocument.FieldSubmissionDateStr:
@@ -1171,12 +1704,12 @@ func (m *FnetDocumentMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetAdditionalInformation(v)
 		return nil
-	case fnetdocument.FieldDocumentCategory:
+	case fnetdocument.FieldCategoryStr:
 		v, ok := value.(string)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
-		m.SetDocumentCategory(v)
+		m.SetCategoryStr(v)
 		return nil
 	case fnetdocument.FieldDocumentStatus:
 		v, ok := value.(string)
@@ -1184,20 +1717,6 @@ func (m *FnetDocumentMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetDocumentStatus(v)
-		return nil
-	case fnetdocument.FieldDocumentSubCategory1:
-		v, ok := value.(string)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.SetDocumentSubCategory1(v)
-		return nil
-	case fnetdocument.FieldDocumentSubCategory2:
-		v, ok := value.(string)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.SetDocumentSubCategory2(v)
 		return nil
 	case fnetdocument.FieldFundDescription:
 		v, ok := value.(string)
@@ -1261,6 +1780,20 @@ func (m *FnetDocumentMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetStatusDescription(v)
+		return nil
+	case fnetdocument.FieldSubCategory1Str:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetSubCategory1Str(v)
+		return nil
+	case fnetdocument.FieldSubCategory2Str:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetSubCategory2Str(v)
 		return nil
 	case fnetdocument.FieldSubmissionDate:
 		v, ok := value.(time.Time)
@@ -1357,14 +1890,14 @@ func (m *FnetDocumentMutation) ClearedFields() []string {
 	if m.FieldCleared(fnetdocument.FieldAdditionalInformation) {
 		fields = append(fields, fnetdocument.FieldAdditionalInformation)
 	}
-	if m.FieldCleared(fnetdocument.FieldDocumentSubCategory1) {
-		fields = append(fields, fnetdocument.FieldDocumentSubCategory1)
-	}
-	if m.FieldCleared(fnetdocument.FieldDocumentSubCategory2) {
-		fields = append(fields, fnetdocument.FieldDocumentSubCategory2)
-	}
 	if m.FieldCleared(fnetdocument.FieldMarketName) {
 		fields = append(fields, fnetdocument.FieldMarketName)
+	}
+	if m.FieldCleared(fnetdocument.FieldSubCategory1Str) {
+		fields = append(fields, fnetdocument.FieldSubCategory1Str)
+	}
+	if m.FieldCleared(fnetdocument.FieldSubCategory2Str) {
+		fields = append(fields, fnetdocument.FieldSubCategory2Str)
 	}
 	return fields
 }
@@ -1383,14 +1916,14 @@ func (m *FnetDocumentMutation) ClearField(name string) error {
 	case fnetdocument.FieldAdditionalInformation:
 		m.ClearAdditionalInformation()
 		return nil
-	case fnetdocument.FieldDocumentSubCategory1:
-		m.ClearDocumentSubCategory1()
-		return nil
-	case fnetdocument.FieldDocumentSubCategory2:
-		m.ClearDocumentSubCategory2()
-		return nil
 	case fnetdocument.FieldMarketName:
 		m.ClearMarketName()
+		return nil
+	case fnetdocument.FieldSubCategory1Str:
+		m.ClearSubCategory1Str()
+		return nil
+	case fnetdocument.FieldSubCategory2Str:
+		m.ClearSubCategory2Str()
 		return nil
 	}
 	return fmt.Errorf("unknown FnetDocument nullable field %s", name)
@@ -1406,17 +1939,11 @@ func (m *FnetDocumentMutation) ResetField(name string) error {
 	case fnetdocument.FieldAdditionalInformation:
 		m.ResetAdditionalInformation()
 		return nil
-	case fnetdocument.FieldDocumentCategory:
-		m.ResetDocumentCategory()
+	case fnetdocument.FieldCategoryStr:
+		m.ResetCategoryStr()
 		return nil
 	case fnetdocument.FieldDocumentStatus:
 		m.ResetDocumentStatus()
-		return nil
-	case fnetdocument.FieldDocumentSubCategory1:
-		m.ResetDocumentSubCategory1()
-		return nil
-	case fnetdocument.FieldDocumentSubCategory2:
-		m.ResetDocumentSubCategory2()
 		return nil
 	case fnetdocument.FieldFundDescription:
 		m.ResetFundDescription()
@@ -1445,6 +1972,12 @@ func (m *FnetDocumentMutation) ResetField(name string) error {
 	case fnetdocument.FieldStatusDescription:
 		m.ResetStatusDescription()
 		return nil
+	case fnetdocument.FieldSubCategory1Str:
+		m.ResetSubCategory1Str()
+		return nil
+	case fnetdocument.FieldSubCategory2Str:
+		m.ResetSubCategory2Str()
+		return nil
 	case fnetdocument.FieldSubmissionDate:
 		m.ResetSubmissionDate()
 		return nil
@@ -1466,48 +1999,920 @@ func (m *FnetDocumentMutation) ResetField(name string) error {
 
 // AddedEdges returns all edge names that were set/added in this mutation.
 func (m *FnetDocumentMutation) AddedEdges() []string {
-	edges := make([]string, 0, 0)
+	edges := make([]string, 0, 3)
+	if m.category != nil {
+		edges = append(edges, fnetdocument.EdgeCategory)
+	}
+	if m.sub_category1 != nil {
+		edges = append(edges, fnetdocument.EdgeSubCategory1)
+	}
+	if m.sub_category2 != nil {
+		edges = append(edges, fnetdocument.EdgeSubCategory2)
+	}
 	return edges
 }
 
 // AddedIDs returns all IDs (to other nodes) that were added for the given edge
 // name in this mutation.
 func (m *FnetDocumentMutation) AddedIDs(name string) []ent.Value {
+	switch name {
+	case fnetdocument.EdgeCategory:
+		if id := m.category; id != nil {
+			return []ent.Value{*id}
+		}
+	case fnetdocument.EdgeSubCategory1:
+		if id := m.sub_category1; id != nil {
+			return []ent.Value{*id}
+		}
+	case fnetdocument.EdgeSubCategory2:
+		if id := m.sub_category2; id != nil {
+			return []ent.Value{*id}
+		}
+	}
 	return nil
 }
 
 // RemovedEdges returns all edge names that were removed in this mutation.
 func (m *FnetDocumentMutation) RemovedEdges() []string {
-	edges := make([]string, 0, 0)
+	edges := make([]string, 0, 3)
 	return edges
 }
 
 // RemovedIDs returns all IDs (to other nodes) that were removed for the edge with
 // the given name in this mutation.
 func (m *FnetDocumentMutation) RemovedIDs(name string) []ent.Value {
+	switch name {
+	}
 	return nil
 }
 
 // ClearedEdges returns all edge names that were cleared in this mutation.
 func (m *FnetDocumentMutation) ClearedEdges() []string {
-	edges := make([]string, 0, 0)
+	edges := make([]string, 0, 3)
+	if m.clearedcategory {
+		edges = append(edges, fnetdocument.EdgeCategory)
+	}
+	if m.clearedsub_category1 {
+		edges = append(edges, fnetdocument.EdgeSubCategory1)
+	}
+	if m.clearedsub_category2 {
+		edges = append(edges, fnetdocument.EdgeSubCategory2)
+	}
 	return edges
 }
 
 // EdgeCleared returns a boolean which indicates if the edge with the given name
 // was cleared in this mutation.
 func (m *FnetDocumentMutation) EdgeCleared(name string) bool {
+	switch name {
+	case fnetdocument.EdgeCategory:
+		return m.clearedcategory
+	case fnetdocument.EdgeSubCategory1:
+		return m.clearedsub_category1
+	case fnetdocument.EdgeSubCategory2:
+		return m.clearedsub_category2
+	}
 	return false
 }
 
 // ClearEdge clears the value of the edge with the given name. It returns an error
 // if that edge is not defined in the schema.
 func (m *FnetDocumentMutation) ClearEdge(name string) error {
+	switch name {
+	case fnetdocument.EdgeCategory:
+		m.ClearCategory()
+		return nil
+	case fnetdocument.EdgeSubCategory1:
+		m.ClearSubCategory1()
+		return nil
+	case fnetdocument.EdgeSubCategory2:
+		m.ClearSubCategory2()
+		return nil
+	}
 	return fmt.Errorf("unknown FnetDocument unique edge %s", name)
 }
 
 // ResetEdge resets all changes to the edge with the given name in this mutation.
 // It returns an error if the edge is not defined in the schema.
 func (m *FnetDocumentMutation) ResetEdge(name string) error {
+	switch name {
+	case fnetdocument.EdgeCategory:
+		m.ResetCategory()
+		return nil
+	case fnetdocument.EdgeSubCategory1:
+		m.ResetSubCategory1()
+		return nil
+	case fnetdocument.EdgeSubCategory2:
+		m.ResetSubCategory2()
+		return nil
+	}
 	return fmt.Errorf("unknown FnetDocument edge %s", name)
+}
+
+// FnetSubCategory1Mutation represents an operation that mutates the FnetSubCategory1 nodes in the graph.
+type FnetSubCategory1Mutation struct {
+	config
+	op               Op
+	typ              string
+	id               *int
+	name             *string
+	clearedFields    map[string]struct{}
+	documents        map[int]struct{}
+	removeddocuments map[int]struct{}
+	cleareddocuments bool
+	done             bool
+	oldValue         func(context.Context) (*FnetSubCategory1, error)
+	predicates       []predicate.FnetSubCategory1
+}
+
+var _ ent.Mutation = (*FnetSubCategory1Mutation)(nil)
+
+// fnetsubcategory1Option allows management of the mutation configuration using functional options.
+type fnetsubcategory1Option func(*FnetSubCategory1Mutation)
+
+// newFnetSubCategory1Mutation creates new mutation for the FnetSubCategory1 entity.
+func newFnetSubCategory1Mutation(c config, op Op, opts ...fnetsubcategory1Option) *FnetSubCategory1Mutation {
+	m := &FnetSubCategory1Mutation{
+		config:        c,
+		op:            op,
+		typ:           TypeFnetSubCategory1,
+		clearedFields: make(map[string]struct{}),
+	}
+	for _, opt := range opts {
+		opt(m)
+	}
+	return m
+}
+
+// withFnetSubCategory1ID sets the ID field of the mutation.
+func withFnetSubCategory1ID(id int) fnetsubcategory1Option {
+	return func(m *FnetSubCategory1Mutation) {
+		var (
+			err   error
+			once  sync.Once
+			value *FnetSubCategory1
+		)
+		m.oldValue = func(ctx context.Context) (*FnetSubCategory1, error) {
+			once.Do(func() {
+				if m.done {
+					err = errors.New("querying old values post mutation is not allowed")
+				} else {
+					value, err = m.Client().FnetSubCategory1.Get(ctx, id)
+				}
+			})
+			return value, err
+		}
+		m.id = &id
+	}
+}
+
+// withFnetSubCategory1 sets the old FnetSubCategory1 of the mutation.
+func withFnetSubCategory1(node *FnetSubCategory1) fnetsubcategory1Option {
+	return func(m *FnetSubCategory1Mutation) {
+		m.oldValue = func(context.Context) (*FnetSubCategory1, error) {
+			return node, nil
+		}
+		m.id = &node.ID
+	}
+}
+
+// Client returns a new `ent.Client` from the mutation. If the mutation was
+// executed in a transaction (ent.Tx), a transactional client is returned.
+func (m FnetSubCategory1Mutation) Client() *Client {
+	client := &Client{config: m.config}
+	client.init()
+	return client
+}
+
+// Tx returns an `ent.Tx` for mutations that were executed in transactions;
+// it returns an error otherwise.
+func (m FnetSubCategory1Mutation) Tx() (*Tx, error) {
+	if _, ok := m.driver.(*txDriver); !ok {
+		return nil, errors.New("ent: mutation is not running in a transaction")
+	}
+	tx := &Tx{config: m.config}
+	tx.init()
+	return tx, nil
+}
+
+// ID returns the ID value in the mutation. Note that the ID is only available
+// if it was provided to the builder or after it was returned from the database.
+func (m *FnetSubCategory1Mutation) ID() (id int, exists bool) {
+	if m.id == nil {
+		return
+	}
+	return *m.id, true
+}
+
+// IDs queries the database and returns the entity ids that match the mutation's predicate.
+// That means, if the mutation is applied within a transaction with an isolation level such
+// as sql.LevelSerializable, the returned ids match the ids of the rows that will be updated
+// or updated by the mutation.
+func (m *FnetSubCategory1Mutation) IDs(ctx context.Context) ([]int, error) {
+	switch {
+	case m.op.Is(OpUpdateOne | OpDeleteOne):
+		id, exists := m.ID()
+		if exists {
+			return []int{id}, nil
+		}
+		fallthrough
+	case m.op.Is(OpUpdate | OpDelete):
+		return m.Client().FnetSubCategory1.Query().Where(m.predicates...).IDs(ctx)
+	default:
+		return nil, fmt.Errorf("IDs is not allowed on %s operations", m.op)
+	}
+}
+
+// SetName sets the "name" field.
+func (m *FnetSubCategory1Mutation) SetName(s string) {
+	m.name = &s
+}
+
+// Name returns the value of the "name" field in the mutation.
+func (m *FnetSubCategory1Mutation) Name() (r string, exists bool) {
+	v := m.name
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldName returns the old "name" field's value of the FnetSubCategory1 entity.
+// If the FnetSubCategory1 object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *FnetSubCategory1Mutation) OldName(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldName is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldName requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldName: %w", err)
+	}
+	return oldValue.Name, nil
+}
+
+// ResetName resets all changes to the "name" field.
+func (m *FnetSubCategory1Mutation) ResetName() {
+	m.name = nil
+}
+
+// AddDocumentIDs adds the "documents" edge to the FnetDocument entity by ids.
+func (m *FnetSubCategory1Mutation) AddDocumentIDs(ids ...int) {
+	if m.documents == nil {
+		m.documents = make(map[int]struct{})
+	}
+	for i := range ids {
+		m.documents[ids[i]] = struct{}{}
+	}
+}
+
+// ClearDocuments clears the "documents" edge to the FnetDocument entity.
+func (m *FnetSubCategory1Mutation) ClearDocuments() {
+	m.cleareddocuments = true
+}
+
+// DocumentsCleared reports if the "documents" edge to the FnetDocument entity was cleared.
+func (m *FnetSubCategory1Mutation) DocumentsCleared() bool {
+	return m.cleareddocuments
+}
+
+// RemoveDocumentIDs removes the "documents" edge to the FnetDocument entity by IDs.
+func (m *FnetSubCategory1Mutation) RemoveDocumentIDs(ids ...int) {
+	if m.removeddocuments == nil {
+		m.removeddocuments = make(map[int]struct{})
+	}
+	for i := range ids {
+		delete(m.documents, ids[i])
+		m.removeddocuments[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedDocuments returns the removed IDs of the "documents" edge to the FnetDocument entity.
+func (m *FnetSubCategory1Mutation) RemovedDocumentsIDs() (ids []int) {
+	for id := range m.removeddocuments {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// DocumentsIDs returns the "documents" edge IDs in the mutation.
+func (m *FnetSubCategory1Mutation) DocumentsIDs() (ids []int) {
+	for id := range m.documents {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetDocuments resets all changes to the "documents" edge.
+func (m *FnetSubCategory1Mutation) ResetDocuments() {
+	m.documents = nil
+	m.cleareddocuments = false
+	m.removeddocuments = nil
+}
+
+// Where appends a list predicates to the FnetSubCategory1Mutation builder.
+func (m *FnetSubCategory1Mutation) Where(ps ...predicate.FnetSubCategory1) {
+	m.predicates = append(m.predicates, ps...)
+}
+
+// Op returns the operation name.
+func (m *FnetSubCategory1Mutation) Op() Op {
+	return m.op
+}
+
+// Type returns the node type of this mutation (FnetSubCategory1).
+func (m *FnetSubCategory1Mutation) Type() string {
+	return m.typ
+}
+
+// Fields returns all fields that were changed during this mutation. Note that in
+// order to get all numeric fields that were incremented/decremented, call
+// AddedFields().
+func (m *FnetSubCategory1Mutation) Fields() []string {
+	fields := make([]string, 0, 1)
+	if m.name != nil {
+		fields = append(fields, fnetsubcategory1.FieldName)
+	}
+	return fields
+}
+
+// Field returns the value of a field with the given name. The second boolean
+// return value indicates that this field was not set, or was not defined in the
+// schema.
+func (m *FnetSubCategory1Mutation) Field(name string) (ent.Value, bool) {
+	switch name {
+	case fnetsubcategory1.FieldName:
+		return m.Name()
+	}
+	return nil, false
+}
+
+// OldField returns the old value of the field from the database. An error is
+// returned if the mutation operation is not UpdateOne, or the query to the
+// database failed.
+func (m *FnetSubCategory1Mutation) OldField(ctx context.Context, name string) (ent.Value, error) {
+	switch name {
+	case fnetsubcategory1.FieldName:
+		return m.OldName(ctx)
+	}
+	return nil, fmt.Errorf("unknown FnetSubCategory1 field %s", name)
+}
+
+// SetField sets the value of a field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *FnetSubCategory1Mutation) SetField(name string, value ent.Value) error {
+	switch name {
+	case fnetsubcategory1.FieldName:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetName(v)
+		return nil
+	}
+	return fmt.Errorf("unknown FnetSubCategory1 field %s", name)
+}
+
+// AddedFields returns all numeric fields that were incremented/decremented during
+// this mutation.
+func (m *FnetSubCategory1Mutation) AddedFields() []string {
+	return nil
+}
+
+// AddedField returns the numeric value that was incremented/decremented on a field
+// with the given name. The second boolean return value indicates that this field
+// was not set, or was not defined in the schema.
+func (m *FnetSubCategory1Mutation) AddedField(name string) (ent.Value, bool) {
+	return nil, false
+}
+
+// AddField adds the value to the field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *FnetSubCategory1Mutation) AddField(name string, value ent.Value) error {
+	switch name {
+	}
+	return fmt.Errorf("unknown FnetSubCategory1 numeric field %s", name)
+}
+
+// ClearedFields returns all nullable fields that were cleared during this
+// mutation.
+func (m *FnetSubCategory1Mutation) ClearedFields() []string {
+	return nil
+}
+
+// FieldCleared returns a boolean indicating if a field with the given name was
+// cleared in this mutation.
+func (m *FnetSubCategory1Mutation) FieldCleared(name string) bool {
+	_, ok := m.clearedFields[name]
+	return ok
+}
+
+// ClearField clears the value of the field with the given name. It returns an
+// error if the field is not defined in the schema.
+func (m *FnetSubCategory1Mutation) ClearField(name string) error {
+	return fmt.Errorf("unknown FnetSubCategory1 nullable field %s", name)
+}
+
+// ResetField resets all changes in the mutation for the field with the given name.
+// It returns an error if the field is not defined in the schema.
+func (m *FnetSubCategory1Mutation) ResetField(name string) error {
+	switch name {
+	case fnetsubcategory1.FieldName:
+		m.ResetName()
+		return nil
+	}
+	return fmt.Errorf("unknown FnetSubCategory1 field %s", name)
+}
+
+// AddedEdges returns all edge names that were set/added in this mutation.
+func (m *FnetSubCategory1Mutation) AddedEdges() []string {
+	edges := make([]string, 0, 1)
+	if m.documents != nil {
+		edges = append(edges, fnetsubcategory1.EdgeDocuments)
+	}
+	return edges
+}
+
+// AddedIDs returns all IDs (to other nodes) that were added for the given edge
+// name in this mutation.
+func (m *FnetSubCategory1Mutation) AddedIDs(name string) []ent.Value {
+	switch name {
+	case fnetsubcategory1.EdgeDocuments:
+		ids := make([]ent.Value, 0, len(m.documents))
+		for id := range m.documents {
+			ids = append(ids, id)
+		}
+		return ids
+	}
+	return nil
+}
+
+// RemovedEdges returns all edge names that were removed in this mutation.
+func (m *FnetSubCategory1Mutation) RemovedEdges() []string {
+	edges := make([]string, 0, 1)
+	if m.removeddocuments != nil {
+		edges = append(edges, fnetsubcategory1.EdgeDocuments)
+	}
+	return edges
+}
+
+// RemovedIDs returns all IDs (to other nodes) that were removed for the edge with
+// the given name in this mutation.
+func (m *FnetSubCategory1Mutation) RemovedIDs(name string) []ent.Value {
+	switch name {
+	case fnetsubcategory1.EdgeDocuments:
+		ids := make([]ent.Value, 0, len(m.removeddocuments))
+		for id := range m.removeddocuments {
+			ids = append(ids, id)
+		}
+		return ids
+	}
+	return nil
+}
+
+// ClearedEdges returns all edge names that were cleared in this mutation.
+func (m *FnetSubCategory1Mutation) ClearedEdges() []string {
+	edges := make([]string, 0, 1)
+	if m.cleareddocuments {
+		edges = append(edges, fnetsubcategory1.EdgeDocuments)
+	}
+	return edges
+}
+
+// EdgeCleared returns a boolean which indicates if the edge with the given name
+// was cleared in this mutation.
+func (m *FnetSubCategory1Mutation) EdgeCleared(name string) bool {
+	switch name {
+	case fnetsubcategory1.EdgeDocuments:
+		return m.cleareddocuments
+	}
+	return false
+}
+
+// ClearEdge clears the value of the edge with the given name. It returns an error
+// if that edge is not defined in the schema.
+func (m *FnetSubCategory1Mutation) ClearEdge(name string) error {
+	switch name {
+	}
+	return fmt.Errorf("unknown FnetSubCategory1 unique edge %s", name)
+}
+
+// ResetEdge resets all changes to the edge with the given name in this mutation.
+// It returns an error if the edge is not defined in the schema.
+func (m *FnetSubCategory1Mutation) ResetEdge(name string) error {
+	switch name {
+	case fnetsubcategory1.EdgeDocuments:
+		m.ResetDocuments()
+		return nil
+	}
+	return fmt.Errorf("unknown FnetSubCategory1 edge %s", name)
+}
+
+// FnetSubCategory2Mutation represents an operation that mutates the FnetSubCategory2 nodes in the graph.
+type FnetSubCategory2Mutation struct {
+	config
+	op               Op
+	typ              string
+	id               *int
+	name             *string
+	clearedFields    map[string]struct{}
+	documents        map[int]struct{}
+	removeddocuments map[int]struct{}
+	cleareddocuments bool
+	done             bool
+	oldValue         func(context.Context) (*FnetSubCategory2, error)
+	predicates       []predicate.FnetSubCategory2
+}
+
+var _ ent.Mutation = (*FnetSubCategory2Mutation)(nil)
+
+// fnetsubcategory2Option allows management of the mutation configuration using functional options.
+type fnetsubcategory2Option func(*FnetSubCategory2Mutation)
+
+// newFnetSubCategory2Mutation creates new mutation for the FnetSubCategory2 entity.
+func newFnetSubCategory2Mutation(c config, op Op, opts ...fnetsubcategory2Option) *FnetSubCategory2Mutation {
+	m := &FnetSubCategory2Mutation{
+		config:        c,
+		op:            op,
+		typ:           TypeFnetSubCategory2,
+		clearedFields: make(map[string]struct{}),
+	}
+	for _, opt := range opts {
+		opt(m)
+	}
+	return m
+}
+
+// withFnetSubCategory2ID sets the ID field of the mutation.
+func withFnetSubCategory2ID(id int) fnetsubcategory2Option {
+	return func(m *FnetSubCategory2Mutation) {
+		var (
+			err   error
+			once  sync.Once
+			value *FnetSubCategory2
+		)
+		m.oldValue = func(ctx context.Context) (*FnetSubCategory2, error) {
+			once.Do(func() {
+				if m.done {
+					err = errors.New("querying old values post mutation is not allowed")
+				} else {
+					value, err = m.Client().FnetSubCategory2.Get(ctx, id)
+				}
+			})
+			return value, err
+		}
+		m.id = &id
+	}
+}
+
+// withFnetSubCategory2 sets the old FnetSubCategory2 of the mutation.
+func withFnetSubCategory2(node *FnetSubCategory2) fnetsubcategory2Option {
+	return func(m *FnetSubCategory2Mutation) {
+		m.oldValue = func(context.Context) (*FnetSubCategory2, error) {
+			return node, nil
+		}
+		m.id = &node.ID
+	}
+}
+
+// Client returns a new `ent.Client` from the mutation. If the mutation was
+// executed in a transaction (ent.Tx), a transactional client is returned.
+func (m FnetSubCategory2Mutation) Client() *Client {
+	client := &Client{config: m.config}
+	client.init()
+	return client
+}
+
+// Tx returns an `ent.Tx` for mutations that were executed in transactions;
+// it returns an error otherwise.
+func (m FnetSubCategory2Mutation) Tx() (*Tx, error) {
+	if _, ok := m.driver.(*txDriver); !ok {
+		return nil, errors.New("ent: mutation is not running in a transaction")
+	}
+	tx := &Tx{config: m.config}
+	tx.init()
+	return tx, nil
+}
+
+// ID returns the ID value in the mutation. Note that the ID is only available
+// if it was provided to the builder or after it was returned from the database.
+func (m *FnetSubCategory2Mutation) ID() (id int, exists bool) {
+	if m.id == nil {
+		return
+	}
+	return *m.id, true
+}
+
+// IDs queries the database and returns the entity ids that match the mutation's predicate.
+// That means, if the mutation is applied within a transaction with an isolation level such
+// as sql.LevelSerializable, the returned ids match the ids of the rows that will be updated
+// or updated by the mutation.
+func (m *FnetSubCategory2Mutation) IDs(ctx context.Context) ([]int, error) {
+	switch {
+	case m.op.Is(OpUpdateOne | OpDeleteOne):
+		id, exists := m.ID()
+		if exists {
+			return []int{id}, nil
+		}
+		fallthrough
+	case m.op.Is(OpUpdate | OpDelete):
+		return m.Client().FnetSubCategory2.Query().Where(m.predicates...).IDs(ctx)
+	default:
+		return nil, fmt.Errorf("IDs is not allowed on %s operations", m.op)
+	}
+}
+
+// SetName sets the "name" field.
+func (m *FnetSubCategory2Mutation) SetName(s string) {
+	m.name = &s
+}
+
+// Name returns the value of the "name" field in the mutation.
+func (m *FnetSubCategory2Mutation) Name() (r string, exists bool) {
+	v := m.name
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldName returns the old "name" field's value of the FnetSubCategory2 entity.
+// If the FnetSubCategory2 object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *FnetSubCategory2Mutation) OldName(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldName is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldName requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldName: %w", err)
+	}
+	return oldValue.Name, nil
+}
+
+// ResetName resets all changes to the "name" field.
+func (m *FnetSubCategory2Mutation) ResetName() {
+	m.name = nil
+}
+
+// AddDocumentIDs adds the "documents" edge to the FnetDocument entity by ids.
+func (m *FnetSubCategory2Mutation) AddDocumentIDs(ids ...int) {
+	if m.documents == nil {
+		m.documents = make(map[int]struct{})
+	}
+	for i := range ids {
+		m.documents[ids[i]] = struct{}{}
+	}
+}
+
+// ClearDocuments clears the "documents" edge to the FnetDocument entity.
+func (m *FnetSubCategory2Mutation) ClearDocuments() {
+	m.cleareddocuments = true
+}
+
+// DocumentsCleared reports if the "documents" edge to the FnetDocument entity was cleared.
+func (m *FnetSubCategory2Mutation) DocumentsCleared() bool {
+	return m.cleareddocuments
+}
+
+// RemoveDocumentIDs removes the "documents" edge to the FnetDocument entity by IDs.
+func (m *FnetSubCategory2Mutation) RemoveDocumentIDs(ids ...int) {
+	if m.removeddocuments == nil {
+		m.removeddocuments = make(map[int]struct{})
+	}
+	for i := range ids {
+		delete(m.documents, ids[i])
+		m.removeddocuments[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedDocuments returns the removed IDs of the "documents" edge to the FnetDocument entity.
+func (m *FnetSubCategory2Mutation) RemovedDocumentsIDs() (ids []int) {
+	for id := range m.removeddocuments {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// DocumentsIDs returns the "documents" edge IDs in the mutation.
+func (m *FnetSubCategory2Mutation) DocumentsIDs() (ids []int) {
+	for id := range m.documents {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetDocuments resets all changes to the "documents" edge.
+func (m *FnetSubCategory2Mutation) ResetDocuments() {
+	m.documents = nil
+	m.cleareddocuments = false
+	m.removeddocuments = nil
+}
+
+// Where appends a list predicates to the FnetSubCategory2Mutation builder.
+func (m *FnetSubCategory2Mutation) Where(ps ...predicate.FnetSubCategory2) {
+	m.predicates = append(m.predicates, ps...)
+}
+
+// Op returns the operation name.
+func (m *FnetSubCategory2Mutation) Op() Op {
+	return m.op
+}
+
+// Type returns the node type of this mutation (FnetSubCategory2).
+func (m *FnetSubCategory2Mutation) Type() string {
+	return m.typ
+}
+
+// Fields returns all fields that were changed during this mutation. Note that in
+// order to get all numeric fields that were incremented/decremented, call
+// AddedFields().
+func (m *FnetSubCategory2Mutation) Fields() []string {
+	fields := make([]string, 0, 1)
+	if m.name != nil {
+		fields = append(fields, fnetsubcategory2.FieldName)
+	}
+	return fields
+}
+
+// Field returns the value of a field with the given name. The second boolean
+// return value indicates that this field was not set, or was not defined in the
+// schema.
+func (m *FnetSubCategory2Mutation) Field(name string) (ent.Value, bool) {
+	switch name {
+	case fnetsubcategory2.FieldName:
+		return m.Name()
+	}
+	return nil, false
+}
+
+// OldField returns the old value of the field from the database. An error is
+// returned if the mutation operation is not UpdateOne, or the query to the
+// database failed.
+func (m *FnetSubCategory2Mutation) OldField(ctx context.Context, name string) (ent.Value, error) {
+	switch name {
+	case fnetsubcategory2.FieldName:
+		return m.OldName(ctx)
+	}
+	return nil, fmt.Errorf("unknown FnetSubCategory2 field %s", name)
+}
+
+// SetField sets the value of a field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *FnetSubCategory2Mutation) SetField(name string, value ent.Value) error {
+	switch name {
+	case fnetsubcategory2.FieldName:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetName(v)
+		return nil
+	}
+	return fmt.Errorf("unknown FnetSubCategory2 field %s", name)
+}
+
+// AddedFields returns all numeric fields that were incremented/decremented during
+// this mutation.
+func (m *FnetSubCategory2Mutation) AddedFields() []string {
+	return nil
+}
+
+// AddedField returns the numeric value that was incremented/decremented on a field
+// with the given name. The second boolean return value indicates that this field
+// was not set, or was not defined in the schema.
+func (m *FnetSubCategory2Mutation) AddedField(name string) (ent.Value, bool) {
+	return nil, false
+}
+
+// AddField adds the value to the field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *FnetSubCategory2Mutation) AddField(name string, value ent.Value) error {
+	switch name {
+	}
+	return fmt.Errorf("unknown FnetSubCategory2 numeric field %s", name)
+}
+
+// ClearedFields returns all nullable fields that were cleared during this
+// mutation.
+func (m *FnetSubCategory2Mutation) ClearedFields() []string {
+	return nil
+}
+
+// FieldCleared returns a boolean indicating if a field with the given name was
+// cleared in this mutation.
+func (m *FnetSubCategory2Mutation) FieldCleared(name string) bool {
+	_, ok := m.clearedFields[name]
+	return ok
+}
+
+// ClearField clears the value of the field with the given name. It returns an
+// error if the field is not defined in the schema.
+func (m *FnetSubCategory2Mutation) ClearField(name string) error {
+	return fmt.Errorf("unknown FnetSubCategory2 nullable field %s", name)
+}
+
+// ResetField resets all changes in the mutation for the field with the given name.
+// It returns an error if the field is not defined in the schema.
+func (m *FnetSubCategory2Mutation) ResetField(name string) error {
+	switch name {
+	case fnetsubcategory2.FieldName:
+		m.ResetName()
+		return nil
+	}
+	return fmt.Errorf("unknown FnetSubCategory2 field %s", name)
+}
+
+// AddedEdges returns all edge names that were set/added in this mutation.
+func (m *FnetSubCategory2Mutation) AddedEdges() []string {
+	edges := make([]string, 0, 1)
+	if m.documents != nil {
+		edges = append(edges, fnetsubcategory2.EdgeDocuments)
+	}
+	return edges
+}
+
+// AddedIDs returns all IDs (to other nodes) that were added for the given edge
+// name in this mutation.
+func (m *FnetSubCategory2Mutation) AddedIDs(name string) []ent.Value {
+	switch name {
+	case fnetsubcategory2.EdgeDocuments:
+		ids := make([]ent.Value, 0, len(m.documents))
+		for id := range m.documents {
+			ids = append(ids, id)
+		}
+		return ids
+	}
+	return nil
+}
+
+// RemovedEdges returns all edge names that were removed in this mutation.
+func (m *FnetSubCategory2Mutation) RemovedEdges() []string {
+	edges := make([]string, 0, 1)
+	if m.removeddocuments != nil {
+		edges = append(edges, fnetsubcategory2.EdgeDocuments)
+	}
+	return edges
+}
+
+// RemovedIDs returns all IDs (to other nodes) that were removed for the edge with
+// the given name in this mutation.
+func (m *FnetSubCategory2Mutation) RemovedIDs(name string) []ent.Value {
+	switch name {
+	case fnetsubcategory2.EdgeDocuments:
+		ids := make([]ent.Value, 0, len(m.removeddocuments))
+		for id := range m.removeddocuments {
+			ids = append(ids, id)
+		}
+		return ids
+	}
+	return nil
+}
+
+// ClearedEdges returns all edge names that were cleared in this mutation.
+func (m *FnetSubCategory2Mutation) ClearedEdges() []string {
+	edges := make([]string, 0, 1)
+	if m.cleareddocuments {
+		edges = append(edges, fnetsubcategory2.EdgeDocuments)
+	}
+	return edges
+}
+
+// EdgeCleared returns a boolean which indicates if the edge with the given name
+// was cleared in this mutation.
+func (m *FnetSubCategory2Mutation) EdgeCleared(name string) bool {
+	switch name {
+	case fnetsubcategory2.EdgeDocuments:
+		return m.cleareddocuments
+	}
+	return false
+}
+
+// ClearEdge clears the value of the edge with the given name. It returns an error
+// if that edge is not defined in the schema.
+func (m *FnetSubCategory2Mutation) ClearEdge(name string) error {
+	switch name {
+	}
+	return fmt.Errorf("unknown FnetSubCategory2 unique edge %s", name)
+}
+
+// ResetEdge resets all changes to the edge with the given name in this mutation.
+// It returns an error if the edge is not defined in the schema.
+func (m *FnetSubCategory2Mutation) ResetEdge(name string) error {
+	switch name {
+	case fnetsubcategory2.EdgeDocuments:
+		m.ResetDocuments()
+		return nil
+	}
+	return fmt.Errorf("unknown FnetSubCategory2 edge %s", name)
 }

@@ -11,7 +11,10 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/lenon/gofii/ent/fnetcategory"
 	"github.com/lenon/gofii/ent/fnetdocument"
+	"github.com/lenon/gofii/ent/fnetsubcategory1"
+	"github.com/lenon/gofii/ent/fnetsubcategory2"
 )
 
 // FnetDocumentCreate is the builder for creating a FnetDocument entity.
@@ -42,43 +45,15 @@ func (fdc *FnetDocumentCreate) SetNillableAdditionalInformation(s *string) *Fnet
 	return fdc
 }
 
-// SetDocumentCategory sets the "document_category" field.
-func (fdc *FnetDocumentCreate) SetDocumentCategory(s string) *FnetDocumentCreate {
-	fdc.mutation.SetDocumentCategory(s)
+// SetCategoryStr sets the "category_str" field.
+func (fdc *FnetDocumentCreate) SetCategoryStr(s string) *FnetDocumentCreate {
+	fdc.mutation.SetCategoryStr(s)
 	return fdc
 }
 
 // SetDocumentStatus sets the "document_status" field.
 func (fdc *FnetDocumentCreate) SetDocumentStatus(s string) *FnetDocumentCreate {
 	fdc.mutation.SetDocumentStatus(s)
-	return fdc
-}
-
-// SetDocumentSubCategory1 sets the "document_sub_category1" field.
-func (fdc *FnetDocumentCreate) SetDocumentSubCategory1(s string) *FnetDocumentCreate {
-	fdc.mutation.SetDocumentSubCategory1(s)
-	return fdc
-}
-
-// SetNillableDocumentSubCategory1 sets the "document_sub_category1" field if the given value is not nil.
-func (fdc *FnetDocumentCreate) SetNillableDocumentSubCategory1(s *string) *FnetDocumentCreate {
-	if s != nil {
-		fdc.SetDocumentSubCategory1(*s)
-	}
-	return fdc
-}
-
-// SetDocumentSubCategory2 sets the "document_sub_category2" field.
-func (fdc *FnetDocumentCreate) SetDocumentSubCategory2(s string) *FnetDocumentCreate {
-	fdc.mutation.SetDocumentSubCategory2(s)
-	return fdc
-}
-
-// SetNillableDocumentSubCategory2 sets the "document_sub_category2" field if the given value is not nil.
-func (fdc *FnetDocumentCreate) SetNillableDocumentSubCategory2(s *string) *FnetDocumentCreate {
-	if s != nil {
-		fdc.SetDocumentSubCategory2(*s)
-	}
 	return fdc
 }
 
@@ -144,6 +119,34 @@ func (fdc *FnetDocumentCreate) SetStatusDescription(s string) *FnetDocumentCreat
 	return fdc
 }
 
+// SetSubCategory1Str sets the "sub_category1_str" field.
+func (fdc *FnetDocumentCreate) SetSubCategory1Str(s string) *FnetDocumentCreate {
+	fdc.mutation.SetSubCategory1Str(s)
+	return fdc
+}
+
+// SetNillableSubCategory1Str sets the "sub_category1_str" field if the given value is not nil.
+func (fdc *FnetDocumentCreate) SetNillableSubCategory1Str(s *string) *FnetDocumentCreate {
+	if s != nil {
+		fdc.SetSubCategory1Str(*s)
+	}
+	return fdc
+}
+
+// SetSubCategory2Str sets the "sub_category2_str" field.
+func (fdc *FnetDocumentCreate) SetSubCategory2Str(s string) *FnetDocumentCreate {
+	fdc.mutation.SetSubCategory2Str(s)
+	return fdc
+}
+
+// SetNillableSubCategory2Str sets the "sub_category2_str" field if the given value is not nil.
+func (fdc *FnetDocumentCreate) SetNillableSubCategory2Str(s *string) *FnetDocumentCreate {
+	if s != nil {
+		fdc.SetSubCategory2Str(*s)
+	}
+	return fdc
+}
+
 // SetSubmissionDate sets the "submission_date" field.
 func (fdc *FnetDocumentCreate) SetSubmissionDate(t time.Time) *FnetDocumentCreate {
 	fdc.mutation.SetSubmissionDate(t)
@@ -172,6 +175,55 @@ func (fdc *FnetDocumentCreate) SetSubmissionMethodDescription(s string) *FnetDoc
 func (fdc *FnetDocumentCreate) SetVersion(i int) *FnetDocumentCreate {
 	fdc.mutation.SetVersion(i)
 	return fdc
+}
+
+// SetCategoryID sets the "category" edge to the FnetCategory entity by ID.
+func (fdc *FnetDocumentCreate) SetCategoryID(id int) *FnetDocumentCreate {
+	fdc.mutation.SetCategoryID(id)
+	return fdc
+}
+
+// SetCategory sets the "category" edge to the FnetCategory entity.
+func (fdc *FnetDocumentCreate) SetCategory(f *FnetCategory) *FnetDocumentCreate {
+	return fdc.SetCategoryID(f.ID)
+}
+
+// SetSubCategory1ID sets the "sub_category1" edge to the FnetSubCategory1 entity by ID.
+func (fdc *FnetDocumentCreate) SetSubCategory1ID(id int) *FnetDocumentCreate {
+	fdc.mutation.SetSubCategory1ID(id)
+	return fdc
+}
+
+// SetNillableSubCategory1ID sets the "sub_category1" edge to the FnetSubCategory1 entity by ID if the given value is not nil.
+func (fdc *FnetDocumentCreate) SetNillableSubCategory1ID(id *int) *FnetDocumentCreate {
+	if id != nil {
+		fdc = fdc.SetSubCategory1ID(*id)
+	}
+	return fdc
+}
+
+// SetSubCategory1 sets the "sub_category1" edge to the FnetSubCategory1 entity.
+func (fdc *FnetDocumentCreate) SetSubCategory1(f *FnetSubCategory1) *FnetDocumentCreate {
+	return fdc.SetSubCategory1ID(f.ID)
+}
+
+// SetSubCategory2ID sets the "sub_category2" edge to the FnetSubCategory2 entity by ID.
+func (fdc *FnetDocumentCreate) SetSubCategory2ID(id int) *FnetDocumentCreate {
+	fdc.mutation.SetSubCategory2ID(id)
+	return fdc
+}
+
+// SetNillableSubCategory2ID sets the "sub_category2" edge to the FnetSubCategory2 entity by ID if the given value is not nil.
+func (fdc *FnetDocumentCreate) SetNillableSubCategory2ID(id *int) *FnetDocumentCreate {
+	if id != nil {
+		fdc = fdc.SetSubCategory2ID(*id)
+	}
+	return fdc
+}
+
+// SetSubCategory2 sets the "sub_category2" edge to the FnetSubCategory2 entity.
+func (fdc *FnetDocumentCreate) SetSubCategory2(f *FnetSubCategory2) *FnetDocumentCreate {
+	return fdc.SetSubCategory2ID(f.ID)
 }
 
 // Mutation returns the FnetDocumentMutation object of the builder.
@@ -258,12 +310,12 @@ func (fdc *FnetDocumentCreate) check() error {
 			return &ValidationError{Name: "fnet_id", err: fmt.Errorf(`ent: validator failed for field "FnetDocument.fnet_id": %w`, err)}
 		}
 	}
-	if _, ok := fdc.mutation.DocumentCategory(); !ok {
-		return &ValidationError{Name: "document_category", err: errors.New(`ent: missing required field "FnetDocument.document_category"`)}
+	if _, ok := fdc.mutation.CategoryStr(); !ok {
+		return &ValidationError{Name: "category_str", err: errors.New(`ent: missing required field "FnetDocument.category_str"`)}
 	}
-	if v, ok := fdc.mutation.DocumentCategory(); ok {
-		if err := fnetdocument.DocumentCategoryValidator(v); err != nil {
-			return &ValidationError{Name: "document_category", err: fmt.Errorf(`ent: validator failed for field "FnetDocument.document_category": %w`, err)}
+	if v, ok := fdc.mutation.CategoryStr(); ok {
+		if err := fnetdocument.CategoryStrValidator(v); err != nil {
+			return &ValidationError{Name: "category_str", err: fmt.Errorf(`ent: validator failed for field "FnetDocument.category_str": %w`, err)}
 		}
 	}
 	if _, ok := fdc.mutation.DocumentStatus(); !ok {
@@ -363,6 +415,9 @@ func (fdc *FnetDocumentCreate) check() error {
 			return &ValidationError{Name: "version", err: fmt.Errorf(`ent: validator failed for field "FnetDocument.version": %w`, err)}
 		}
 	}
+	if _, ok := fdc.mutation.CategoryID(); !ok {
+		return &ValidationError{Name: "category", err: errors.New(`ent: missing required edge "FnetDocument.category"`)}
+	}
 	return nil
 }
 
@@ -407,13 +462,13 @@ func (fdc *FnetDocumentCreate) createSpec() (*FnetDocument, *sqlgraph.CreateSpec
 		})
 		_node.AdditionalInformation = value
 	}
-	if value, ok := fdc.mutation.DocumentCategory(); ok {
+	if value, ok := fdc.mutation.CategoryStr(); ok {
 		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
 			Type:   field.TypeString,
 			Value:  value,
-			Column: fnetdocument.FieldDocumentCategory,
+			Column: fnetdocument.FieldCategoryStr,
 		})
-		_node.DocumentCategory = value
+		_node.CategoryStr = value
 	}
 	if value, ok := fdc.mutation.DocumentStatus(); ok {
 		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
@@ -422,22 +477,6 @@ func (fdc *FnetDocumentCreate) createSpec() (*FnetDocument, *sqlgraph.CreateSpec
 			Column: fnetdocument.FieldDocumentStatus,
 		})
 		_node.DocumentStatus = value
-	}
-	if value, ok := fdc.mutation.DocumentSubCategory1(); ok {
-		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
-			Type:   field.TypeString,
-			Value:  value,
-			Column: fnetdocument.FieldDocumentSubCategory1,
-		})
-		_node.DocumentSubCategory1 = value
-	}
-	if value, ok := fdc.mutation.DocumentSubCategory2(); ok {
-		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
-			Type:   field.TypeString,
-			Value:  value,
-			Column: fnetdocument.FieldDocumentSubCategory2,
-		})
-		_node.DocumentSubCategory2 = value
 	}
 	if value, ok := fdc.mutation.FundDescription(); ok {
 		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
@@ -511,6 +550,22 @@ func (fdc *FnetDocumentCreate) createSpec() (*FnetDocument, *sqlgraph.CreateSpec
 		})
 		_node.StatusDescription = value
 	}
+	if value, ok := fdc.mutation.SubCategory1Str(); ok {
+		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Value:  value,
+			Column: fnetdocument.FieldSubCategory1Str,
+		})
+		_node.SubCategory1Str = value
+	}
+	if value, ok := fdc.mutation.SubCategory2Str(); ok {
+		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Value:  value,
+			Column: fnetdocument.FieldSubCategory2Str,
+		})
+		_node.SubCategory2Str = value
+	}
 	if value, ok := fdc.mutation.SubmissionDate(); ok {
 		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
 			Type:   field.TypeTime,
@@ -550,6 +605,66 @@ func (fdc *FnetDocumentCreate) createSpec() (*FnetDocument, *sqlgraph.CreateSpec
 			Column: fnetdocument.FieldVersion,
 		})
 		_node.Version = value
+	}
+	if nodes := fdc.mutation.CategoryIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   fnetdocument.CategoryTable,
+			Columns: []string{fnetdocument.CategoryColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: &sqlgraph.FieldSpec{
+					Type:   field.TypeInt,
+					Column: fnetcategory.FieldID,
+				},
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.category_id = &nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := fdc.mutation.SubCategory1IDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   fnetdocument.SubCategory1Table,
+			Columns: []string{fnetdocument.SubCategory1Column},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: &sqlgraph.FieldSpec{
+					Type:   field.TypeInt,
+					Column: fnetsubcategory1.FieldID,
+				},
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.sub_category1_id = &nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := fdc.mutation.SubCategory2IDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   fnetdocument.SubCategory2Table,
+			Columns: []string{fnetdocument.SubCategory2Column},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: &sqlgraph.FieldSpec{
+					Type:   field.TypeInt,
+					Column: fnetsubcategory2.FieldID,
+				},
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.sub_category2_id = &nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
 	}
 	return _node, _spec
 }
@@ -639,15 +754,15 @@ func (u *FnetDocumentUpsert) ClearAdditionalInformation() *FnetDocumentUpsert {
 	return u
 }
 
-// SetDocumentCategory sets the "document_category" field.
-func (u *FnetDocumentUpsert) SetDocumentCategory(v string) *FnetDocumentUpsert {
-	u.Set(fnetdocument.FieldDocumentCategory, v)
+// SetCategoryStr sets the "category_str" field.
+func (u *FnetDocumentUpsert) SetCategoryStr(v string) *FnetDocumentUpsert {
+	u.Set(fnetdocument.FieldCategoryStr, v)
 	return u
 }
 
-// UpdateDocumentCategory sets the "document_category" field to the value that was provided on create.
-func (u *FnetDocumentUpsert) UpdateDocumentCategory() *FnetDocumentUpsert {
-	u.SetExcluded(fnetdocument.FieldDocumentCategory)
+// UpdateCategoryStr sets the "category_str" field to the value that was provided on create.
+func (u *FnetDocumentUpsert) UpdateCategoryStr() *FnetDocumentUpsert {
+	u.SetExcluded(fnetdocument.FieldCategoryStr)
 	return u
 }
 
@@ -660,42 +775,6 @@ func (u *FnetDocumentUpsert) SetDocumentStatus(v string) *FnetDocumentUpsert {
 // UpdateDocumentStatus sets the "document_status" field to the value that was provided on create.
 func (u *FnetDocumentUpsert) UpdateDocumentStatus() *FnetDocumentUpsert {
 	u.SetExcluded(fnetdocument.FieldDocumentStatus)
-	return u
-}
-
-// SetDocumentSubCategory1 sets the "document_sub_category1" field.
-func (u *FnetDocumentUpsert) SetDocumentSubCategory1(v string) *FnetDocumentUpsert {
-	u.Set(fnetdocument.FieldDocumentSubCategory1, v)
-	return u
-}
-
-// UpdateDocumentSubCategory1 sets the "document_sub_category1" field to the value that was provided on create.
-func (u *FnetDocumentUpsert) UpdateDocumentSubCategory1() *FnetDocumentUpsert {
-	u.SetExcluded(fnetdocument.FieldDocumentSubCategory1)
-	return u
-}
-
-// ClearDocumentSubCategory1 clears the value of the "document_sub_category1" field.
-func (u *FnetDocumentUpsert) ClearDocumentSubCategory1() *FnetDocumentUpsert {
-	u.SetNull(fnetdocument.FieldDocumentSubCategory1)
-	return u
-}
-
-// SetDocumentSubCategory2 sets the "document_sub_category2" field.
-func (u *FnetDocumentUpsert) SetDocumentSubCategory2(v string) *FnetDocumentUpsert {
-	u.Set(fnetdocument.FieldDocumentSubCategory2, v)
-	return u
-}
-
-// UpdateDocumentSubCategory2 sets the "document_sub_category2" field to the value that was provided on create.
-func (u *FnetDocumentUpsert) UpdateDocumentSubCategory2() *FnetDocumentUpsert {
-	u.SetExcluded(fnetdocument.FieldDocumentSubCategory2)
-	return u
-}
-
-// ClearDocumentSubCategory2 clears the value of the "document_sub_category2" field.
-func (u *FnetDocumentUpsert) ClearDocumentSubCategory2() *FnetDocumentUpsert {
-	u.SetNull(fnetdocument.FieldDocumentSubCategory2)
 	return u
 }
 
@@ -810,6 +889,42 @@ func (u *FnetDocumentUpsert) SetStatusDescription(v string) *FnetDocumentUpsert 
 // UpdateStatusDescription sets the "status_description" field to the value that was provided on create.
 func (u *FnetDocumentUpsert) UpdateStatusDescription() *FnetDocumentUpsert {
 	u.SetExcluded(fnetdocument.FieldStatusDescription)
+	return u
+}
+
+// SetSubCategory1Str sets the "sub_category1_str" field.
+func (u *FnetDocumentUpsert) SetSubCategory1Str(v string) *FnetDocumentUpsert {
+	u.Set(fnetdocument.FieldSubCategory1Str, v)
+	return u
+}
+
+// UpdateSubCategory1Str sets the "sub_category1_str" field to the value that was provided on create.
+func (u *FnetDocumentUpsert) UpdateSubCategory1Str() *FnetDocumentUpsert {
+	u.SetExcluded(fnetdocument.FieldSubCategory1Str)
+	return u
+}
+
+// ClearSubCategory1Str clears the value of the "sub_category1_str" field.
+func (u *FnetDocumentUpsert) ClearSubCategory1Str() *FnetDocumentUpsert {
+	u.SetNull(fnetdocument.FieldSubCategory1Str)
+	return u
+}
+
+// SetSubCategory2Str sets the "sub_category2_str" field.
+func (u *FnetDocumentUpsert) SetSubCategory2Str(v string) *FnetDocumentUpsert {
+	u.Set(fnetdocument.FieldSubCategory2Str, v)
+	return u
+}
+
+// UpdateSubCategory2Str sets the "sub_category2_str" field to the value that was provided on create.
+func (u *FnetDocumentUpsert) UpdateSubCategory2Str() *FnetDocumentUpsert {
+	u.SetExcluded(fnetdocument.FieldSubCategory2Str)
+	return u
+}
+
+// ClearSubCategory2Str clears the value of the "sub_category2_str" field.
+func (u *FnetDocumentUpsert) ClearSubCategory2Str() *FnetDocumentUpsert {
+	u.SetNull(fnetdocument.FieldSubCategory2Str)
 	return u
 }
 
@@ -966,17 +1081,17 @@ func (u *FnetDocumentUpsertOne) ClearAdditionalInformation() *FnetDocumentUpsert
 	})
 }
 
-// SetDocumentCategory sets the "document_category" field.
-func (u *FnetDocumentUpsertOne) SetDocumentCategory(v string) *FnetDocumentUpsertOne {
+// SetCategoryStr sets the "category_str" field.
+func (u *FnetDocumentUpsertOne) SetCategoryStr(v string) *FnetDocumentUpsertOne {
 	return u.Update(func(s *FnetDocumentUpsert) {
-		s.SetDocumentCategory(v)
+		s.SetCategoryStr(v)
 	})
 }
 
-// UpdateDocumentCategory sets the "document_category" field to the value that was provided on create.
-func (u *FnetDocumentUpsertOne) UpdateDocumentCategory() *FnetDocumentUpsertOne {
+// UpdateCategoryStr sets the "category_str" field to the value that was provided on create.
+func (u *FnetDocumentUpsertOne) UpdateCategoryStr() *FnetDocumentUpsertOne {
 	return u.Update(func(s *FnetDocumentUpsert) {
-		s.UpdateDocumentCategory()
+		s.UpdateCategoryStr()
 	})
 }
 
@@ -991,48 +1106,6 @@ func (u *FnetDocumentUpsertOne) SetDocumentStatus(v string) *FnetDocumentUpsertO
 func (u *FnetDocumentUpsertOne) UpdateDocumentStatus() *FnetDocumentUpsertOne {
 	return u.Update(func(s *FnetDocumentUpsert) {
 		s.UpdateDocumentStatus()
-	})
-}
-
-// SetDocumentSubCategory1 sets the "document_sub_category1" field.
-func (u *FnetDocumentUpsertOne) SetDocumentSubCategory1(v string) *FnetDocumentUpsertOne {
-	return u.Update(func(s *FnetDocumentUpsert) {
-		s.SetDocumentSubCategory1(v)
-	})
-}
-
-// UpdateDocumentSubCategory1 sets the "document_sub_category1" field to the value that was provided on create.
-func (u *FnetDocumentUpsertOne) UpdateDocumentSubCategory1() *FnetDocumentUpsertOne {
-	return u.Update(func(s *FnetDocumentUpsert) {
-		s.UpdateDocumentSubCategory1()
-	})
-}
-
-// ClearDocumentSubCategory1 clears the value of the "document_sub_category1" field.
-func (u *FnetDocumentUpsertOne) ClearDocumentSubCategory1() *FnetDocumentUpsertOne {
-	return u.Update(func(s *FnetDocumentUpsert) {
-		s.ClearDocumentSubCategory1()
-	})
-}
-
-// SetDocumentSubCategory2 sets the "document_sub_category2" field.
-func (u *FnetDocumentUpsertOne) SetDocumentSubCategory2(v string) *FnetDocumentUpsertOne {
-	return u.Update(func(s *FnetDocumentUpsert) {
-		s.SetDocumentSubCategory2(v)
-	})
-}
-
-// UpdateDocumentSubCategory2 sets the "document_sub_category2" field to the value that was provided on create.
-func (u *FnetDocumentUpsertOne) UpdateDocumentSubCategory2() *FnetDocumentUpsertOne {
-	return u.Update(func(s *FnetDocumentUpsert) {
-		s.UpdateDocumentSubCategory2()
-	})
-}
-
-// ClearDocumentSubCategory2 clears the value of the "document_sub_category2" field.
-func (u *FnetDocumentUpsertOne) ClearDocumentSubCategory2() *FnetDocumentUpsertOne {
-	return u.Update(func(s *FnetDocumentUpsert) {
-		s.ClearDocumentSubCategory2()
 	})
 }
 
@@ -1166,6 +1239,48 @@ func (u *FnetDocumentUpsertOne) SetStatusDescription(v string) *FnetDocumentUpse
 func (u *FnetDocumentUpsertOne) UpdateStatusDescription() *FnetDocumentUpsertOne {
 	return u.Update(func(s *FnetDocumentUpsert) {
 		s.UpdateStatusDescription()
+	})
+}
+
+// SetSubCategory1Str sets the "sub_category1_str" field.
+func (u *FnetDocumentUpsertOne) SetSubCategory1Str(v string) *FnetDocumentUpsertOne {
+	return u.Update(func(s *FnetDocumentUpsert) {
+		s.SetSubCategory1Str(v)
+	})
+}
+
+// UpdateSubCategory1Str sets the "sub_category1_str" field to the value that was provided on create.
+func (u *FnetDocumentUpsertOne) UpdateSubCategory1Str() *FnetDocumentUpsertOne {
+	return u.Update(func(s *FnetDocumentUpsert) {
+		s.UpdateSubCategory1Str()
+	})
+}
+
+// ClearSubCategory1Str clears the value of the "sub_category1_str" field.
+func (u *FnetDocumentUpsertOne) ClearSubCategory1Str() *FnetDocumentUpsertOne {
+	return u.Update(func(s *FnetDocumentUpsert) {
+		s.ClearSubCategory1Str()
+	})
+}
+
+// SetSubCategory2Str sets the "sub_category2_str" field.
+func (u *FnetDocumentUpsertOne) SetSubCategory2Str(v string) *FnetDocumentUpsertOne {
+	return u.Update(func(s *FnetDocumentUpsert) {
+		s.SetSubCategory2Str(v)
+	})
+}
+
+// UpdateSubCategory2Str sets the "sub_category2_str" field to the value that was provided on create.
+func (u *FnetDocumentUpsertOne) UpdateSubCategory2Str() *FnetDocumentUpsertOne {
+	return u.Update(func(s *FnetDocumentUpsert) {
+		s.UpdateSubCategory2Str()
+	})
+}
+
+// ClearSubCategory2Str clears the value of the "sub_category2_str" field.
+func (u *FnetDocumentUpsertOne) ClearSubCategory2Str() *FnetDocumentUpsertOne {
+	return u.Update(func(s *FnetDocumentUpsert) {
+		s.ClearSubCategory2Str()
 	})
 }
 
@@ -1494,17 +1609,17 @@ func (u *FnetDocumentUpsertBulk) ClearAdditionalInformation() *FnetDocumentUpser
 	})
 }
 
-// SetDocumentCategory sets the "document_category" field.
-func (u *FnetDocumentUpsertBulk) SetDocumentCategory(v string) *FnetDocumentUpsertBulk {
+// SetCategoryStr sets the "category_str" field.
+func (u *FnetDocumentUpsertBulk) SetCategoryStr(v string) *FnetDocumentUpsertBulk {
 	return u.Update(func(s *FnetDocumentUpsert) {
-		s.SetDocumentCategory(v)
+		s.SetCategoryStr(v)
 	})
 }
 
-// UpdateDocumentCategory sets the "document_category" field to the value that was provided on create.
-func (u *FnetDocumentUpsertBulk) UpdateDocumentCategory() *FnetDocumentUpsertBulk {
+// UpdateCategoryStr sets the "category_str" field to the value that was provided on create.
+func (u *FnetDocumentUpsertBulk) UpdateCategoryStr() *FnetDocumentUpsertBulk {
 	return u.Update(func(s *FnetDocumentUpsert) {
-		s.UpdateDocumentCategory()
+		s.UpdateCategoryStr()
 	})
 }
 
@@ -1519,48 +1634,6 @@ func (u *FnetDocumentUpsertBulk) SetDocumentStatus(v string) *FnetDocumentUpsert
 func (u *FnetDocumentUpsertBulk) UpdateDocumentStatus() *FnetDocumentUpsertBulk {
 	return u.Update(func(s *FnetDocumentUpsert) {
 		s.UpdateDocumentStatus()
-	})
-}
-
-// SetDocumentSubCategory1 sets the "document_sub_category1" field.
-func (u *FnetDocumentUpsertBulk) SetDocumentSubCategory1(v string) *FnetDocumentUpsertBulk {
-	return u.Update(func(s *FnetDocumentUpsert) {
-		s.SetDocumentSubCategory1(v)
-	})
-}
-
-// UpdateDocumentSubCategory1 sets the "document_sub_category1" field to the value that was provided on create.
-func (u *FnetDocumentUpsertBulk) UpdateDocumentSubCategory1() *FnetDocumentUpsertBulk {
-	return u.Update(func(s *FnetDocumentUpsert) {
-		s.UpdateDocumentSubCategory1()
-	})
-}
-
-// ClearDocumentSubCategory1 clears the value of the "document_sub_category1" field.
-func (u *FnetDocumentUpsertBulk) ClearDocumentSubCategory1() *FnetDocumentUpsertBulk {
-	return u.Update(func(s *FnetDocumentUpsert) {
-		s.ClearDocumentSubCategory1()
-	})
-}
-
-// SetDocumentSubCategory2 sets the "document_sub_category2" field.
-func (u *FnetDocumentUpsertBulk) SetDocumentSubCategory2(v string) *FnetDocumentUpsertBulk {
-	return u.Update(func(s *FnetDocumentUpsert) {
-		s.SetDocumentSubCategory2(v)
-	})
-}
-
-// UpdateDocumentSubCategory2 sets the "document_sub_category2" field to the value that was provided on create.
-func (u *FnetDocumentUpsertBulk) UpdateDocumentSubCategory2() *FnetDocumentUpsertBulk {
-	return u.Update(func(s *FnetDocumentUpsert) {
-		s.UpdateDocumentSubCategory2()
-	})
-}
-
-// ClearDocumentSubCategory2 clears the value of the "document_sub_category2" field.
-func (u *FnetDocumentUpsertBulk) ClearDocumentSubCategory2() *FnetDocumentUpsertBulk {
-	return u.Update(func(s *FnetDocumentUpsert) {
-		s.ClearDocumentSubCategory2()
 	})
 }
 
@@ -1694,6 +1767,48 @@ func (u *FnetDocumentUpsertBulk) SetStatusDescription(v string) *FnetDocumentUps
 func (u *FnetDocumentUpsertBulk) UpdateStatusDescription() *FnetDocumentUpsertBulk {
 	return u.Update(func(s *FnetDocumentUpsert) {
 		s.UpdateStatusDescription()
+	})
+}
+
+// SetSubCategory1Str sets the "sub_category1_str" field.
+func (u *FnetDocumentUpsertBulk) SetSubCategory1Str(v string) *FnetDocumentUpsertBulk {
+	return u.Update(func(s *FnetDocumentUpsert) {
+		s.SetSubCategory1Str(v)
+	})
+}
+
+// UpdateSubCategory1Str sets the "sub_category1_str" field to the value that was provided on create.
+func (u *FnetDocumentUpsertBulk) UpdateSubCategory1Str() *FnetDocumentUpsertBulk {
+	return u.Update(func(s *FnetDocumentUpsert) {
+		s.UpdateSubCategory1Str()
+	})
+}
+
+// ClearSubCategory1Str clears the value of the "sub_category1_str" field.
+func (u *FnetDocumentUpsertBulk) ClearSubCategory1Str() *FnetDocumentUpsertBulk {
+	return u.Update(func(s *FnetDocumentUpsert) {
+		s.ClearSubCategory1Str()
+	})
+}
+
+// SetSubCategory2Str sets the "sub_category2_str" field.
+func (u *FnetDocumentUpsertBulk) SetSubCategory2Str(v string) *FnetDocumentUpsertBulk {
+	return u.Update(func(s *FnetDocumentUpsert) {
+		s.SetSubCategory2Str(v)
+	})
+}
+
+// UpdateSubCategory2Str sets the "sub_category2_str" field to the value that was provided on create.
+func (u *FnetDocumentUpsertBulk) UpdateSubCategory2Str() *FnetDocumentUpsertBulk {
+	return u.Update(func(s *FnetDocumentUpsert) {
+		s.UpdateSubCategory2Str()
+	})
+}
+
+// ClearSubCategory2Str clears the value of the "sub_category2_str" field.
+func (u *FnetDocumentUpsertBulk) ClearSubCategory2Str() *FnetDocumentUpsertBulk {
+	return u.Update(func(s *FnetDocumentUpsert) {
+		s.ClearSubCategory2Str()
 	})
 }
 

@@ -6,5 +6,14 @@ import (
 	"entgo.io/ent/dialect/sql"
 )
 
+// FnetCategory is the predicate function for fnetcategory builders.
+type FnetCategory func(*sql.Selector)
+
 // FnetDocument is the predicate function for fnetdocument builders.
 type FnetDocument func(*sql.Selector)
+
+// FnetSubCategory1 is the predicate function for fnetsubcategory1 builders.
+type FnetSubCategory1 func(*sql.Selector)
+
+// FnetSubCategory2 is the predicate function for fnetsubcategory2 builders.
+type FnetSubCategory2 func(*sql.Selector)

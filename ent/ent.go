@@ -10,7 +10,10 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
+	"github.com/lenon/gofii/ent/fnetcategory"
 	"github.com/lenon/gofii/ent/fnetdocument"
+	"github.com/lenon/gofii/ent/fnetsubcategory1"
+	"github.com/lenon/gofii/ent/fnetsubcategory2"
 )
 
 // ent aliases to avoid import conflicts in user's code.
@@ -31,7 +34,10 @@ type OrderFunc func(*sql.Selector)
 // columnChecker returns a function indicates if the column exists in the given column.
 func columnChecker(table string) func(string) error {
 	checks := map[string]func(string) bool{
-		fnetdocument.Table: fnetdocument.ValidColumn,
+		fnetcategory.Table:     fnetcategory.ValidColumn,
+		fnetdocument.Table:     fnetdocument.ValidColumn,
+		fnetsubcategory1.Table: fnetsubcategory1.ValidColumn,
+		fnetsubcategory2.Table: fnetsubcategory2.ValidColumn,
 	}
 	check, ok := checks[table]
 	if !ok {

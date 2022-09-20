@@ -24,7 +24,10 @@ type config struct {
 
 // hooks per client, for fast access.
 type hooks struct {
-	FnetDocument []ent.Hook
+	FnetCategory     []ent.Hook
+	FnetDocument     []ent.Hook
+	FnetSubCategory1 []ent.Hook
+	FnetSubCategory2 []ent.Hook
 }
 
 // Options applies the options on the config object.

@@ -10,19 +10,26 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/lenon/gofii/ent/fnetcategory"
 	"github.com/lenon/gofii/ent/fnetdocument"
+	"github.com/lenon/gofii/ent/fnetsubcategory1"
+	"github.com/lenon/gofii/ent/fnetsubcategory2"
 	"github.com/lenon/gofii/ent/predicate"
 )
 
 // FnetDocumentQuery is the builder for querying FnetDocument entities.
 type FnetDocumentQuery struct {
 	config
-	limit      *int
-	offset     *int
-	unique     *bool
-	order      []OrderFunc
-	fields     []string
-	predicates []predicate.FnetDocument
+	limit            *int
+	offset           *int
+	unique           *bool
+	order            []OrderFunc
+	fields           []string
+	predicates       []predicate.FnetDocument
+	withCategory     *FnetCategoryQuery
+	withSubCategory1 *FnetSubCategory1Query
+	withSubCategory2 *FnetSubCategory2Query
+	withFKs          bool
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -57,6 +64,72 @@ func (fdq *FnetDocumentQuery) Unique(unique bool) *FnetDocumentQuery {
 func (fdq *FnetDocumentQuery) Order(o ...OrderFunc) *FnetDocumentQuery {
 	fdq.order = append(fdq.order, o...)
 	return fdq
+}
+
+// QueryCategory chains the current query on the "category" edge.
+func (fdq *FnetDocumentQuery) QueryCategory() *FnetCategoryQuery {
+	query := &FnetCategoryQuery{config: fdq.config}
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := fdq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := fdq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(fnetdocument.Table, fnetdocument.FieldID, selector),
+			sqlgraph.To(fnetcategory.Table, fnetcategory.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, fnetdocument.CategoryTable, fnetdocument.CategoryColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(fdq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QuerySubCategory1 chains the current query on the "sub_category1" edge.
+func (fdq *FnetDocumentQuery) QuerySubCategory1() *FnetSubCategory1Query {
+	query := &FnetSubCategory1Query{config: fdq.config}
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := fdq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := fdq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(fnetdocument.Table, fnetdocument.FieldID, selector),
+			sqlgraph.To(fnetsubcategory1.Table, fnetsubcategory1.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, fnetdocument.SubCategory1Table, fnetdocument.SubCategory1Column),
+		)
+		fromU = sqlgraph.SetNeighbors(fdq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QuerySubCategory2 chains the current query on the "sub_category2" edge.
+func (fdq *FnetDocumentQuery) QuerySubCategory2() *FnetSubCategory2Query {
+	query := &FnetSubCategory2Query{config: fdq.config}
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := fdq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := fdq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(fnetdocument.Table, fnetdocument.FieldID, selector),
+			sqlgraph.To(fnetsubcategory2.Table, fnetsubcategory2.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, fnetdocument.SubCategory2Table, fnetdocument.SubCategory2Column),
+		)
+		fromU = sqlgraph.SetNeighbors(fdq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
 }
 
 // First returns the first FnetDocument entity from the query.
@@ -235,16 +308,52 @@ func (fdq *FnetDocumentQuery) Clone() *FnetDocumentQuery {
 		return nil
 	}
 	return &FnetDocumentQuery{
-		config:     fdq.config,
-		limit:      fdq.limit,
-		offset:     fdq.offset,
-		order:      append([]OrderFunc{}, fdq.order...),
-		predicates: append([]predicate.FnetDocument{}, fdq.predicates...),
+		config:           fdq.config,
+		limit:            fdq.limit,
+		offset:           fdq.offset,
+		order:            append([]OrderFunc{}, fdq.order...),
+		predicates:       append([]predicate.FnetDocument{}, fdq.predicates...),
+		withCategory:     fdq.withCategory.Clone(),
+		withSubCategory1: fdq.withSubCategory1.Clone(),
+		withSubCategory2: fdq.withSubCategory2.Clone(),
 		// clone intermediate query.
 		sql:    fdq.sql.Clone(),
 		path:   fdq.path,
 		unique: fdq.unique,
 	}
+}
+
+// WithCategory tells the query-builder to eager-load the nodes that are connected to
+// the "category" edge. The optional arguments are used to configure the query builder of the edge.
+func (fdq *FnetDocumentQuery) WithCategory(opts ...func(*FnetCategoryQuery)) *FnetDocumentQuery {
+	query := &FnetCategoryQuery{config: fdq.config}
+	for _, opt := range opts {
+		opt(query)
+	}
+	fdq.withCategory = query
+	return fdq
+}
+
+// WithSubCategory1 tells the query-builder to eager-load the nodes that are connected to
+// the "sub_category1" edge. The optional arguments are used to configure the query builder of the edge.
+func (fdq *FnetDocumentQuery) WithSubCategory1(opts ...func(*FnetSubCategory1Query)) *FnetDocumentQuery {
+	query := &FnetSubCategory1Query{config: fdq.config}
+	for _, opt := range opts {
+		opt(query)
+	}
+	fdq.withSubCategory1 = query
+	return fdq
+}
+
+// WithSubCategory2 tells the query-builder to eager-load the nodes that are connected to
+// the "sub_category2" edge. The optional arguments are used to configure the query builder of the edge.
+func (fdq *FnetDocumentQuery) WithSubCategory2(opts ...func(*FnetSubCategory2Query)) *FnetDocumentQuery {
+	query := &FnetSubCategory2Query{config: fdq.config}
+	for _, opt := range opts {
+		opt(query)
+	}
+	fdq.withSubCategory2 = query
+	return fdq
 }
 
 // GroupBy is used to group vertices by one or more fields/columns.
@@ -313,15 +422,28 @@ func (fdq *FnetDocumentQuery) prepareQuery(ctx context.Context) error {
 
 func (fdq *FnetDocumentQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*FnetDocument, error) {
 	var (
-		nodes = []*FnetDocument{}
-		_spec = fdq.querySpec()
+		nodes       = []*FnetDocument{}
+		withFKs     = fdq.withFKs
+		_spec       = fdq.querySpec()
+		loadedTypes = [3]bool{
+			fdq.withCategory != nil,
+			fdq.withSubCategory1 != nil,
+			fdq.withSubCategory2 != nil,
+		}
 	)
+	if fdq.withCategory != nil || fdq.withSubCategory1 != nil || fdq.withSubCategory2 != nil {
+		withFKs = true
+	}
+	if withFKs {
+		_spec.Node.Columns = append(_spec.Node.Columns, fnetdocument.ForeignKeys...)
+	}
 	_spec.ScanValues = func(columns []string) ([]interface{}, error) {
 		return (*FnetDocument).scanValues(nil, columns)
 	}
 	_spec.Assign = func(columns []string, values []interface{}) error {
 		node := &FnetDocument{config: fdq.config}
 		nodes = append(nodes, node)
+		node.Edges.loadedTypes = loadedTypes
 		return node.assignValues(columns, values)
 	}
 	for i := range hooks {
@@ -333,7 +455,113 @@ func (fdq *FnetDocumentQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([
 	if len(nodes) == 0 {
 		return nodes, nil
 	}
+	if query := fdq.withCategory; query != nil {
+		if err := fdq.loadCategory(ctx, query, nodes, nil,
+			func(n *FnetDocument, e *FnetCategory) { n.Edges.Category = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := fdq.withSubCategory1; query != nil {
+		if err := fdq.loadSubCategory1(ctx, query, nodes, nil,
+			func(n *FnetDocument, e *FnetSubCategory1) { n.Edges.SubCategory1 = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := fdq.withSubCategory2; query != nil {
+		if err := fdq.loadSubCategory2(ctx, query, nodes, nil,
+			func(n *FnetDocument, e *FnetSubCategory2) { n.Edges.SubCategory2 = e }); err != nil {
+			return nil, err
+		}
+	}
 	return nodes, nil
+}
+
+func (fdq *FnetDocumentQuery) loadCategory(ctx context.Context, query *FnetCategoryQuery, nodes []*FnetDocument, init func(*FnetDocument), assign func(*FnetDocument, *FnetCategory)) error {
+	ids := make([]int, 0, len(nodes))
+	nodeids := make(map[int][]*FnetDocument)
+	for i := range nodes {
+		if nodes[i].category_id == nil {
+			continue
+		}
+		fk := *nodes[i].category_id
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	query.Where(fnetcategory.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "category_id" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
+func (fdq *FnetDocumentQuery) loadSubCategory1(ctx context.Context, query *FnetSubCategory1Query, nodes []*FnetDocument, init func(*FnetDocument), assign func(*FnetDocument, *FnetSubCategory1)) error {
+	ids := make([]int, 0, len(nodes))
+	nodeids := make(map[int][]*FnetDocument)
+	for i := range nodes {
+		if nodes[i].sub_category1_id == nil {
+			continue
+		}
+		fk := *nodes[i].sub_category1_id
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	query.Where(fnetsubcategory1.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "sub_category1_id" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
+func (fdq *FnetDocumentQuery) loadSubCategory2(ctx context.Context, query *FnetSubCategory2Query, nodes []*FnetDocument, init func(*FnetDocument), assign func(*FnetDocument, *FnetSubCategory2)) error {
+	ids := make([]int, 0, len(nodes))
+	nodeids := make(map[int][]*FnetDocument)
+	for i := range nodes {
+		if nodes[i].sub_category2_id == nil {
+			continue
+		}
+		fk := *nodes[i].sub_category2_id
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	query.Where(fnetsubcategory2.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "sub_category2_id" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
 }
 
 func (fdq *FnetDocumentQuery) sqlCount(ctx context.Context) (int, error) {
