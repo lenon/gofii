@@ -123,3 +123,11 @@ func (d *Document) ParseReferenceDate() (time.Time, error) {
 func (d *Document) ParseSubmissionDate() (time.Time, error) {
 	return ParseDate(d.SubmissionDate, DateFormatDMYHM)
 }
+
+func (d *Document) HasSubCategory1() bool {
+	return d.SubCategory1 != ""
+}
+
+func (d *Document) HasSubCategory2() bool {
+	return d.SubCategory2 != ""
+}

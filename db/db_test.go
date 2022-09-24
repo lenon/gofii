@@ -29,6 +29,63 @@ func setupDB() *db.Connection {
 	return db
 }
 
+func TestUpsertCategory(t *testing.T) {
+	db := setupDB()
+	defer db.Close()
+
+	_, err := db.UpsertCategory("my category")
+	require.Nil(t, err)
+
+	count := db.Client.FnetCategory.Query().CountX(db.Context)
+	require.Equal(t, 1, count)
+
+	// insert the same category again
+	_, err = db.UpsertCategory("my category")
+	require.Nil(t, err)
+
+	// should not add a new record
+	count = db.Client.FnetCategory.Query().CountX(db.Context)
+	require.Equal(t, 1, count, "must upsert existing record and not create a new one")
+}
+
+func TestUpsertSubCategory1(t *testing.T) {
+	db := setupDB()
+	defer db.Close()
+
+	_, err := db.UpsertSubCategory1("my sub category 1")
+	require.Nil(t, err)
+
+	count := db.Client.FnetSubCategory1.Query().CountX(db.Context)
+	require.Equal(t, 1, count)
+
+	// insert the same category again
+	_, err = db.UpsertSubCategory1("my sub category 1")
+	require.Nil(t, err)
+
+	// should not add a new record
+	count = db.Client.FnetSubCategory1.Query().CountX(db.Context)
+	require.Equal(t, 1, count, "must upsert existing record and not create a new one")
+}
+
+func TestUpsertSubCategory2(t *testing.T) {
+	db := setupDB()
+	defer db.Close()
+
+	_, err := db.UpsertSubCategory2("my sub category 2")
+	require.Nil(t, err)
+
+	count := db.Client.FnetSubCategory2.Query().CountX(db.Context)
+	require.Equal(t, 1, count)
+
+	// insert the same category again
+	_, err = db.UpsertSubCategory2("my sub category 2")
+	require.Nil(t, err)
+
+	// should not add a new record
+	count = db.Client.FnetSubCategory2.Query().CountX(db.Context)
+	require.Equal(t, 1, count, "must upsert existing record and not create a new one")
+}
+
 func TestUpsertNewDocument(t *testing.T) {
 	db := setupDB()
 	defer db.Close()
