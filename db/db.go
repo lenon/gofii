@@ -40,7 +40,7 @@ func (c *Connection) UpsertDocument(doc *fnet.Document) error {
 		return nil
 	}
 
-	category_id, err := c.Client.FnetCategory.Create().
+	categoryID, err := c.Client.FnetCategory.Create().
 		SetName(doc.Category).
 		OnConflict().
 		UpdateNewValues().
@@ -53,7 +53,7 @@ func (c *Connection) UpsertDocument(doc *fnet.Document) error {
 	create := c.Client.FnetDocument.Create().
 		SetFnetID(doc.ID).
 		SetAdditionalInformation(doc.AdditionalInformation).
-		SetCategoryID(category_id).
+		SetCategoryID(categoryID).
 		SetCategoryStr(doc.Category).
 		SetFundDescription(doc.FundDescription).
 		SetFundMarketName(doc.FundMarketName).
@@ -74,7 +74,7 @@ func (c *Connection) UpsertDocument(doc *fnet.Document) error {
 		SetVersion(doc.Version)
 
 	if doc.SubCategory1 != "" {
-		sub_category1_id, err := c.Client.FnetSubCategory1.Create().
+		subCategory1ID, err := c.Client.FnetSubCategory1.Create().
 			SetName(doc.SubCategory1).
 			OnConflict().
 			UpdateNewValues().
@@ -84,11 +84,11 @@ func (c *Connection) UpsertDocument(doc *fnet.Document) error {
 			return err
 		}
 
-		create.SetSubCategory1ID(sub_category1_id)
+		create.SetSubCategory1ID(subCategory1ID)
 	}
 
 	if doc.SubCategory2 != "" {
-		sub_category2_id, err := c.Client.FnetSubCategory2.Create().
+		subCategory2ID, err := c.Client.FnetSubCategory2.Create().
 			SetName(doc.SubCategory2).
 			OnConflict().
 			UpdateNewValues().
@@ -98,7 +98,7 @@ func (c *Connection) UpsertDocument(doc *fnet.Document) error {
 			return err
 		}
 
-		create.SetSubCategory2ID(sub_category2_id)
+		create.SetSubCategory2ID(subCategory2ID)
 	}
 
 	return create.OnConflict().

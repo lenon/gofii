@@ -6,15 +6,15 @@ import (
 )
 
 const (
-	DATE_FORMAT_MY     = "2"
-	DATE_FORMAT_DMY    = "3"
-	DATE_FORMAT_DMY_HM = "4"
+	DateFormatMY    = "2"
+	DateFormatDMY   = "3"
+	DateFormatDMYHM = "4"
 )
 
 var dateFormats = map[string]string{
-	DATE_FORMAT_MY:     "01/2006",
-	DATE_FORMAT_DMY:    "02/01/2006",
-	DATE_FORMAT_DMY_HM: "02/01/2006 15:04",
+	DateFormatMY:    "01/2006",
+	DateFormatDMY:   "02/01/2006",
+	DateFormatDMYHM: "02/01/2006 15:04",
 }
 
 func ParseDate(date string, format string) (time.Time, error) {

@@ -91,15 +91,15 @@ func TestUpsertNewDocument(t *testing.T) {
 
 	assert.Equal(t, "my category", category.Name)
 
-	sub_category1, err := entity.Edges.SubCategory1OrErr()
+	subCategory1, err := entity.Edges.SubCategory1OrErr()
 	require.Nil(t, err)
 
-	assert.Equal(t, "my subcategory 1", sub_category1.Name)
+	assert.Equal(t, "my subcategory 1", subCategory1.Name)
 
-	sub_category2, err := entity.Edges.SubCategory2OrErr()
+	subCategory2, err := entity.Edges.SubCategory2OrErr()
 	require.Nil(t, err)
 
-	assert.Equal(t, "my subcategory 2", sub_category2.Name)
+	assert.Equal(t, "my subcategory 2", subCategory2.Name)
 }
 
 func TestUpsertAlreadyCreatedDocument(t *testing.T) {

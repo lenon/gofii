@@ -121,5 +121,5 @@ func (d *Document) ParseReferenceDate() (time.Time, error) {
 }
 
 func (d *Document) ParseSubmissionDate() (time.Time, error) {
-	return ParseDate(d.SubmissionDate, DATE_FORMAT_DMY_HM)
+	return ParseDate(d.SubmissionDate, DateFormatDMYHM)
 }
