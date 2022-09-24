@@ -13,23 +13,24 @@ import (
 	_ "github.com/mattn/go-sqlite3"
 )
 
-func setupDB() (*db.Connection, error) {
-	db, err := db.Open(context.Background(), "sqlite3", ":memory:?_fk=1")
+func perror(err error) {
 	if err != nil {
-		return nil, err
+		panic(err)
 	}
+}
+
+func setupDB() *db.Connection {
+	db, err := db.Open(context.Background(), "sqlite3", ":memory:?_fk=1")
+	perror(err)
 
 	err = db.Migrate()
-	if err != nil {
-		return nil, err
-	}
+	perror(err)
 
-	return db, err
+	return db
 }
 
 func TestUpsertNewDocument(t *testing.T) {
-	db, err := setupDB()
-	require.Nil(t, err)
+	db := setupDB()
 	defer db.Close()
 
 	document := &fnet.Document{
@@ -53,7 +54,7 @@ func TestUpsertNewDocument(t *testing.T) {
 		Version:                     2,
 	}
 
-	err = db.UpsertDocument(document)
+	err := db.UpsertDocument(document)
 	require.Nil(t, err)
 
 	entity, err := db.Client.FnetDocument.Query().
@@ -102,8 +103,7 @@ func TestUpsertNewDocument(t *testing.T) {
 }
 
 func TestUpsertAlreadyCreatedDocument(t *testing.T) {
-	db, err := setupDB()
-	require.Nil(t, err)
+	db := setupDB()
 	defer db.Close()
 
 	document := fnet.Document{
@@ -127,7 +127,7 @@ func TestUpsertAlreadyCreatedDocument(t *testing.T) {
 		Version:                     2,
 	}
 
-	err = db.UpsertDocument(&document)
+	err := db.UpsertDocument(&document)
 	require.Nil(t, err)
 
 	documentCopy := document
@@ -151,8 +151,7 @@ func TestUpsertAlreadyCreatedDocument(t *testing.T) {
 }
 
 func TestUpsertInvalidDocument(t *testing.T) {
-	db, err := setupDB()
-	require.Nil(t, err)
+	db := setupDB()
 	defer db.Close()
 
 	document := fnet.Document{
@@ -176,6 +175,6 @@ func TestUpsertInvalidDocument(t *testing.T) {
 		Version:                     2,
 	}
 
-	err = db.UpsertDocument(&document)
+	err := db.UpsertDocument(&document)
 	assert.EqualError(t, err, "ent: validator failed for field \"FnetDocument.category_str\": value is less than the required length")
 }
