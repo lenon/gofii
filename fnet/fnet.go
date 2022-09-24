@@ -22,6 +22,11 @@ type Client struct {
 }
 
 type Document struct {
+	// the following fields were not included because they are either empty or
+	// do not hold any useful information:
+	// arquivoEstruturado, assuntos, cnpjAdministrador, cnpjFundo, dda formatoEstruturaDocumento,
+	// idEntidadeGerenciadora, idSelectItemConvenio, idSelectNotificacaoConvenio, idTemplate,
+	// indicadorFundoAtivoB3, nomeAdministrador, numeroEmissao, ofertaPublica, tipoPedido
 	ID                          int    `json:"id"`
 	AdditionalInformation       string `json:"informacoesAdicionais"`
 	Category                    string `json:"categoriaDocumento"`
