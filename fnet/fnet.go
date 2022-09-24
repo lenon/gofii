@@ -25,20 +25,20 @@ type Document struct {
 	ID                          int    `json:"id"`
 	AdditionalInformation       string `json:"informacoesAdicionais"`
 	Category                    string `json:"categoriaDocumento"`
-	DocumentStatus              string `json:"situacaoDocumento"`
 	FundDescription             string `json:"descricaoFundo"`
+	FundMarketName              string `json:"nomePregao"`
 	HighPriority                bool   `json:"altaPrioridade"`
-	MarketName                  string `json:"nomePregao"`
 	ReferenceDate               string `json:"dataReferencia"`
 	ReferenceDateFormat         string `json:"formatoDataReferencia"`
 	Reviewed                    string `json:"analisado"`
-	Status                      string `json:"status"`
-	StatusDescription           string `json:"descricaoStatus"`
+	Status                      string `json:"situacaoDocumento"`
 	SubCategory1                string `json:"tipoDocumento"`
 	SubCategory2                string `json:"especieDocumento"`
 	SubmissionDate              string `json:"dataEntrega"`
 	SubmissionMethod            string `json:"modalidade"`
 	SubmissionMethodDescription string `json:"descricaoModalidade"`
+	SubmissionStatus            string `json:"status"`
+	SubmissionStatusDescription string `json:"descricaoStatus"`
 	Version                     int    `json:"versao"`
 }
 

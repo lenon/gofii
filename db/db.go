@@ -55,22 +55,22 @@ func (c *Connection) UpsertDocument(doc *fnet.Document) error {
 		SetAdditionalInformation(doc.AdditionalInformation).
 		SetCategoryID(category_id).
 		SetCategoryStr(doc.Category).
-		SetDocumentStatus(doc.DocumentStatus).
 		SetFundDescription(doc.FundDescription).
+		SetFundMarketName(doc.FundMarketName).
 		SetHighPriority(doc.HighPriority).
-		SetMarketName(doc.MarketName).
 		SetReferenceDate(referenceDate).
 		SetReferenceDateFormat(doc.ReferenceDateFormat).
 		SetReferenceDateStr(doc.ReferenceDate).
 		SetReviewed(doc.Reviewed).
 		SetStatus(doc.Status).
-		SetStatusDescription(doc.StatusDescription).
 		SetSubCategory1Str(doc.SubCategory1).
 		SetSubCategory2Str(doc.SubCategory2).
 		SetSubmissionDate(submissionDate).
 		SetSubmissionDateStr(doc.SubmissionDate).
 		SetSubmissionMethod(doc.SubmissionMethod).
 		SetSubmissionMethodDescription(doc.SubmissionMethodDescription).
+		SetSubmissionStatus(doc.SubmissionStatus).
+		SetSubmissionStatusDescription(doc.SubmissionStatusDescription).
 		SetVersion(doc.Version)
 
 	if doc.SubCategory1 != "" {

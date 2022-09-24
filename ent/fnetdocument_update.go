@@ -57,41 +57,35 @@ func (fdu *FnetDocumentUpdate) SetCategoryStr(s string) *FnetDocumentUpdate {
 	return fdu
 }
 
-// SetDocumentStatus sets the "document_status" field.
-func (fdu *FnetDocumentUpdate) SetDocumentStatus(s string) *FnetDocumentUpdate {
-	fdu.mutation.SetDocumentStatus(s)
-	return fdu
-}
-
 // SetFundDescription sets the "fund_description" field.
 func (fdu *FnetDocumentUpdate) SetFundDescription(s string) *FnetDocumentUpdate {
 	fdu.mutation.SetFundDescription(s)
 	return fdu
 }
 
-// SetHighPriority sets the "high_priority" field.
-func (fdu *FnetDocumentUpdate) SetHighPriority(b bool) *FnetDocumentUpdate {
-	fdu.mutation.SetHighPriority(b)
+// SetFundMarketName sets the "fund_market_name" field.
+func (fdu *FnetDocumentUpdate) SetFundMarketName(s string) *FnetDocumentUpdate {
+	fdu.mutation.SetFundMarketName(s)
 	return fdu
 }
 
-// SetMarketName sets the "market_name" field.
-func (fdu *FnetDocumentUpdate) SetMarketName(s string) *FnetDocumentUpdate {
-	fdu.mutation.SetMarketName(s)
-	return fdu
-}
-
-// SetNillableMarketName sets the "market_name" field if the given value is not nil.
-func (fdu *FnetDocumentUpdate) SetNillableMarketName(s *string) *FnetDocumentUpdate {
+// SetNillableFundMarketName sets the "fund_market_name" field if the given value is not nil.
+func (fdu *FnetDocumentUpdate) SetNillableFundMarketName(s *string) *FnetDocumentUpdate {
 	if s != nil {
-		fdu.SetMarketName(*s)
+		fdu.SetFundMarketName(*s)
 	}
 	return fdu
 }
 
-// ClearMarketName clears the value of the "market_name" field.
-func (fdu *FnetDocumentUpdate) ClearMarketName() *FnetDocumentUpdate {
-	fdu.mutation.ClearMarketName()
+// ClearFundMarketName clears the value of the "fund_market_name" field.
+func (fdu *FnetDocumentUpdate) ClearFundMarketName() *FnetDocumentUpdate {
+	fdu.mutation.ClearFundMarketName()
+	return fdu
+}
+
+// SetHighPriority sets the "high_priority" field.
+func (fdu *FnetDocumentUpdate) SetHighPriority(b bool) *FnetDocumentUpdate {
+	fdu.mutation.SetHighPriority(b)
 	return fdu
 }
 
@@ -122,12 +116,6 @@ func (fdu *FnetDocumentUpdate) SetReviewed(s string) *FnetDocumentUpdate {
 // SetStatus sets the "status" field.
 func (fdu *FnetDocumentUpdate) SetStatus(s string) *FnetDocumentUpdate {
 	fdu.mutation.SetStatus(s)
-	return fdu
-}
-
-// SetStatusDescription sets the "status_description" field.
-func (fdu *FnetDocumentUpdate) SetStatusDescription(s string) *FnetDocumentUpdate {
-	fdu.mutation.SetStatusDescription(s)
 	return fdu
 }
 
@@ -192,6 +180,18 @@ func (fdu *FnetDocumentUpdate) SetSubmissionMethod(s string) *FnetDocumentUpdate
 // SetSubmissionMethodDescription sets the "submission_method_description" field.
 func (fdu *FnetDocumentUpdate) SetSubmissionMethodDescription(s string) *FnetDocumentUpdate {
 	fdu.mutation.SetSubmissionMethodDescription(s)
+	return fdu
+}
+
+// SetSubmissionStatus sets the "submission_status" field.
+func (fdu *FnetDocumentUpdate) SetSubmissionStatus(s string) *FnetDocumentUpdate {
+	fdu.mutation.SetSubmissionStatus(s)
+	return fdu
+}
+
+// SetSubmissionStatusDescription sets the "submission_status_description" field.
+func (fdu *FnetDocumentUpdate) SetSubmissionStatusDescription(s string) *FnetDocumentUpdate {
+	fdu.mutation.SetSubmissionStatusDescription(s)
 	return fdu
 }
 
@@ -347,11 +347,6 @@ func (fdu *FnetDocumentUpdate) check() error {
 			return &ValidationError{Name: "category_str", err: fmt.Errorf(`ent: validator failed for field "FnetDocument.category_str": %w`, err)}
 		}
 	}
-	if v, ok := fdu.mutation.DocumentStatus(); ok {
-		if err := fnetdocument.DocumentStatusValidator(v); err != nil {
-			return &ValidationError{Name: "document_status", err: fmt.Errorf(`ent: validator failed for field "FnetDocument.document_status": %w`, err)}
-		}
-	}
 	if v, ok := fdu.mutation.FundDescription(); ok {
 		if err := fnetdocument.FundDescriptionValidator(v); err != nil {
 			return &ValidationError{Name: "fund_description", err: fmt.Errorf(`ent: validator failed for field "FnetDocument.fund_description": %w`, err)}
@@ -377,11 +372,6 @@ func (fdu *FnetDocumentUpdate) check() error {
 			return &ValidationError{Name: "status", err: fmt.Errorf(`ent: validator failed for field "FnetDocument.status": %w`, err)}
 		}
 	}
-	if v, ok := fdu.mutation.StatusDescription(); ok {
-		if err := fnetdocument.StatusDescriptionValidator(v); err != nil {
-			return &ValidationError{Name: "status_description", err: fmt.Errorf(`ent: validator failed for field "FnetDocument.status_description": %w`, err)}
-		}
-	}
 	if v, ok := fdu.mutation.SubmissionDateStr(); ok {
 		if err := fnetdocument.SubmissionDateStrValidator(v); err != nil {
 			return &ValidationError{Name: "submission_date_str", err: fmt.Errorf(`ent: validator failed for field "FnetDocument.submission_date_str": %w`, err)}
@@ -395,6 +385,16 @@ func (fdu *FnetDocumentUpdate) check() error {
 	if v, ok := fdu.mutation.SubmissionMethodDescription(); ok {
 		if err := fnetdocument.SubmissionMethodDescriptionValidator(v); err != nil {
 			return &ValidationError{Name: "submission_method_description", err: fmt.Errorf(`ent: validator failed for field "FnetDocument.submission_method_description": %w`, err)}
+		}
+	}
+	if v, ok := fdu.mutation.SubmissionStatus(); ok {
+		if err := fnetdocument.SubmissionStatusValidator(v); err != nil {
+			return &ValidationError{Name: "submission_status", err: fmt.Errorf(`ent: validator failed for field "FnetDocument.submission_status": %w`, err)}
+		}
+	}
+	if v, ok := fdu.mutation.SubmissionStatusDescription(); ok {
+		if err := fnetdocument.SubmissionStatusDescriptionValidator(v); err != nil {
+			return &ValidationError{Name: "submission_status_description", err: fmt.Errorf(`ent: validator failed for field "FnetDocument.submission_status_description": %w`, err)}
 		}
 	}
 	if v, ok := fdu.mutation.Version(); ok {
@@ -446,13 +446,6 @@ func (fdu *FnetDocumentUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Column: fnetdocument.FieldCategoryStr,
 		})
 	}
-	if value, ok := fdu.mutation.DocumentStatus(); ok {
-		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeString,
-			Value:  value,
-			Column: fnetdocument.FieldDocumentStatus,
-		})
-	}
 	if value, ok := fdu.mutation.FundDescription(); ok {
 		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
 			Type:   field.TypeString,
@@ -460,24 +453,24 @@ func (fdu *FnetDocumentUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Column: fnetdocument.FieldFundDescription,
 		})
 	}
+	if value, ok := fdu.mutation.FundMarketName(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Value:  value,
+			Column: fnetdocument.FieldFundMarketName,
+		})
+	}
+	if fdu.mutation.FundMarketNameCleared() {
+		_spec.Fields.Clear = append(_spec.Fields.Clear, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Column: fnetdocument.FieldFundMarketName,
+		})
+	}
 	if value, ok := fdu.mutation.HighPriority(); ok {
 		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
 			Type:   field.TypeBool,
 			Value:  value,
 			Column: fnetdocument.FieldHighPriority,
-		})
-	}
-	if value, ok := fdu.mutation.MarketName(); ok {
-		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeString,
-			Value:  value,
-			Column: fnetdocument.FieldMarketName,
-		})
-	}
-	if fdu.mutation.MarketNameCleared() {
-		_spec.Fields.Clear = append(_spec.Fields.Clear, &sqlgraph.FieldSpec{
-			Type:   field.TypeString,
-			Column: fnetdocument.FieldMarketName,
 		})
 	}
 	if value, ok := fdu.mutation.ReferenceDate(); ok {
@@ -513,13 +506,6 @@ func (fdu *FnetDocumentUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Type:   field.TypeString,
 			Value:  value,
 			Column: fnetdocument.FieldStatus,
-		})
-	}
-	if value, ok := fdu.mutation.StatusDescription(); ok {
-		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeString,
-			Value:  value,
-			Column: fnetdocument.FieldStatusDescription,
 		})
 	}
 	if value, ok := fdu.mutation.SubCategory1Str(); ok {
@@ -574,6 +560,20 @@ func (fdu *FnetDocumentUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Type:   field.TypeString,
 			Value:  value,
 			Column: fnetdocument.FieldSubmissionMethodDescription,
+		})
+	}
+	if value, ok := fdu.mutation.SubmissionStatus(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Value:  value,
+			Column: fnetdocument.FieldSubmissionStatus,
+		})
+	}
+	if value, ok := fdu.mutation.SubmissionStatusDescription(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Value:  value,
+			Column: fnetdocument.FieldSubmissionStatusDescription,
 		})
 	}
 	if value, ok := fdu.mutation.Version(); ok {
@@ -740,41 +740,35 @@ func (fduo *FnetDocumentUpdateOne) SetCategoryStr(s string) *FnetDocumentUpdateO
 	return fduo
 }
 
-// SetDocumentStatus sets the "document_status" field.
-func (fduo *FnetDocumentUpdateOne) SetDocumentStatus(s string) *FnetDocumentUpdateOne {
-	fduo.mutation.SetDocumentStatus(s)
-	return fduo
-}
-
 // SetFundDescription sets the "fund_description" field.
 func (fduo *FnetDocumentUpdateOne) SetFundDescription(s string) *FnetDocumentUpdateOne {
 	fduo.mutation.SetFundDescription(s)
 	return fduo
 }
 
-// SetHighPriority sets the "high_priority" field.
-func (fduo *FnetDocumentUpdateOne) SetHighPriority(b bool) *FnetDocumentUpdateOne {
-	fduo.mutation.SetHighPriority(b)
+// SetFundMarketName sets the "fund_market_name" field.
+func (fduo *FnetDocumentUpdateOne) SetFundMarketName(s string) *FnetDocumentUpdateOne {
+	fduo.mutation.SetFundMarketName(s)
 	return fduo
 }
 
-// SetMarketName sets the "market_name" field.
-func (fduo *FnetDocumentUpdateOne) SetMarketName(s string) *FnetDocumentUpdateOne {
-	fduo.mutation.SetMarketName(s)
-	return fduo
-}
-
-// SetNillableMarketName sets the "market_name" field if the given value is not nil.
-func (fduo *FnetDocumentUpdateOne) SetNillableMarketName(s *string) *FnetDocumentUpdateOne {
+// SetNillableFundMarketName sets the "fund_market_name" field if the given value is not nil.
+func (fduo *FnetDocumentUpdateOne) SetNillableFundMarketName(s *string) *FnetDocumentUpdateOne {
 	if s != nil {
-		fduo.SetMarketName(*s)
+		fduo.SetFundMarketName(*s)
 	}
 	return fduo
 }
 
-// ClearMarketName clears the value of the "market_name" field.
-func (fduo *FnetDocumentUpdateOne) ClearMarketName() *FnetDocumentUpdateOne {
-	fduo.mutation.ClearMarketName()
+// ClearFundMarketName clears the value of the "fund_market_name" field.
+func (fduo *FnetDocumentUpdateOne) ClearFundMarketName() *FnetDocumentUpdateOne {
+	fduo.mutation.ClearFundMarketName()
+	return fduo
+}
+
+// SetHighPriority sets the "high_priority" field.
+func (fduo *FnetDocumentUpdateOne) SetHighPriority(b bool) *FnetDocumentUpdateOne {
+	fduo.mutation.SetHighPriority(b)
 	return fduo
 }
 
@@ -805,12 +799,6 @@ func (fduo *FnetDocumentUpdateOne) SetReviewed(s string) *FnetDocumentUpdateOne 
 // SetStatus sets the "status" field.
 func (fduo *FnetDocumentUpdateOne) SetStatus(s string) *FnetDocumentUpdateOne {
 	fduo.mutation.SetStatus(s)
-	return fduo
-}
-
-// SetStatusDescription sets the "status_description" field.
-func (fduo *FnetDocumentUpdateOne) SetStatusDescription(s string) *FnetDocumentUpdateOne {
-	fduo.mutation.SetStatusDescription(s)
 	return fduo
 }
 
@@ -875,6 +863,18 @@ func (fduo *FnetDocumentUpdateOne) SetSubmissionMethod(s string) *FnetDocumentUp
 // SetSubmissionMethodDescription sets the "submission_method_description" field.
 func (fduo *FnetDocumentUpdateOne) SetSubmissionMethodDescription(s string) *FnetDocumentUpdateOne {
 	fduo.mutation.SetSubmissionMethodDescription(s)
+	return fduo
+}
+
+// SetSubmissionStatus sets the "submission_status" field.
+func (fduo *FnetDocumentUpdateOne) SetSubmissionStatus(s string) *FnetDocumentUpdateOne {
+	fduo.mutation.SetSubmissionStatus(s)
+	return fduo
+}
+
+// SetSubmissionStatusDescription sets the "submission_status_description" field.
+func (fduo *FnetDocumentUpdateOne) SetSubmissionStatusDescription(s string) *FnetDocumentUpdateOne {
+	fduo.mutation.SetSubmissionStatusDescription(s)
 	return fduo
 }
 
@@ -1043,11 +1043,6 @@ func (fduo *FnetDocumentUpdateOne) check() error {
 			return &ValidationError{Name: "category_str", err: fmt.Errorf(`ent: validator failed for field "FnetDocument.category_str": %w`, err)}
 		}
 	}
-	if v, ok := fduo.mutation.DocumentStatus(); ok {
-		if err := fnetdocument.DocumentStatusValidator(v); err != nil {
-			return &ValidationError{Name: "document_status", err: fmt.Errorf(`ent: validator failed for field "FnetDocument.document_status": %w`, err)}
-		}
-	}
 	if v, ok := fduo.mutation.FundDescription(); ok {
 		if err := fnetdocument.FundDescriptionValidator(v); err != nil {
 			return &ValidationError{Name: "fund_description", err: fmt.Errorf(`ent: validator failed for field "FnetDocument.fund_description": %w`, err)}
@@ -1073,11 +1068,6 @@ func (fduo *FnetDocumentUpdateOne) check() error {
 			return &ValidationError{Name: "status", err: fmt.Errorf(`ent: validator failed for field "FnetDocument.status": %w`, err)}
 		}
 	}
-	if v, ok := fduo.mutation.StatusDescription(); ok {
-		if err := fnetdocument.StatusDescriptionValidator(v); err != nil {
-			return &ValidationError{Name: "status_description", err: fmt.Errorf(`ent: validator failed for field "FnetDocument.status_description": %w`, err)}
-		}
-	}
 	if v, ok := fduo.mutation.SubmissionDateStr(); ok {
 		if err := fnetdocument.SubmissionDateStrValidator(v); err != nil {
 			return &ValidationError{Name: "submission_date_str", err: fmt.Errorf(`ent: validator failed for field "FnetDocument.submission_date_str": %w`, err)}
@@ -1091,6 +1081,16 @@ func (fduo *FnetDocumentUpdateOne) check() error {
 	if v, ok := fduo.mutation.SubmissionMethodDescription(); ok {
 		if err := fnetdocument.SubmissionMethodDescriptionValidator(v); err != nil {
 			return &ValidationError{Name: "submission_method_description", err: fmt.Errorf(`ent: validator failed for field "FnetDocument.submission_method_description": %w`, err)}
+		}
+	}
+	if v, ok := fduo.mutation.SubmissionStatus(); ok {
+		if err := fnetdocument.SubmissionStatusValidator(v); err != nil {
+			return &ValidationError{Name: "submission_status", err: fmt.Errorf(`ent: validator failed for field "FnetDocument.submission_status": %w`, err)}
+		}
+	}
+	if v, ok := fduo.mutation.SubmissionStatusDescription(); ok {
+		if err := fnetdocument.SubmissionStatusDescriptionValidator(v); err != nil {
+			return &ValidationError{Name: "submission_status_description", err: fmt.Errorf(`ent: validator failed for field "FnetDocument.submission_status_description": %w`, err)}
 		}
 	}
 	if v, ok := fduo.mutation.Version(); ok {
@@ -1159,13 +1159,6 @@ func (fduo *FnetDocumentUpdateOne) sqlSave(ctx context.Context) (_node *FnetDocu
 			Column: fnetdocument.FieldCategoryStr,
 		})
 	}
-	if value, ok := fduo.mutation.DocumentStatus(); ok {
-		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeString,
-			Value:  value,
-			Column: fnetdocument.FieldDocumentStatus,
-		})
-	}
 	if value, ok := fduo.mutation.FundDescription(); ok {
 		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
 			Type:   field.TypeString,
@@ -1173,24 +1166,24 @@ func (fduo *FnetDocumentUpdateOne) sqlSave(ctx context.Context) (_node *FnetDocu
 			Column: fnetdocument.FieldFundDescription,
 		})
 	}
+	if value, ok := fduo.mutation.FundMarketName(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Value:  value,
+			Column: fnetdocument.FieldFundMarketName,
+		})
+	}
+	if fduo.mutation.FundMarketNameCleared() {
+		_spec.Fields.Clear = append(_spec.Fields.Clear, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Column: fnetdocument.FieldFundMarketName,
+		})
+	}
 	if value, ok := fduo.mutation.HighPriority(); ok {
 		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
 			Type:   field.TypeBool,
 			Value:  value,
 			Column: fnetdocument.FieldHighPriority,
-		})
-	}
-	if value, ok := fduo.mutation.MarketName(); ok {
-		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeString,
-			Value:  value,
-			Column: fnetdocument.FieldMarketName,
-		})
-	}
-	if fduo.mutation.MarketNameCleared() {
-		_spec.Fields.Clear = append(_spec.Fields.Clear, &sqlgraph.FieldSpec{
-			Type:   field.TypeString,
-			Column: fnetdocument.FieldMarketName,
 		})
 	}
 	if value, ok := fduo.mutation.ReferenceDate(); ok {
@@ -1226,13 +1219,6 @@ func (fduo *FnetDocumentUpdateOne) sqlSave(ctx context.Context) (_node *FnetDocu
 			Type:   field.TypeString,
 			Value:  value,
 			Column: fnetdocument.FieldStatus,
-		})
-	}
-	if value, ok := fduo.mutation.StatusDescription(); ok {
-		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeString,
-			Value:  value,
-			Column: fnetdocument.FieldStatusDescription,
 		})
 	}
 	if value, ok := fduo.mutation.SubCategory1Str(); ok {
@@ -1287,6 +1273,20 @@ func (fduo *FnetDocumentUpdateOne) sqlSave(ctx context.Context) (_node *FnetDocu
 			Type:   field.TypeString,
 			Value:  value,
 			Column: fnetdocument.FieldSubmissionMethodDescription,
+		})
+	}
+	if value, ok := fduo.mutation.SubmissionStatus(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Value:  value,
+			Column: fnetdocument.FieldSubmissionStatus,
+		})
+	}
+	if value, ok := fduo.mutation.SubmissionStatusDescription(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Value:  value,
+			Column: fnetdocument.FieldSubmissionStatusDescription,
 		})
 	}
 	if value, ok := fduo.mutation.Version(); ok {

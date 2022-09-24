@@ -447,22 +447,22 @@ type FnetDocumentMutation struct {
 	addfnet_id                    *int
 	additional_information        *string
 	category_str                  *string
-	document_status               *string
 	fund_description              *string
+	fund_market_name              *string
 	high_priority                 *bool
-	market_name                   *string
 	reference_date                *time.Time
 	reference_date_format         *string
 	reference_date_str            *string
 	reviewed                      *string
 	status                        *string
-	status_description            *string
 	sub_category1_str             *string
 	sub_category2_str             *string
 	submission_date               *time.Time
 	submission_date_str           *string
 	submission_method             *string
 	submission_method_description *string
+	submission_status             *string
+	submission_status_description *string
 	version                       *int
 	addversion                    *int
 	clearedFields                 map[string]struct{}
@@ -716,42 +716,6 @@ func (m *FnetDocumentMutation) ResetCategoryStr() {
 	m.category_str = nil
 }
 
-// SetDocumentStatus sets the "document_status" field.
-func (m *FnetDocumentMutation) SetDocumentStatus(s string) {
-	m.document_status = &s
-}
-
-// DocumentStatus returns the value of the "document_status" field in the mutation.
-func (m *FnetDocumentMutation) DocumentStatus() (r string, exists bool) {
-	v := m.document_status
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// OldDocumentStatus returns the old "document_status" field's value of the FnetDocument entity.
-// If the FnetDocument object wasn't provided to the builder, the object is fetched from the database.
-// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *FnetDocumentMutation) OldDocumentStatus(ctx context.Context) (v string, err error) {
-	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldDocumentStatus is only allowed on UpdateOne operations")
-	}
-	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldDocumentStatus requires an ID field in the mutation")
-	}
-	oldValue, err := m.oldValue(ctx)
-	if err != nil {
-		return v, fmt.Errorf("querying old value for OldDocumentStatus: %w", err)
-	}
-	return oldValue.DocumentStatus, nil
-}
-
-// ResetDocumentStatus resets all changes to the "document_status" field.
-func (m *FnetDocumentMutation) ResetDocumentStatus() {
-	m.document_status = nil
-}
-
 // SetFundDescription sets the "fund_description" field.
 func (m *FnetDocumentMutation) SetFundDescription(s string) {
 	m.fund_description = &s
@@ -788,6 +752,55 @@ func (m *FnetDocumentMutation) ResetFundDescription() {
 	m.fund_description = nil
 }
 
+// SetFundMarketName sets the "fund_market_name" field.
+func (m *FnetDocumentMutation) SetFundMarketName(s string) {
+	m.fund_market_name = &s
+}
+
+// FundMarketName returns the value of the "fund_market_name" field in the mutation.
+func (m *FnetDocumentMutation) FundMarketName() (r string, exists bool) {
+	v := m.fund_market_name
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldFundMarketName returns the old "fund_market_name" field's value of the FnetDocument entity.
+// If the FnetDocument object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *FnetDocumentMutation) OldFundMarketName(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldFundMarketName is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldFundMarketName requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldFundMarketName: %w", err)
+	}
+	return oldValue.FundMarketName, nil
+}
+
+// ClearFundMarketName clears the value of the "fund_market_name" field.
+func (m *FnetDocumentMutation) ClearFundMarketName() {
+	m.fund_market_name = nil
+	m.clearedFields[fnetdocument.FieldFundMarketName] = struct{}{}
+}
+
+// FundMarketNameCleared returns if the "fund_market_name" field was cleared in this mutation.
+func (m *FnetDocumentMutation) FundMarketNameCleared() bool {
+	_, ok := m.clearedFields[fnetdocument.FieldFundMarketName]
+	return ok
+}
+
+// ResetFundMarketName resets all changes to the "fund_market_name" field.
+func (m *FnetDocumentMutation) ResetFundMarketName() {
+	m.fund_market_name = nil
+	delete(m.clearedFields, fnetdocument.FieldFundMarketName)
+}
+
 // SetHighPriority sets the "high_priority" field.
 func (m *FnetDocumentMutation) SetHighPriority(b bool) {
 	m.high_priority = &b
@@ -822,55 +835,6 @@ func (m *FnetDocumentMutation) OldHighPriority(ctx context.Context) (v bool, err
 // ResetHighPriority resets all changes to the "high_priority" field.
 func (m *FnetDocumentMutation) ResetHighPriority() {
 	m.high_priority = nil
-}
-
-// SetMarketName sets the "market_name" field.
-func (m *FnetDocumentMutation) SetMarketName(s string) {
-	m.market_name = &s
-}
-
-// MarketName returns the value of the "market_name" field in the mutation.
-func (m *FnetDocumentMutation) MarketName() (r string, exists bool) {
-	v := m.market_name
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// OldMarketName returns the old "market_name" field's value of the FnetDocument entity.
-// If the FnetDocument object wasn't provided to the builder, the object is fetched from the database.
-// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *FnetDocumentMutation) OldMarketName(ctx context.Context) (v string, err error) {
-	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldMarketName is only allowed on UpdateOne operations")
-	}
-	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldMarketName requires an ID field in the mutation")
-	}
-	oldValue, err := m.oldValue(ctx)
-	if err != nil {
-		return v, fmt.Errorf("querying old value for OldMarketName: %w", err)
-	}
-	return oldValue.MarketName, nil
-}
-
-// ClearMarketName clears the value of the "market_name" field.
-func (m *FnetDocumentMutation) ClearMarketName() {
-	m.market_name = nil
-	m.clearedFields[fnetdocument.FieldMarketName] = struct{}{}
-}
-
-// MarketNameCleared returns if the "market_name" field was cleared in this mutation.
-func (m *FnetDocumentMutation) MarketNameCleared() bool {
-	_, ok := m.clearedFields[fnetdocument.FieldMarketName]
-	return ok
-}
-
-// ResetMarketName resets all changes to the "market_name" field.
-func (m *FnetDocumentMutation) ResetMarketName() {
-	m.market_name = nil
-	delete(m.clearedFields, fnetdocument.FieldMarketName)
 }
 
 // SetReferenceDate sets the "reference_date" field.
@@ -1051,42 +1015,6 @@ func (m *FnetDocumentMutation) OldStatus(ctx context.Context) (v string, err err
 // ResetStatus resets all changes to the "status" field.
 func (m *FnetDocumentMutation) ResetStatus() {
 	m.status = nil
-}
-
-// SetStatusDescription sets the "status_description" field.
-func (m *FnetDocumentMutation) SetStatusDescription(s string) {
-	m.status_description = &s
-}
-
-// StatusDescription returns the value of the "status_description" field in the mutation.
-func (m *FnetDocumentMutation) StatusDescription() (r string, exists bool) {
-	v := m.status_description
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// OldStatusDescription returns the old "status_description" field's value of the FnetDocument entity.
-// If the FnetDocument object wasn't provided to the builder, the object is fetched from the database.
-// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *FnetDocumentMutation) OldStatusDescription(ctx context.Context) (v string, err error) {
-	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldStatusDescription is only allowed on UpdateOne operations")
-	}
-	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldStatusDescription requires an ID field in the mutation")
-	}
-	oldValue, err := m.oldValue(ctx)
-	if err != nil {
-		return v, fmt.Errorf("querying old value for OldStatusDescription: %w", err)
-	}
-	return oldValue.StatusDescription, nil
-}
-
-// ResetStatusDescription resets all changes to the "status_description" field.
-func (m *FnetDocumentMutation) ResetStatusDescription() {
-	m.status_description = nil
 }
 
 // SetSubCategory1Str sets the "sub_category1_str" field.
@@ -1331,6 +1259,78 @@ func (m *FnetDocumentMutation) ResetSubmissionMethodDescription() {
 	m.submission_method_description = nil
 }
 
+// SetSubmissionStatus sets the "submission_status" field.
+func (m *FnetDocumentMutation) SetSubmissionStatus(s string) {
+	m.submission_status = &s
+}
+
+// SubmissionStatus returns the value of the "submission_status" field in the mutation.
+func (m *FnetDocumentMutation) SubmissionStatus() (r string, exists bool) {
+	v := m.submission_status
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldSubmissionStatus returns the old "submission_status" field's value of the FnetDocument entity.
+// If the FnetDocument object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *FnetDocumentMutation) OldSubmissionStatus(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldSubmissionStatus is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldSubmissionStatus requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldSubmissionStatus: %w", err)
+	}
+	return oldValue.SubmissionStatus, nil
+}
+
+// ResetSubmissionStatus resets all changes to the "submission_status" field.
+func (m *FnetDocumentMutation) ResetSubmissionStatus() {
+	m.submission_status = nil
+}
+
+// SetSubmissionStatusDescription sets the "submission_status_description" field.
+func (m *FnetDocumentMutation) SetSubmissionStatusDescription(s string) {
+	m.submission_status_description = &s
+}
+
+// SubmissionStatusDescription returns the value of the "submission_status_description" field in the mutation.
+func (m *FnetDocumentMutation) SubmissionStatusDescription() (r string, exists bool) {
+	v := m.submission_status_description
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldSubmissionStatusDescription returns the old "submission_status_description" field's value of the FnetDocument entity.
+// If the FnetDocument object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *FnetDocumentMutation) OldSubmissionStatusDescription(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldSubmissionStatusDescription is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldSubmissionStatusDescription requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldSubmissionStatusDescription: %w", err)
+	}
+	return oldValue.SubmissionStatusDescription, nil
+}
+
+// ResetSubmissionStatusDescription resets all changes to the "submission_status_description" field.
+func (m *FnetDocumentMutation) ResetSubmissionStatusDescription() {
+	m.submission_status_description = nil
+}
+
 // SetVersion sets the "version" field.
 func (m *FnetDocumentMutation) SetVersion(i int) {
 	m.version = &i
@@ -1533,17 +1533,14 @@ func (m *FnetDocumentMutation) Fields() []string {
 	if m.category_str != nil {
 		fields = append(fields, fnetdocument.FieldCategoryStr)
 	}
-	if m.document_status != nil {
-		fields = append(fields, fnetdocument.FieldDocumentStatus)
-	}
 	if m.fund_description != nil {
 		fields = append(fields, fnetdocument.FieldFundDescription)
 	}
+	if m.fund_market_name != nil {
+		fields = append(fields, fnetdocument.FieldFundMarketName)
+	}
 	if m.high_priority != nil {
 		fields = append(fields, fnetdocument.FieldHighPriority)
-	}
-	if m.market_name != nil {
-		fields = append(fields, fnetdocument.FieldMarketName)
 	}
 	if m.reference_date != nil {
 		fields = append(fields, fnetdocument.FieldReferenceDate)
@@ -1559,9 +1556,6 @@ func (m *FnetDocumentMutation) Fields() []string {
 	}
 	if m.status != nil {
 		fields = append(fields, fnetdocument.FieldStatus)
-	}
-	if m.status_description != nil {
-		fields = append(fields, fnetdocument.FieldStatusDescription)
 	}
 	if m.sub_category1_str != nil {
 		fields = append(fields, fnetdocument.FieldSubCategory1Str)
@@ -1581,6 +1575,12 @@ func (m *FnetDocumentMutation) Fields() []string {
 	if m.submission_method_description != nil {
 		fields = append(fields, fnetdocument.FieldSubmissionMethodDescription)
 	}
+	if m.submission_status != nil {
+		fields = append(fields, fnetdocument.FieldSubmissionStatus)
+	}
+	if m.submission_status_description != nil {
+		fields = append(fields, fnetdocument.FieldSubmissionStatusDescription)
+	}
 	if m.version != nil {
 		fields = append(fields, fnetdocument.FieldVersion)
 	}
@@ -1598,14 +1598,12 @@ func (m *FnetDocumentMutation) Field(name string) (ent.Value, bool) {
 		return m.AdditionalInformation()
 	case fnetdocument.FieldCategoryStr:
 		return m.CategoryStr()
-	case fnetdocument.FieldDocumentStatus:
-		return m.DocumentStatus()
 	case fnetdocument.FieldFundDescription:
 		return m.FundDescription()
+	case fnetdocument.FieldFundMarketName:
+		return m.FundMarketName()
 	case fnetdocument.FieldHighPriority:
 		return m.HighPriority()
-	case fnetdocument.FieldMarketName:
-		return m.MarketName()
 	case fnetdocument.FieldReferenceDate:
 		return m.ReferenceDate()
 	case fnetdocument.FieldReferenceDateFormat:
@@ -1616,8 +1614,6 @@ func (m *FnetDocumentMutation) Field(name string) (ent.Value, bool) {
 		return m.Reviewed()
 	case fnetdocument.FieldStatus:
 		return m.Status()
-	case fnetdocument.FieldStatusDescription:
-		return m.StatusDescription()
 	case fnetdocument.FieldSubCategory1Str:
 		return m.SubCategory1Str()
 	case fnetdocument.FieldSubCategory2Str:
@@ -1630,6 +1626,10 @@ func (m *FnetDocumentMutation) Field(name string) (ent.Value, bool) {
 		return m.SubmissionMethod()
 	case fnetdocument.FieldSubmissionMethodDescription:
 		return m.SubmissionMethodDescription()
+	case fnetdocument.FieldSubmissionStatus:
+		return m.SubmissionStatus()
+	case fnetdocument.FieldSubmissionStatusDescription:
+		return m.SubmissionStatusDescription()
 	case fnetdocument.FieldVersion:
 		return m.Version()
 	}
@@ -1647,14 +1647,12 @@ func (m *FnetDocumentMutation) OldField(ctx context.Context, name string) (ent.V
 		return m.OldAdditionalInformation(ctx)
 	case fnetdocument.FieldCategoryStr:
 		return m.OldCategoryStr(ctx)
-	case fnetdocument.FieldDocumentStatus:
-		return m.OldDocumentStatus(ctx)
 	case fnetdocument.FieldFundDescription:
 		return m.OldFundDescription(ctx)
+	case fnetdocument.FieldFundMarketName:
+		return m.OldFundMarketName(ctx)
 	case fnetdocument.FieldHighPriority:
 		return m.OldHighPriority(ctx)
-	case fnetdocument.FieldMarketName:
-		return m.OldMarketName(ctx)
 	case fnetdocument.FieldReferenceDate:
 		return m.OldReferenceDate(ctx)
 	case fnetdocument.FieldReferenceDateFormat:
@@ -1665,8 +1663,6 @@ func (m *FnetDocumentMutation) OldField(ctx context.Context, name string) (ent.V
 		return m.OldReviewed(ctx)
 	case fnetdocument.FieldStatus:
 		return m.OldStatus(ctx)
-	case fnetdocument.FieldStatusDescription:
-		return m.OldStatusDescription(ctx)
 	case fnetdocument.FieldSubCategory1Str:
 		return m.OldSubCategory1Str(ctx)
 	case fnetdocument.FieldSubCategory2Str:
@@ -1679,6 +1675,10 @@ func (m *FnetDocumentMutation) OldField(ctx context.Context, name string) (ent.V
 		return m.OldSubmissionMethod(ctx)
 	case fnetdocument.FieldSubmissionMethodDescription:
 		return m.OldSubmissionMethodDescription(ctx)
+	case fnetdocument.FieldSubmissionStatus:
+		return m.OldSubmissionStatus(ctx)
+	case fnetdocument.FieldSubmissionStatusDescription:
+		return m.OldSubmissionStatusDescription(ctx)
 	case fnetdocument.FieldVersion:
 		return m.OldVersion(ctx)
 	}
@@ -1711,13 +1711,6 @@ func (m *FnetDocumentMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetCategoryStr(v)
 		return nil
-	case fnetdocument.FieldDocumentStatus:
-		v, ok := value.(string)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.SetDocumentStatus(v)
-		return nil
 	case fnetdocument.FieldFundDescription:
 		v, ok := value.(string)
 		if !ok {
@@ -1725,19 +1718,19 @@ func (m *FnetDocumentMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetFundDescription(v)
 		return nil
+	case fnetdocument.FieldFundMarketName:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetFundMarketName(v)
+		return nil
 	case fnetdocument.FieldHighPriority:
 		v, ok := value.(bool)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetHighPriority(v)
-		return nil
-	case fnetdocument.FieldMarketName:
-		v, ok := value.(string)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.SetMarketName(v)
 		return nil
 	case fnetdocument.FieldReferenceDate:
 		v, ok := value.(time.Time)
@@ -1773,13 +1766,6 @@ func (m *FnetDocumentMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetStatus(v)
-		return nil
-	case fnetdocument.FieldStatusDescription:
-		v, ok := value.(string)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.SetStatusDescription(v)
 		return nil
 	case fnetdocument.FieldSubCategory1Str:
 		v, ok := value.(string)
@@ -1822,6 +1808,20 @@ func (m *FnetDocumentMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetSubmissionMethodDescription(v)
+		return nil
+	case fnetdocument.FieldSubmissionStatus:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetSubmissionStatus(v)
+		return nil
+	case fnetdocument.FieldSubmissionStatusDescription:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetSubmissionStatusDescription(v)
 		return nil
 	case fnetdocument.FieldVersion:
 		v, ok := value.(int)
@@ -1890,8 +1890,8 @@ func (m *FnetDocumentMutation) ClearedFields() []string {
 	if m.FieldCleared(fnetdocument.FieldAdditionalInformation) {
 		fields = append(fields, fnetdocument.FieldAdditionalInformation)
 	}
-	if m.FieldCleared(fnetdocument.FieldMarketName) {
-		fields = append(fields, fnetdocument.FieldMarketName)
+	if m.FieldCleared(fnetdocument.FieldFundMarketName) {
+		fields = append(fields, fnetdocument.FieldFundMarketName)
 	}
 	if m.FieldCleared(fnetdocument.FieldSubCategory1Str) {
 		fields = append(fields, fnetdocument.FieldSubCategory1Str)
@@ -1916,8 +1916,8 @@ func (m *FnetDocumentMutation) ClearField(name string) error {
 	case fnetdocument.FieldAdditionalInformation:
 		m.ClearAdditionalInformation()
 		return nil
-	case fnetdocument.FieldMarketName:
-		m.ClearMarketName()
+	case fnetdocument.FieldFundMarketName:
+		m.ClearFundMarketName()
 		return nil
 	case fnetdocument.FieldSubCategory1Str:
 		m.ClearSubCategory1Str()
@@ -1942,17 +1942,14 @@ func (m *FnetDocumentMutation) ResetField(name string) error {
 	case fnetdocument.FieldCategoryStr:
 		m.ResetCategoryStr()
 		return nil
-	case fnetdocument.FieldDocumentStatus:
-		m.ResetDocumentStatus()
-		return nil
 	case fnetdocument.FieldFundDescription:
 		m.ResetFundDescription()
 		return nil
+	case fnetdocument.FieldFundMarketName:
+		m.ResetFundMarketName()
+		return nil
 	case fnetdocument.FieldHighPriority:
 		m.ResetHighPriority()
-		return nil
-	case fnetdocument.FieldMarketName:
-		m.ResetMarketName()
 		return nil
 	case fnetdocument.FieldReferenceDate:
 		m.ResetReferenceDate()
@@ -1968,9 +1965,6 @@ func (m *FnetDocumentMutation) ResetField(name string) error {
 		return nil
 	case fnetdocument.FieldStatus:
 		m.ResetStatus()
-		return nil
-	case fnetdocument.FieldStatusDescription:
-		m.ResetStatusDescription()
 		return nil
 	case fnetdocument.FieldSubCategory1Str:
 		m.ResetSubCategory1Str()
@@ -1989,6 +1983,12 @@ func (m *FnetDocumentMutation) ResetField(name string) error {
 		return nil
 	case fnetdocument.FieldSubmissionMethodDescription:
 		m.ResetSubmissionMethodDescription()
+		return nil
+	case fnetdocument.FieldSubmissionStatus:
+		m.ResetSubmissionStatus()
+		return nil
+	case fnetdocument.FieldSubmissionStatusDescription:
+		m.ResetSubmissionStatusDescription()
 		return nil
 	case fnetdocument.FieldVersion:
 		m.ResetVersion()

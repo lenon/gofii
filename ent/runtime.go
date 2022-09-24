@@ -23,46 +23,46 @@ func init() {
 	fnetdocumentDescCategoryStr := fnetdocumentFields[2].Descriptor()
 	// fnetdocument.CategoryStrValidator is a validator for the "category_str" field. It is called by the builders before save.
 	fnetdocument.CategoryStrValidator = fnetdocumentDescCategoryStr.Validators[0].(func(string) error)
-	// fnetdocumentDescDocumentStatus is the schema descriptor for document_status field.
-	fnetdocumentDescDocumentStatus := fnetdocumentFields[3].Descriptor()
-	// fnetdocument.DocumentStatusValidator is a validator for the "document_status" field. It is called by the builders before save.
-	fnetdocument.DocumentStatusValidator = fnetdocumentDescDocumentStatus.Validators[0].(func(string) error)
 	// fnetdocumentDescFundDescription is the schema descriptor for fund_description field.
-	fnetdocumentDescFundDescription := fnetdocumentFields[4].Descriptor()
+	fnetdocumentDescFundDescription := fnetdocumentFields[3].Descriptor()
 	// fnetdocument.FundDescriptionValidator is a validator for the "fund_description" field. It is called by the builders before save.
 	fnetdocument.FundDescriptionValidator = fnetdocumentDescFundDescription.Validators[0].(func(string) error)
 	// fnetdocumentDescReferenceDateFormat is the schema descriptor for reference_date_format field.
-	fnetdocumentDescReferenceDateFormat := fnetdocumentFields[8].Descriptor()
+	fnetdocumentDescReferenceDateFormat := fnetdocumentFields[7].Descriptor()
 	// fnetdocument.ReferenceDateFormatValidator is a validator for the "reference_date_format" field. It is called by the builders before save.
 	fnetdocument.ReferenceDateFormatValidator = fnetdocumentDescReferenceDateFormat.Validators[0].(func(string) error)
 	// fnetdocumentDescReferenceDateStr is the schema descriptor for reference_date_str field.
-	fnetdocumentDescReferenceDateStr := fnetdocumentFields[9].Descriptor()
+	fnetdocumentDescReferenceDateStr := fnetdocumentFields[8].Descriptor()
 	// fnetdocument.ReferenceDateStrValidator is a validator for the "reference_date_str" field. It is called by the builders before save.
 	fnetdocument.ReferenceDateStrValidator = fnetdocumentDescReferenceDateStr.Validators[0].(func(string) error)
 	// fnetdocumentDescReviewed is the schema descriptor for reviewed field.
-	fnetdocumentDescReviewed := fnetdocumentFields[10].Descriptor()
+	fnetdocumentDescReviewed := fnetdocumentFields[9].Descriptor()
 	// fnetdocument.ReviewedValidator is a validator for the "reviewed" field. It is called by the builders before save.
 	fnetdocument.ReviewedValidator = fnetdocumentDescReviewed.Validators[0].(func(string) error)
 	// fnetdocumentDescStatus is the schema descriptor for status field.
-	fnetdocumentDescStatus := fnetdocumentFields[11].Descriptor()
+	fnetdocumentDescStatus := fnetdocumentFields[10].Descriptor()
 	// fnetdocument.StatusValidator is a validator for the "status" field. It is called by the builders before save.
 	fnetdocument.StatusValidator = fnetdocumentDescStatus.Validators[0].(func(string) error)
-	// fnetdocumentDescStatusDescription is the schema descriptor for status_description field.
-	fnetdocumentDescStatusDescription := fnetdocumentFields[12].Descriptor()
-	// fnetdocument.StatusDescriptionValidator is a validator for the "status_description" field. It is called by the builders before save.
-	fnetdocument.StatusDescriptionValidator = fnetdocumentDescStatusDescription.Validators[0].(func(string) error)
 	// fnetdocumentDescSubmissionDateStr is the schema descriptor for submission_date_str field.
-	fnetdocumentDescSubmissionDateStr := fnetdocumentFields[16].Descriptor()
+	fnetdocumentDescSubmissionDateStr := fnetdocumentFields[14].Descriptor()
 	// fnetdocument.SubmissionDateStrValidator is a validator for the "submission_date_str" field. It is called by the builders before save.
 	fnetdocument.SubmissionDateStrValidator = fnetdocumentDescSubmissionDateStr.Validators[0].(func(string) error)
 	// fnetdocumentDescSubmissionMethod is the schema descriptor for submission_method field.
-	fnetdocumentDescSubmissionMethod := fnetdocumentFields[17].Descriptor()
+	fnetdocumentDescSubmissionMethod := fnetdocumentFields[15].Descriptor()
 	// fnetdocument.SubmissionMethodValidator is a validator for the "submission_method" field. It is called by the builders before save.
 	fnetdocument.SubmissionMethodValidator = fnetdocumentDescSubmissionMethod.Validators[0].(func(string) error)
 	// fnetdocumentDescSubmissionMethodDescription is the schema descriptor for submission_method_description field.
-	fnetdocumentDescSubmissionMethodDescription := fnetdocumentFields[18].Descriptor()
+	fnetdocumentDescSubmissionMethodDescription := fnetdocumentFields[16].Descriptor()
 	// fnetdocument.SubmissionMethodDescriptionValidator is a validator for the "submission_method_description" field. It is called by the builders before save.
 	fnetdocument.SubmissionMethodDescriptionValidator = fnetdocumentDescSubmissionMethodDescription.Validators[0].(func(string) error)
+	// fnetdocumentDescSubmissionStatus is the schema descriptor for submission_status field.
+	fnetdocumentDescSubmissionStatus := fnetdocumentFields[17].Descriptor()
+	// fnetdocument.SubmissionStatusValidator is a validator for the "submission_status" field. It is called by the builders before save.
+	fnetdocument.SubmissionStatusValidator = fnetdocumentDescSubmissionStatus.Validators[0].(func(string) error)
+	// fnetdocumentDescSubmissionStatusDescription is the schema descriptor for submission_status_description field.
+	fnetdocumentDescSubmissionStatusDescription := fnetdocumentFields[18].Descriptor()
+	// fnetdocument.SubmissionStatusDescriptionValidator is a validator for the "submission_status_description" field. It is called by the builders before save.
+	fnetdocument.SubmissionStatusDescriptionValidator = fnetdocumentDescSubmissionStatusDescription.Validators[0].(func(string) error)
 	// fnetdocumentDescVersion is the schema descriptor for version field.
 	fnetdocumentDescVersion := fnetdocumentFields[19].Descriptor()
 	// fnetdocument.VersionValidator is a validator for the "version" field. It is called by the builders before save.

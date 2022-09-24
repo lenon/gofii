@@ -51,35 +51,29 @@ func (fdc *FnetDocumentCreate) SetCategoryStr(s string) *FnetDocumentCreate {
 	return fdc
 }
 
-// SetDocumentStatus sets the "document_status" field.
-func (fdc *FnetDocumentCreate) SetDocumentStatus(s string) *FnetDocumentCreate {
-	fdc.mutation.SetDocumentStatus(s)
-	return fdc
-}
-
 // SetFundDescription sets the "fund_description" field.
 func (fdc *FnetDocumentCreate) SetFundDescription(s string) *FnetDocumentCreate {
 	fdc.mutation.SetFundDescription(s)
 	return fdc
 }
 
+// SetFundMarketName sets the "fund_market_name" field.
+func (fdc *FnetDocumentCreate) SetFundMarketName(s string) *FnetDocumentCreate {
+	fdc.mutation.SetFundMarketName(s)
+	return fdc
+}
+
+// SetNillableFundMarketName sets the "fund_market_name" field if the given value is not nil.
+func (fdc *FnetDocumentCreate) SetNillableFundMarketName(s *string) *FnetDocumentCreate {
+	if s != nil {
+		fdc.SetFundMarketName(*s)
+	}
+	return fdc
+}
+
 // SetHighPriority sets the "high_priority" field.
 func (fdc *FnetDocumentCreate) SetHighPriority(b bool) *FnetDocumentCreate {
 	fdc.mutation.SetHighPriority(b)
-	return fdc
-}
-
-// SetMarketName sets the "market_name" field.
-func (fdc *FnetDocumentCreate) SetMarketName(s string) *FnetDocumentCreate {
-	fdc.mutation.SetMarketName(s)
-	return fdc
-}
-
-// SetNillableMarketName sets the "market_name" field if the given value is not nil.
-func (fdc *FnetDocumentCreate) SetNillableMarketName(s *string) *FnetDocumentCreate {
-	if s != nil {
-		fdc.SetMarketName(*s)
-	}
 	return fdc
 }
 
@@ -110,12 +104,6 @@ func (fdc *FnetDocumentCreate) SetReviewed(s string) *FnetDocumentCreate {
 // SetStatus sets the "status" field.
 func (fdc *FnetDocumentCreate) SetStatus(s string) *FnetDocumentCreate {
 	fdc.mutation.SetStatus(s)
-	return fdc
-}
-
-// SetStatusDescription sets the "status_description" field.
-func (fdc *FnetDocumentCreate) SetStatusDescription(s string) *FnetDocumentCreate {
-	fdc.mutation.SetStatusDescription(s)
 	return fdc
 }
 
@@ -168,6 +156,18 @@ func (fdc *FnetDocumentCreate) SetSubmissionMethod(s string) *FnetDocumentCreate
 // SetSubmissionMethodDescription sets the "submission_method_description" field.
 func (fdc *FnetDocumentCreate) SetSubmissionMethodDescription(s string) *FnetDocumentCreate {
 	fdc.mutation.SetSubmissionMethodDescription(s)
+	return fdc
+}
+
+// SetSubmissionStatus sets the "submission_status" field.
+func (fdc *FnetDocumentCreate) SetSubmissionStatus(s string) *FnetDocumentCreate {
+	fdc.mutation.SetSubmissionStatus(s)
+	return fdc
+}
+
+// SetSubmissionStatusDescription sets the "submission_status_description" field.
+func (fdc *FnetDocumentCreate) SetSubmissionStatusDescription(s string) *FnetDocumentCreate {
+	fdc.mutation.SetSubmissionStatusDescription(s)
 	return fdc
 }
 
@@ -318,14 +318,6 @@ func (fdc *FnetDocumentCreate) check() error {
 			return &ValidationError{Name: "category_str", err: fmt.Errorf(`ent: validator failed for field "FnetDocument.category_str": %w`, err)}
 		}
 	}
-	if _, ok := fdc.mutation.DocumentStatus(); !ok {
-		return &ValidationError{Name: "document_status", err: errors.New(`ent: missing required field "FnetDocument.document_status"`)}
-	}
-	if v, ok := fdc.mutation.DocumentStatus(); ok {
-		if err := fnetdocument.DocumentStatusValidator(v); err != nil {
-			return &ValidationError{Name: "document_status", err: fmt.Errorf(`ent: validator failed for field "FnetDocument.document_status": %w`, err)}
-		}
-	}
 	if _, ok := fdc.mutation.FundDescription(); !ok {
 		return &ValidationError{Name: "fund_description", err: errors.New(`ent: missing required field "FnetDocument.fund_description"`)}
 	}
@@ -372,14 +364,6 @@ func (fdc *FnetDocumentCreate) check() error {
 			return &ValidationError{Name: "status", err: fmt.Errorf(`ent: validator failed for field "FnetDocument.status": %w`, err)}
 		}
 	}
-	if _, ok := fdc.mutation.StatusDescription(); !ok {
-		return &ValidationError{Name: "status_description", err: errors.New(`ent: missing required field "FnetDocument.status_description"`)}
-	}
-	if v, ok := fdc.mutation.StatusDescription(); ok {
-		if err := fnetdocument.StatusDescriptionValidator(v); err != nil {
-			return &ValidationError{Name: "status_description", err: fmt.Errorf(`ent: validator failed for field "FnetDocument.status_description": %w`, err)}
-		}
-	}
 	if _, ok := fdc.mutation.SubmissionDate(); !ok {
 		return &ValidationError{Name: "submission_date", err: errors.New(`ent: missing required field "FnetDocument.submission_date"`)}
 	}
@@ -405,6 +389,22 @@ func (fdc *FnetDocumentCreate) check() error {
 	if v, ok := fdc.mutation.SubmissionMethodDescription(); ok {
 		if err := fnetdocument.SubmissionMethodDescriptionValidator(v); err != nil {
 			return &ValidationError{Name: "submission_method_description", err: fmt.Errorf(`ent: validator failed for field "FnetDocument.submission_method_description": %w`, err)}
+		}
+	}
+	if _, ok := fdc.mutation.SubmissionStatus(); !ok {
+		return &ValidationError{Name: "submission_status", err: errors.New(`ent: missing required field "FnetDocument.submission_status"`)}
+	}
+	if v, ok := fdc.mutation.SubmissionStatus(); ok {
+		if err := fnetdocument.SubmissionStatusValidator(v); err != nil {
+			return &ValidationError{Name: "submission_status", err: fmt.Errorf(`ent: validator failed for field "FnetDocument.submission_status": %w`, err)}
+		}
+	}
+	if _, ok := fdc.mutation.SubmissionStatusDescription(); !ok {
+		return &ValidationError{Name: "submission_status_description", err: errors.New(`ent: missing required field "FnetDocument.submission_status_description"`)}
+	}
+	if v, ok := fdc.mutation.SubmissionStatusDescription(); ok {
+		if err := fnetdocument.SubmissionStatusDescriptionValidator(v); err != nil {
+			return &ValidationError{Name: "submission_status_description", err: fmt.Errorf(`ent: validator failed for field "FnetDocument.submission_status_description": %w`, err)}
 		}
 	}
 	if _, ok := fdc.mutation.Version(); !ok {
@@ -470,14 +470,6 @@ func (fdc *FnetDocumentCreate) createSpec() (*FnetDocument, *sqlgraph.CreateSpec
 		})
 		_node.CategoryStr = value
 	}
-	if value, ok := fdc.mutation.DocumentStatus(); ok {
-		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
-			Type:   field.TypeString,
-			Value:  value,
-			Column: fnetdocument.FieldDocumentStatus,
-		})
-		_node.DocumentStatus = value
-	}
 	if value, ok := fdc.mutation.FundDescription(); ok {
 		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
 			Type:   field.TypeString,
@@ -486,6 +478,14 @@ func (fdc *FnetDocumentCreate) createSpec() (*FnetDocument, *sqlgraph.CreateSpec
 		})
 		_node.FundDescription = value
 	}
+	if value, ok := fdc.mutation.FundMarketName(); ok {
+		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Value:  value,
+			Column: fnetdocument.FieldFundMarketName,
+		})
+		_node.FundMarketName = value
+	}
 	if value, ok := fdc.mutation.HighPriority(); ok {
 		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
 			Type:   field.TypeBool,
@@ -493,14 +493,6 @@ func (fdc *FnetDocumentCreate) createSpec() (*FnetDocument, *sqlgraph.CreateSpec
 			Column: fnetdocument.FieldHighPriority,
 		})
 		_node.HighPriority = value
-	}
-	if value, ok := fdc.mutation.MarketName(); ok {
-		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
-			Type:   field.TypeString,
-			Value:  value,
-			Column: fnetdocument.FieldMarketName,
-		})
-		_node.MarketName = value
 	}
 	if value, ok := fdc.mutation.ReferenceDate(); ok {
 		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
@@ -541,14 +533,6 @@ func (fdc *FnetDocumentCreate) createSpec() (*FnetDocument, *sqlgraph.CreateSpec
 			Column: fnetdocument.FieldStatus,
 		})
 		_node.Status = value
-	}
-	if value, ok := fdc.mutation.StatusDescription(); ok {
-		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
-			Type:   field.TypeString,
-			Value:  value,
-			Column: fnetdocument.FieldStatusDescription,
-		})
-		_node.StatusDescription = value
 	}
 	if value, ok := fdc.mutation.SubCategory1Str(); ok {
 		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
@@ -597,6 +581,22 @@ func (fdc *FnetDocumentCreate) createSpec() (*FnetDocument, *sqlgraph.CreateSpec
 			Column: fnetdocument.FieldSubmissionMethodDescription,
 		})
 		_node.SubmissionMethodDescription = value
+	}
+	if value, ok := fdc.mutation.SubmissionStatus(); ok {
+		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Value:  value,
+			Column: fnetdocument.FieldSubmissionStatus,
+		})
+		_node.SubmissionStatus = value
+	}
+	if value, ok := fdc.mutation.SubmissionStatusDescription(); ok {
+		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Value:  value,
+			Column: fnetdocument.FieldSubmissionStatusDescription,
+		})
+		_node.SubmissionStatusDescription = value
 	}
 	if value, ok := fdc.mutation.Version(); ok {
 		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
@@ -766,18 +766,6 @@ func (u *FnetDocumentUpsert) UpdateCategoryStr() *FnetDocumentUpsert {
 	return u
 }
 
-// SetDocumentStatus sets the "document_status" field.
-func (u *FnetDocumentUpsert) SetDocumentStatus(v string) *FnetDocumentUpsert {
-	u.Set(fnetdocument.FieldDocumentStatus, v)
-	return u
-}
-
-// UpdateDocumentStatus sets the "document_status" field to the value that was provided on create.
-func (u *FnetDocumentUpsert) UpdateDocumentStatus() *FnetDocumentUpsert {
-	u.SetExcluded(fnetdocument.FieldDocumentStatus)
-	return u
-}
-
 // SetFundDescription sets the "fund_description" field.
 func (u *FnetDocumentUpsert) SetFundDescription(v string) *FnetDocumentUpsert {
 	u.Set(fnetdocument.FieldFundDescription, v)
@@ -790,6 +778,24 @@ func (u *FnetDocumentUpsert) UpdateFundDescription() *FnetDocumentUpsert {
 	return u
 }
 
+// SetFundMarketName sets the "fund_market_name" field.
+func (u *FnetDocumentUpsert) SetFundMarketName(v string) *FnetDocumentUpsert {
+	u.Set(fnetdocument.FieldFundMarketName, v)
+	return u
+}
+
+// UpdateFundMarketName sets the "fund_market_name" field to the value that was provided on create.
+func (u *FnetDocumentUpsert) UpdateFundMarketName() *FnetDocumentUpsert {
+	u.SetExcluded(fnetdocument.FieldFundMarketName)
+	return u
+}
+
+// ClearFundMarketName clears the value of the "fund_market_name" field.
+func (u *FnetDocumentUpsert) ClearFundMarketName() *FnetDocumentUpsert {
+	u.SetNull(fnetdocument.FieldFundMarketName)
+	return u
+}
+
 // SetHighPriority sets the "high_priority" field.
 func (u *FnetDocumentUpsert) SetHighPriority(v bool) *FnetDocumentUpsert {
 	u.Set(fnetdocument.FieldHighPriority, v)
@@ -799,24 +805,6 @@ func (u *FnetDocumentUpsert) SetHighPriority(v bool) *FnetDocumentUpsert {
 // UpdateHighPriority sets the "high_priority" field to the value that was provided on create.
 func (u *FnetDocumentUpsert) UpdateHighPriority() *FnetDocumentUpsert {
 	u.SetExcluded(fnetdocument.FieldHighPriority)
-	return u
-}
-
-// SetMarketName sets the "market_name" field.
-func (u *FnetDocumentUpsert) SetMarketName(v string) *FnetDocumentUpsert {
-	u.Set(fnetdocument.FieldMarketName, v)
-	return u
-}
-
-// UpdateMarketName sets the "market_name" field to the value that was provided on create.
-func (u *FnetDocumentUpsert) UpdateMarketName() *FnetDocumentUpsert {
-	u.SetExcluded(fnetdocument.FieldMarketName)
-	return u
-}
-
-// ClearMarketName clears the value of the "market_name" field.
-func (u *FnetDocumentUpsert) ClearMarketName() *FnetDocumentUpsert {
-	u.SetNull(fnetdocument.FieldMarketName)
 	return u
 }
 
@@ -877,18 +865,6 @@ func (u *FnetDocumentUpsert) SetStatus(v string) *FnetDocumentUpsert {
 // UpdateStatus sets the "status" field to the value that was provided on create.
 func (u *FnetDocumentUpsert) UpdateStatus() *FnetDocumentUpsert {
 	u.SetExcluded(fnetdocument.FieldStatus)
-	return u
-}
-
-// SetStatusDescription sets the "status_description" field.
-func (u *FnetDocumentUpsert) SetStatusDescription(v string) *FnetDocumentUpsert {
-	u.Set(fnetdocument.FieldStatusDescription, v)
-	return u
-}
-
-// UpdateStatusDescription sets the "status_description" field to the value that was provided on create.
-func (u *FnetDocumentUpsert) UpdateStatusDescription() *FnetDocumentUpsert {
-	u.SetExcluded(fnetdocument.FieldStatusDescription)
 	return u
 }
 
@@ -973,6 +949,30 @@ func (u *FnetDocumentUpsert) SetSubmissionMethodDescription(v string) *FnetDocum
 // UpdateSubmissionMethodDescription sets the "submission_method_description" field to the value that was provided on create.
 func (u *FnetDocumentUpsert) UpdateSubmissionMethodDescription() *FnetDocumentUpsert {
 	u.SetExcluded(fnetdocument.FieldSubmissionMethodDescription)
+	return u
+}
+
+// SetSubmissionStatus sets the "submission_status" field.
+func (u *FnetDocumentUpsert) SetSubmissionStatus(v string) *FnetDocumentUpsert {
+	u.Set(fnetdocument.FieldSubmissionStatus, v)
+	return u
+}
+
+// UpdateSubmissionStatus sets the "submission_status" field to the value that was provided on create.
+func (u *FnetDocumentUpsert) UpdateSubmissionStatus() *FnetDocumentUpsert {
+	u.SetExcluded(fnetdocument.FieldSubmissionStatus)
+	return u
+}
+
+// SetSubmissionStatusDescription sets the "submission_status_description" field.
+func (u *FnetDocumentUpsert) SetSubmissionStatusDescription(v string) *FnetDocumentUpsert {
+	u.Set(fnetdocument.FieldSubmissionStatusDescription, v)
+	return u
+}
+
+// UpdateSubmissionStatusDescription sets the "submission_status_description" field to the value that was provided on create.
+func (u *FnetDocumentUpsert) UpdateSubmissionStatusDescription() *FnetDocumentUpsert {
+	u.SetExcluded(fnetdocument.FieldSubmissionStatusDescription)
 	return u
 }
 
@@ -1095,20 +1095,6 @@ func (u *FnetDocumentUpsertOne) UpdateCategoryStr() *FnetDocumentUpsertOne {
 	})
 }
 
-// SetDocumentStatus sets the "document_status" field.
-func (u *FnetDocumentUpsertOne) SetDocumentStatus(v string) *FnetDocumentUpsertOne {
-	return u.Update(func(s *FnetDocumentUpsert) {
-		s.SetDocumentStatus(v)
-	})
-}
-
-// UpdateDocumentStatus sets the "document_status" field to the value that was provided on create.
-func (u *FnetDocumentUpsertOne) UpdateDocumentStatus() *FnetDocumentUpsertOne {
-	return u.Update(func(s *FnetDocumentUpsert) {
-		s.UpdateDocumentStatus()
-	})
-}
-
 // SetFundDescription sets the "fund_description" field.
 func (u *FnetDocumentUpsertOne) SetFundDescription(v string) *FnetDocumentUpsertOne {
 	return u.Update(func(s *FnetDocumentUpsert) {
@@ -1123,6 +1109,27 @@ func (u *FnetDocumentUpsertOne) UpdateFundDescription() *FnetDocumentUpsertOne {
 	})
 }
 
+// SetFundMarketName sets the "fund_market_name" field.
+func (u *FnetDocumentUpsertOne) SetFundMarketName(v string) *FnetDocumentUpsertOne {
+	return u.Update(func(s *FnetDocumentUpsert) {
+		s.SetFundMarketName(v)
+	})
+}
+
+// UpdateFundMarketName sets the "fund_market_name" field to the value that was provided on create.
+func (u *FnetDocumentUpsertOne) UpdateFundMarketName() *FnetDocumentUpsertOne {
+	return u.Update(func(s *FnetDocumentUpsert) {
+		s.UpdateFundMarketName()
+	})
+}
+
+// ClearFundMarketName clears the value of the "fund_market_name" field.
+func (u *FnetDocumentUpsertOne) ClearFundMarketName() *FnetDocumentUpsertOne {
+	return u.Update(func(s *FnetDocumentUpsert) {
+		s.ClearFundMarketName()
+	})
+}
+
 // SetHighPriority sets the "high_priority" field.
 func (u *FnetDocumentUpsertOne) SetHighPriority(v bool) *FnetDocumentUpsertOne {
 	return u.Update(func(s *FnetDocumentUpsert) {
@@ -1134,27 +1141,6 @@ func (u *FnetDocumentUpsertOne) SetHighPriority(v bool) *FnetDocumentUpsertOne {
 func (u *FnetDocumentUpsertOne) UpdateHighPriority() *FnetDocumentUpsertOne {
 	return u.Update(func(s *FnetDocumentUpsert) {
 		s.UpdateHighPriority()
-	})
-}
-
-// SetMarketName sets the "market_name" field.
-func (u *FnetDocumentUpsertOne) SetMarketName(v string) *FnetDocumentUpsertOne {
-	return u.Update(func(s *FnetDocumentUpsert) {
-		s.SetMarketName(v)
-	})
-}
-
-// UpdateMarketName sets the "market_name" field to the value that was provided on create.
-func (u *FnetDocumentUpsertOne) UpdateMarketName() *FnetDocumentUpsertOne {
-	return u.Update(func(s *FnetDocumentUpsert) {
-		s.UpdateMarketName()
-	})
-}
-
-// ClearMarketName clears the value of the "market_name" field.
-func (u *FnetDocumentUpsertOne) ClearMarketName() *FnetDocumentUpsertOne {
-	return u.Update(func(s *FnetDocumentUpsert) {
-		s.ClearMarketName()
 	})
 }
 
@@ -1225,20 +1211,6 @@ func (u *FnetDocumentUpsertOne) SetStatus(v string) *FnetDocumentUpsertOne {
 func (u *FnetDocumentUpsertOne) UpdateStatus() *FnetDocumentUpsertOne {
 	return u.Update(func(s *FnetDocumentUpsert) {
 		s.UpdateStatus()
-	})
-}
-
-// SetStatusDescription sets the "status_description" field.
-func (u *FnetDocumentUpsertOne) SetStatusDescription(v string) *FnetDocumentUpsertOne {
-	return u.Update(func(s *FnetDocumentUpsert) {
-		s.SetStatusDescription(v)
-	})
-}
-
-// UpdateStatusDescription sets the "status_description" field to the value that was provided on create.
-func (u *FnetDocumentUpsertOne) UpdateStatusDescription() *FnetDocumentUpsertOne {
-	return u.Update(func(s *FnetDocumentUpsert) {
-		s.UpdateStatusDescription()
 	})
 }
 
@@ -1337,6 +1309,34 @@ func (u *FnetDocumentUpsertOne) SetSubmissionMethodDescription(v string) *FnetDo
 func (u *FnetDocumentUpsertOne) UpdateSubmissionMethodDescription() *FnetDocumentUpsertOne {
 	return u.Update(func(s *FnetDocumentUpsert) {
 		s.UpdateSubmissionMethodDescription()
+	})
+}
+
+// SetSubmissionStatus sets the "submission_status" field.
+func (u *FnetDocumentUpsertOne) SetSubmissionStatus(v string) *FnetDocumentUpsertOne {
+	return u.Update(func(s *FnetDocumentUpsert) {
+		s.SetSubmissionStatus(v)
+	})
+}
+
+// UpdateSubmissionStatus sets the "submission_status" field to the value that was provided on create.
+func (u *FnetDocumentUpsertOne) UpdateSubmissionStatus() *FnetDocumentUpsertOne {
+	return u.Update(func(s *FnetDocumentUpsert) {
+		s.UpdateSubmissionStatus()
+	})
+}
+
+// SetSubmissionStatusDescription sets the "submission_status_description" field.
+func (u *FnetDocumentUpsertOne) SetSubmissionStatusDescription(v string) *FnetDocumentUpsertOne {
+	return u.Update(func(s *FnetDocumentUpsert) {
+		s.SetSubmissionStatusDescription(v)
+	})
+}
+
+// UpdateSubmissionStatusDescription sets the "submission_status_description" field to the value that was provided on create.
+func (u *FnetDocumentUpsertOne) UpdateSubmissionStatusDescription() *FnetDocumentUpsertOne {
+	return u.Update(func(s *FnetDocumentUpsert) {
+		s.UpdateSubmissionStatusDescription()
 	})
 }
 
@@ -1623,20 +1623,6 @@ func (u *FnetDocumentUpsertBulk) UpdateCategoryStr() *FnetDocumentUpsertBulk {
 	})
 }
 
-// SetDocumentStatus sets the "document_status" field.
-func (u *FnetDocumentUpsertBulk) SetDocumentStatus(v string) *FnetDocumentUpsertBulk {
-	return u.Update(func(s *FnetDocumentUpsert) {
-		s.SetDocumentStatus(v)
-	})
-}
-
-// UpdateDocumentStatus sets the "document_status" field to the value that was provided on create.
-func (u *FnetDocumentUpsertBulk) UpdateDocumentStatus() *FnetDocumentUpsertBulk {
-	return u.Update(func(s *FnetDocumentUpsert) {
-		s.UpdateDocumentStatus()
-	})
-}
-
 // SetFundDescription sets the "fund_description" field.
 func (u *FnetDocumentUpsertBulk) SetFundDescription(v string) *FnetDocumentUpsertBulk {
 	return u.Update(func(s *FnetDocumentUpsert) {
@@ -1651,6 +1637,27 @@ func (u *FnetDocumentUpsertBulk) UpdateFundDescription() *FnetDocumentUpsertBulk
 	})
 }
 
+// SetFundMarketName sets the "fund_market_name" field.
+func (u *FnetDocumentUpsertBulk) SetFundMarketName(v string) *FnetDocumentUpsertBulk {
+	return u.Update(func(s *FnetDocumentUpsert) {
+		s.SetFundMarketName(v)
+	})
+}
+
+// UpdateFundMarketName sets the "fund_market_name" field to the value that was provided on create.
+func (u *FnetDocumentUpsertBulk) UpdateFundMarketName() *FnetDocumentUpsertBulk {
+	return u.Update(func(s *FnetDocumentUpsert) {
+		s.UpdateFundMarketName()
+	})
+}
+
+// ClearFundMarketName clears the value of the "fund_market_name" field.
+func (u *FnetDocumentUpsertBulk) ClearFundMarketName() *FnetDocumentUpsertBulk {
+	return u.Update(func(s *FnetDocumentUpsert) {
+		s.ClearFundMarketName()
+	})
+}
+
 // SetHighPriority sets the "high_priority" field.
 func (u *FnetDocumentUpsertBulk) SetHighPriority(v bool) *FnetDocumentUpsertBulk {
 	return u.Update(func(s *FnetDocumentUpsert) {
@@ -1662,27 +1669,6 @@ func (u *FnetDocumentUpsertBulk) SetHighPriority(v bool) *FnetDocumentUpsertBulk
 func (u *FnetDocumentUpsertBulk) UpdateHighPriority() *FnetDocumentUpsertBulk {
 	return u.Update(func(s *FnetDocumentUpsert) {
 		s.UpdateHighPriority()
-	})
-}
-
-// SetMarketName sets the "market_name" field.
-func (u *FnetDocumentUpsertBulk) SetMarketName(v string) *FnetDocumentUpsertBulk {
-	return u.Update(func(s *FnetDocumentUpsert) {
-		s.SetMarketName(v)
-	})
-}
-
-// UpdateMarketName sets the "market_name" field to the value that was provided on create.
-func (u *FnetDocumentUpsertBulk) UpdateMarketName() *FnetDocumentUpsertBulk {
-	return u.Update(func(s *FnetDocumentUpsert) {
-		s.UpdateMarketName()
-	})
-}
-
-// ClearMarketName clears the value of the "market_name" field.
-func (u *FnetDocumentUpsertBulk) ClearMarketName() *FnetDocumentUpsertBulk {
-	return u.Update(func(s *FnetDocumentUpsert) {
-		s.ClearMarketName()
 	})
 }
 
@@ -1753,20 +1739,6 @@ func (u *FnetDocumentUpsertBulk) SetStatus(v string) *FnetDocumentUpsertBulk {
 func (u *FnetDocumentUpsertBulk) UpdateStatus() *FnetDocumentUpsertBulk {
 	return u.Update(func(s *FnetDocumentUpsert) {
 		s.UpdateStatus()
-	})
-}
-
-// SetStatusDescription sets the "status_description" field.
-func (u *FnetDocumentUpsertBulk) SetStatusDescription(v string) *FnetDocumentUpsertBulk {
-	return u.Update(func(s *FnetDocumentUpsert) {
-		s.SetStatusDescription(v)
-	})
-}
-
-// UpdateStatusDescription sets the "status_description" field to the value that was provided on create.
-func (u *FnetDocumentUpsertBulk) UpdateStatusDescription() *FnetDocumentUpsertBulk {
-	return u.Update(func(s *FnetDocumentUpsert) {
-		s.UpdateStatusDescription()
 	})
 }
 
@@ -1865,6 +1837,34 @@ func (u *FnetDocumentUpsertBulk) SetSubmissionMethodDescription(v string) *FnetD
 func (u *FnetDocumentUpsertBulk) UpdateSubmissionMethodDescription() *FnetDocumentUpsertBulk {
 	return u.Update(func(s *FnetDocumentUpsert) {
 		s.UpdateSubmissionMethodDescription()
+	})
+}
+
+// SetSubmissionStatus sets the "submission_status" field.
+func (u *FnetDocumentUpsertBulk) SetSubmissionStatus(v string) *FnetDocumentUpsertBulk {
+	return u.Update(func(s *FnetDocumentUpsert) {
+		s.SetSubmissionStatus(v)
+	})
+}
+
+// UpdateSubmissionStatus sets the "submission_status" field to the value that was provided on create.
+func (u *FnetDocumentUpsertBulk) UpdateSubmissionStatus() *FnetDocumentUpsertBulk {
+	return u.Update(func(s *FnetDocumentUpsert) {
+		s.UpdateSubmissionStatus()
+	})
+}
+
+// SetSubmissionStatusDescription sets the "submission_status_description" field.
+func (u *FnetDocumentUpsertBulk) SetSubmissionStatusDescription(v string) *FnetDocumentUpsertBulk {
+	return u.Update(func(s *FnetDocumentUpsert) {
+		s.SetSubmissionStatusDescription(v)
+	})
+}
+
+// UpdateSubmissionStatusDescription sets the "submission_status_description" field to the value that was provided on create.
+func (u *FnetDocumentUpsertBulk) UpdateSubmissionStatusDescription() *FnetDocumentUpsertBulk {
+	return u.Update(func(s *FnetDocumentUpsert) {
+		s.UpdateSubmissionStatusDescription()
 	})
 }
 

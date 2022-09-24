@@ -25,14 +25,12 @@ type FnetDocument struct {
 	AdditionalInformation string `json:"additional_information,omitempty"`
 	// CategoryStr holds the value of the "category_str" field.
 	CategoryStr string `json:"category_str,omitempty"`
-	// DocumentStatus holds the value of the "document_status" field.
-	DocumentStatus string `json:"document_status,omitempty"`
 	// FundDescription holds the value of the "fund_description" field.
 	FundDescription string `json:"fund_description,omitempty"`
+	// FundMarketName holds the value of the "fund_market_name" field.
+	FundMarketName string `json:"fund_market_name,omitempty"`
 	// HighPriority holds the value of the "high_priority" field.
 	HighPriority bool `json:"high_priority,omitempty"`
-	// MarketName holds the value of the "market_name" field.
-	MarketName string `json:"market_name,omitempty"`
 	// ReferenceDate holds the value of the "reference_date" field.
 	ReferenceDate time.Time `json:"reference_date,omitempty"`
 	// ReferenceDateFormat holds the value of the "reference_date_format" field.
@@ -43,8 +41,6 @@ type FnetDocument struct {
 	Reviewed string `json:"reviewed,omitempty"`
 	// Status holds the value of the "status" field.
 	Status string `json:"status,omitempty"`
-	// StatusDescription holds the value of the "status_description" field.
-	StatusDescription string `json:"status_description,omitempty"`
 	// SubCategory1Str holds the value of the "sub_category1_str" field.
 	SubCategory1Str string `json:"sub_category1_str,omitempty"`
 	// SubCategory2Str holds the value of the "sub_category2_str" field.
@@ -57,6 +53,10 @@ type FnetDocument struct {
 	SubmissionMethod string `json:"submission_method,omitempty"`
 	// SubmissionMethodDescription holds the value of the "submission_method_description" field.
 	SubmissionMethodDescription string `json:"submission_method_description,omitempty"`
+	// SubmissionStatus holds the value of the "submission_status" field.
+	SubmissionStatus string `json:"submission_status,omitempty"`
+	// SubmissionStatusDescription holds the value of the "submission_status_description" field.
+	SubmissionStatusDescription string `json:"submission_status_description,omitempty"`
 	// Version holds the value of the "version" field.
 	Version int `json:"version,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
@@ -128,7 +128,7 @@ func (*FnetDocument) scanValues(columns []string) ([]interface{}, error) {
 			values[i] = new(sql.NullBool)
 		case fnetdocument.FieldID, fnetdocument.FieldFnetID, fnetdocument.FieldVersion:
 			values[i] = new(sql.NullInt64)
-		case fnetdocument.FieldAdditionalInformation, fnetdocument.FieldCategoryStr, fnetdocument.FieldDocumentStatus, fnetdocument.FieldFundDescription, fnetdocument.FieldMarketName, fnetdocument.FieldReferenceDateFormat, fnetdocument.FieldReferenceDateStr, fnetdocument.FieldReviewed, fnetdocument.FieldStatus, fnetdocument.FieldStatusDescription, fnetdocument.FieldSubCategory1Str, fnetdocument.FieldSubCategory2Str, fnetdocument.FieldSubmissionDateStr, fnetdocument.FieldSubmissionMethod, fnetdocument.FieldSubmissionMethodDescription:
+		case fnetdocument.FieldAdditionalInformation, fnetdocument.FieldCategoryStr, fnetdocument.FieldFundDescription, fnetdocument.FieldFundMarketName, fnetdocument.FieldReferenceDateFormat, fnetdocument.FieldReferenceDateStr, fnetdocument.FieldReviewed, fnetdocument.FieldStatus, fnetdocument.FieldSubCategory1Str, fnetdocument.FieldSubCategory2Str, fnetdocument.FieldSubmissionDateStr, fnetdocument.FieldSubmissionMethod, fnetdocument.FieldSubmissionMethodDescription, fnetdocument.FieldSubmissionStatus, fnetdocument.FieldSubmissionStatusDescription:
 			values[i] = new(sql.NullString)
 		case fnetdocument.FieldReferenceDate, fnetdocument.FieldSubmissionDate:
 			values[i] = new(sql.NullTime)
@@ -177,29 +177,23 @@ func (fd *FnetDocument) assignValues(columns []string, values []interface{}) err
 			} else if value.Valid {
 				fd.CategoryStr = value.String
 			}
-		case fnetdocument.FieldDocumentStatus:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field document_status", values[i])
-			} else if value.Valid {
-				fd.DocumentStatus = value.String
-			}
 		case fnetdocument.FieldFundDescription:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field fund_description", values[i])
 			} else if value.Valid {
 				fd.FundDescription = value.String
 			}
+		case fnetdocument.FieldFundMarketName:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field fund_market_name", values[i])
+			} else if value.Valid {
+				fd.FundMarketName = value.String
+			}
 		case fnetdocument.FieldHighPriority:
 			if value, ok := values[i].(*sql.NullBool); !ok {
 				return fmt.Errorf("unexpected type %T for field high_priority", values[i])
 			} else if value.Valid {
 				fd.HighPriority = value.Bool
-			}
-		case fnetdocument.FieldMarketName:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field market_name", values[i])
-			} else if value.Valid {
-				fd.MarketName = value.String
 			}
 		case fnetdocument.FieldReferenceDate:
 			if value, ok := values[i].(*sql.NullTime); !ok {
@@ -230,12 +224,6 @@ func (fd *FnetDocument) assignValues(columns []string, values []interface{}) err
 				return fmt.Errorf("unexpected type %T for field status", values[i])
 			} else if value.Valid {
 				fd.Status = value.String
-			}
-		case fnetdocument.FieldStatusDescription:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field status_description", values[i])
-			} else if value.Valid {
-				fd.StatusDescription = value.String
 			}
 		case fnetdocument.FieldSubCategory1Str:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -272,6 +260,18 @@ func (fd *FnetDocument) assignValues(columns []string, values []interface{}) err
 				return fmt.Errorf("unexpected type %T for field submission_method_description", values[i])
 			} else if value.Valid {
 				fd.SubmissionMethodDescription = value.String
+			}
+		case fnetdocument.FieldSubmissionStatus:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field submission_status", values[i])
+			} else if value.Valid {
+				fd.SubmissionStatus = value.String
+			}
+		case fnetdocument.FieldSubmissionStatusDescription:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field submission_status_description", values[i])
+			} else if value.Valid {
+				fd.SubmissionStatusDescription = value.String
 			}
 		case fnetdocument.FieldVersion:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
@@ -352,17 +352,14 @@ func (fd *FnetDocument) String() string {
 	builder.WriteString("category_str=")
 	builder.WriteString(fd.CategoryStr)
 	builder.WriteString(", ")
-	builder.WriteString("document_status=")
-	builder.WriteString(fd.DocumentStatus)
-	builder.WriteString(", ")
 	builder.WriteString("fund_description=")
 	builder.WriteString(fd.FundDescription)
 	builder.WriteString(", ")
+	builder.WriteString("fund_market_name=")
+	builder.WriteString(fd.FundMarketName)
+	builder.WriteString(", ")
 	builder.WriteString("high_priority=")
 	builder.WriteString(fmt.Sprintf("%v", fd.HighPriority))
-	builder.WriteString(", ")
-	builder.WriteString("market_name=")
-	builder.WriteString(fd.MarketName)
 	builder.WriteString(", ")
 	builder.WriteString("reference_date=")
 	builder.WriteString(fd.ReferenceDate.Format(time.ANSIC))
@@ -378,9 +375,6 @@ func (fd *FnetDocument) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("status=")
 	builder.WriteString(fd.Status)
-	builder.WriteString(", ")
-	builder.WriteString("status_description=")
-	builder.WriteString(fd.StatusDescription)
 	builder.WriteString(", ")
 	builder.WriteString("sub_category1_str=")
 	builder.WriteString(fd.SubCategory1Str)
@@ -399,6 +393,12 @@ func (fd *FnetDocument) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("submission_method_description=")
 	builder.WriteString(fd.SubmissionMethodDescription)
+	builder.WriteString(", ")
+	builder.WriteString("submission_status=")
+	builder.WriteString(fd.SubmissionStatus)
+	builder.WriteString(", ")
+	builder.WriteString("submission_status_description=")
+	builder.WriteString(fd.SubmissionStatusDescription)
 	builder.WriteString(", ")
 	builder.WriteString("version=")
 	builder.WriteString(fmt.Sprintf("%v", fd.Version))
