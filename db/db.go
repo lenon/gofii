@@ -30,12 +30,12 @@ func (c *Connection) Migrate() error {
 }
 
 func (c *Connection) UpsertDocument(doc *fnet.Document) error {
-	referenceDate, err := doc.ParsedReferenceDate()
+	referenceDate, err := doc.ParseReferenceDate()
 	if err != nil {
 		return err
 	}
 
-	submissionDate, err := doc.ParsedSubmissionDate()
+	submissionDate, err := doc.ParseSubmissionDate()
 	if err != nil {
 		return nil
 	}

@@ -71,11 +71,11 @@ func TestGetFirstPage(t *testing.T) {
 	assert.Equal(t, "14/09/2022 19:35", response.Data[0].SubmissionDate)
 	assert.Equal(t, 1333, client.TotalPages())
 
-	submissionDate, err := response.Data[0].ParsedSubmissionDate()
+	submissionDate, err := response.Data[0].ParseSubmissionDate()
 	assert.Nil(t, err)
 	assert.Equal(t, time.Date(2022, 9, 14, 19, 35, 0, 0, time.Local), submissionDate)
 
-	referenceDate, err := response.Data[0].ParsedReferenceDate()
+	referenceDate, err := response.Data[0].ParseReferenceDate()
 	assert.Nil(t, err)
 	assert.Equal(t, time.Date(2022, 9, 14, 0, 0, 0, 0, time.Local), referenceDate)
 }
