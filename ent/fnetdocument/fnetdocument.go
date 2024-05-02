@@ -2,6 +2,11 @@
 
 package fnetdocument
 
+import (
+	"entgo.io/ent/dialect/sql"
+	"entgo.io/ent/dialect/sql/sqlgraph"
+)
+
 const (
 	// Label holds the string label denoting the fnetdocument type in the database.
 	Label = "fnet_document"
@@ -154,3 +159,153 @@ var (
 	// VersionValidator is a validator for the "version" field. It is called by the builders before save.
 	VersionValidator func(int) error
 )
+
+// OrderOption defines the ordering options for the FnetDocument queries.
+type OrderOption func(*sql.Selector)
+
+// ByID orders the results by the id field.
+func ByID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldID, opts...).ToFunc()
+}
+
+// ByFnetID orders the results by the fnet_id field.
+func ByFnetID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldFnetID, opts...).ToFunc()
+}
+
+// ByAdditionalInformation orders the results by the additional_information field.
+func ByAdditionalInformation(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldAdditionalInformation, opts...).ToFunc()
+}
+
+// ByCategoryStr orders the results by the category_str field.
+func ByCategoryStr(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldCategoryStr, opts...).ToFunc()
+}
+
+// ByFundDescription orders the results by the fund_description field.
+func ByFundDescription(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldFundDescription, opts...).ToFunc()
+}
+
+// ByFundMarketName orders the results by the fund_market_name field.
+func ByFundMarketName(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldFundMarketName, opts...).ToFunc()
+}
+
+// ByHighPriority orders the results by the high_priority field.
+func ByHighPriority(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldHighPriority, opts...).ToFunc()
+}
+
+// ByReferenceDate orders the results by the reference_date field.
+func ByReferenceDate(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldReferenceDate, opts...).ToFunc()
+}
+
+// ByReferenceDateFormat orders the results by the reference_date_format field.
+func ByReferenceDateFormat(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldReferenceDateFormat, opts...).ToFunc()
+}
+
+// ByReferenceDateStr orders the results by the reference_date_str field.
+func ByReferenceDateStr(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldReferenceDateStr, opts...).ToFunc()
+}
+
+// ByReviewed orders the results by the reviewed field.
+func ByReviewed(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldReviewed, opts...).ToFunc()
+}
+
+// ByStatus orders the results by the status field.
+func ByStatus(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldStatus, opts...).ToFunc()
+}
+
+// BySubCategory1Str orders the results by the sub_category1_str field.
+func BySubCategory1Str(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldSubCategory1Str, opts...).ToFunc()
+}
+
+// BySubCategory2Str orders the results by the sub_category2_str field.
+func BySubCategory2Str(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldSubCategory2Str, opts...).ToFunc()
+}
+
+// BySubmissionDate orders the results by the submission_date field.
+func BySubmissionDate(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldSubmissionDate, opts...).ToFunc()
+}
+
+// BySubmissionDateStr orders the results by the submission_date_str field.
+func BySubmissionDateStr(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldSubmissionDateStr, opts...).ToFunc()
+}
+
+// BySubmissionMethod orders the results by the submission_method field.
+func BySubmissionMethod(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldSubmissionMethod, opts...).ToFunc()
+}
+
+// BySubmissionMethodDescription orders the results by the submission_method_description field.
+func BySubmissionMethodDescription(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldSubmissionMethodDescription, opts...).ToFunc()
+}
+
+// BySubmissionStatus orders the results by the submission_status field.
+func BySubmissionStatus(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldSubmissionStatus, opts...).ToFunc()
+}
+
+// BySubmissionStatusDescription orders the results by the submission_status_description field.
+func BySubmissionStatusDescription(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldSubmissionStatusDescription, opts...).ToFunc()
+}
+
+// ByVersion orders the results by the version field.
+func ByVersion(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldVersion, opts...).ToFunc()
+}
+
+// ByCategoryField orders the results by category field.
+func ByCategoryField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newCategoryStep(), sql.OrderByField(field, opts...))
+	}
+}
+
+// BySubCategory1Field orders the results by sub_category1 field.
+func BySubCategory1Field(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newSubCategory1Step(), sql.OrderByField(field, opts...))
+	}
+}
+
+// BySubCategory2Field orders the results by sub_category2 field.
+func BySubCategory2Field(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newSubCategory2Step(), sql.OrderByField(field, opts...))
+	}
+}
+func newCategoryStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(CategoryInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, true, CategoryTable, CategoryColumn),
+	)
+}
+func newSubCategory1Step() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(SubCategory1InverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, true, SubCategory1Table, SubCategory1Column),
+	)
+}
+func newSubCategory2Step() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(SubCategory2InverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, true, SubCategory2Table, SubCategory2Column),
+	)
+}

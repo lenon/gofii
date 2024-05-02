@@ -7,6 +7,7 @@ import (
 	"strings"
 	"time"
 
+	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"github.com/lenon/gofii/ent/fnetcategory"
 	"github.com/lenon/gofii/ent/fnetdocument"
@@ -65,6 +66,7 @@ type FnetDocument struct {
 	category_id      *int
 	sub_category1_id *int
 	sub_category2_id *int
+	selectValues     sql.SelectValues
 }
 
 // FnetDocumentEdges holds the relations/edges for other nodes in the graph.
@@ -83,12 +85,10 @@ type FnetDocumentEdges struct {
 // CategoryOrErr returns the Category value or an error if the edge
 // was not loaded in eager-loading, or loaded but was not found.
 func (e FnetDocumentEdges) CategoryOrErr() (*FnetCategory, error) {
-	if e.loadedTypes[0] {
-		if e.Category == nil {
-			// Edge was loaded but was not found.
-			return nil, &NotFoundError{label: fnetcategory.Label}
-		}
+	if e.Category != nil {
 		return e.Category, nil
+	} else if e.loadedTypes[0] {
+		return nil, &NotFoundError{label: fnetcategory.Label}
 	}
 	return nil, &NotLoadedError{edge: "category"}
 }
@@ -96,12 +96,10 @@ func (e FnetDocumentEdges) CategoryOrErr() (*FnetCategory, error) {
 // SubCategory1OrErr returns the SubCategory1 value or an error if the edge
 // was not loaded in eager-loading, or loaded but was not found.
 func (e FnetDocumentEdges) SubCategory1OrErr() (*FnetSubCategory1, error) {
-	if e.loadedTypes[1] {
-		if e.SubCategory1 == nil {
-			// Edge was loaded but was not found.
-			return nil, &NotFoundError{label: fnetsubcategory1.Label}
-		}
+	if e.SubCategory1 != nil {
 		return e.SubCategory1, nil
+	} else if e.loadedTypes[1] {
+		return nil, &NotFoundError{label: fnetsubcategory1.Label}
 	}
 	return nil, &NotLoadedError{edge: "sub_category1"}
 }
@@ -109,19 +107,17 @@ func (e FnetDocumentEdges) SubCategory1OrErr() (*FnetSubCategory1, error) {
 // SubCategory2OrErr returns the SubCategory2 value or an error if the edge
 // was not loaded in eager-loading, or loaded but was not found.
 func (e FnetDocumentEdges) SubCategory2OrErr() (*FnetSubCategory2, error) {
-	if e.loadedTypes[2] {
-		if e.SubCategory2 == nil {
-			// Edge was loaded but was not found.
-			return nil, &NotFoundError{label: fnetsubcategory2.Label}
-		}
+	if e.SubCategory2 != nil {
 		return e.SubCategory2, nil
+	} else if e.loadedTypes[2] {
+		return nil, &NotFoundError{label: fnetsubcategory2.Label}
 	}
 	return nil, &NotLoadedError{edge: "sub_category2"}
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
-func (*FnetDocument) scanValues(columns []string) ([]interface{}, error) {
-	values := make([]interface{}, len(columns))
+func (*FnetDocument) scanValues(columns []string) ([]any, error) {
+	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
 		case fnetdocument.FieldHighPriority:
@@ -139,7 +135,7 @@ func (*FnetDocument) scanValues(columns []string) ([]interface{}, error) {
 		case fnetdocument.ForeignKeys[2]: // sub_category2_id
 			values[i] = new(sql.NullInt64)
 		default:
-			return nil, fmt.Errorf("unexpected column %q for type FnetDocument", columns[i])
+			values[i] = new(sql.UnknownType)
 		}
 	}
 	return values, nil
@@ -147,7 +143,7 @@ func (*FnetDocument) scanValues(columns []string) ([]interface{}, error) {
 
 // assignValues assigns the values that were returned from sql.Rows (after scanning)
 // to the FnetDocument fields.
-func (fd *FnetDocument) assignValues(columns []string, values []interface{}) error {
+func (fd *FnetDocument) assignValues(columns []string, values []any) error {
 	if m, n := len(values), len(columns); m < n {
 		return fmt.Errorf("mismatch number of scan values: %d != %d", m, n)
 	}
@@ -300,31 +296,39 @@ func (fd *FnetDocument) assignValues(columns []string, values []interface{}) err
 				fd.sub_category2_id = new(int)
 				*fd.sub_category2_id = int(value.Int64)
 			}
+		default:
+			fd.selectValues.Set(columns[i], values[i])
 		}
 	}
 	return nil
 }
 
+// Value returns the ent.Value that was dynamically selected and assigned to the FnetDocument.
+// This includes values selected through modifiers, order, etc.
+func (fd *FnetDocument) Value(name string) (ent.Value, error) {
+	return fd.selectValues.Get(name)
+}
+
 // QueryCategory queries the "category" edge of the FnetDocument entity.
 func (fd *FnetDocument) QueryCategory() *FnetCategoryQuery {
-	return (&FnetDocumentClient{config: fd.config}).QueryCategory(fd)
+	return NewFnetDocumentClient(fd.config).QueryCategory(fd)
 }
 
 // QuerySubCategory1 queries the "sub_category1" edge of the FnetDocument entity.
 func (fd *FnetDocument) QuerySubCategory1() *FnetSubCategory1Query {
-	return (&FnetDocumentClient{config: fd.config}).QuerySubCategory1(fd)
+	return NewFnetDocumentClient(fd.config).QuerySubCategory1(fd)
 }
 
 // QuerySubCategory2 queries the "sub_category2" edge of the FnetDocument entity.
 func (fd *FnetDocument) QuerySubCategory2() *FnetSubCategory2Query {
-	return (&FnetDocumentClient{config: fd.config}).QuerySubCategory2(fd)
+	return NewFnetDocumentClient(fd.config).QuerySubCategory2(fd)
 }
 
 // Update returns a builder for updating this FnetDocument.
 // Note that you need to call FnetDocument.Unwrap() before calling this method if this FnetDocument
 // was returned from a transaction, and the transaction was committed or rolled back.
 func (fd *FnetDocument) Update() *FnetDocumentUpdateOne {
-	return (&FnetDocumentClient{config: fd.config}).UpdateOne(fd)
+	return NewFnetDocumentClient(fd.config).UpdateOne(fd)
 }
 
 // Unwrap unwraps the FnetDocument entity that was returned from a transaction after it was closed,
@@ -408,9 +412,3 @@ func (fd *FnetDocument) String() string {
 
 // FnetDocuments is a parsable slice of FnetDocument.
 type FnetDocuments []*FnetDocument
-
-func (fd FnetDocuments) config(cfg config) {
-	for _i := range fd {
-		fd[_i].config = cfg
-	}
-}

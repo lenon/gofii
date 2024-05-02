@@ -12,2024 +12,1332 @@ import (
 
 // ID filters vertices based on their ID field.
 func ID(id int) predicate.FnetDocument {
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.EQ(s.C(FieldID), id))
-	})
+	return predicate.FnetDocument(sql.FieldEQ(FieldID, id))
 }
 
 // IDEQ applies the EQ predicate on the ID field.
 func IDEQ(id int) predicate.FnetDocument {
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.EQ(s.C(FieldID), id))
-	})
+	return predicate.FnetDocument(sql.FieldEQ(FieldID, id))
 }
 
 // IDNEQ applies the NEQ predicate on the ID field.
 func IDNEQ(id int) predicate.FnetDocument {
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.NEQ(s.C(FieldID), id))
-	})
+	return predicate.FnetDocument(sql.FieldNEQ(FieldID, id))
 }
 
 // IDIn applies the In predicate on the ID field.
 func IDIn(ids ...int) predicate.FnetDocument {
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		v := make([]interface{}, len(ids))
-		for i := range v {
-			v[i] = ids[i]
-		}
-		s.Where(sql.In(s.C(FieldID), v...))
-	})
+	return predicate.FnetDocument(sql.FieldIn(FieldID, ids...))
 }
 
 // IDNotIn applies the NotIn predicate on the ID field.
 func IDNotIn(ids ...int) predicate.FnetDocument {
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		v := make([]interface{}, len(ids))
-		for i := range v {
-			v[i] = ids[i]
-		}
-		s.Where(sql.NotIn(s.C(FieldID), v...))
-	})
+	return predicate.FnetDocument(sql.FieldNotIn(FieldID, ids...))
 }
 
 // IDGT applies the GT predicate on the ID field.
 func IDGT(id int) predicate.FnetDocument {
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.GT(s.C(FieldID), id))
-	})
+	return predicate.FnetDocument(sql.FieldGT(FieldID, id))
 }
 
 // IDGTE applies the GTE predicate on the ID field.
 func IDGTE(id int) predicate.FnetDocument {
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.GTE(s.C(FieldID), id))
-	})
+	return predicate.FnetDocument(sql.FieldGTE(FieldID, id))
 }
 
 // IDLT applies the LT predicate on the ID field.
 func IDLT(id int) predicate.FnetDocument {
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.LT(s.C(FieldID), id))
-	})
+	return predicate.FnetDocument(sql.FieldLT(FieldID, id))
 }
 
 // IDLTE applies the LTE predicate on the ID field.
 func IDLTE(id int) predicate.FnetDocument {
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.LTE(s.C(FieldID), id))
-	})
+	return predicate.FnetDocument(sql.FieldLTE(FieldID, id))
 }
 
 // FnetID applies equality check predicate on the "fnet_id" field. It's identical to FnetIDEQ.
 func FnetID(v int) predicate.FnetDocument {
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.EQ(s.C(FieldFnetID), v))
-	})
+	return predicate.FnetDocument(sql.FieldEQ(FieldFnetID, v))
 }
 
 // AdditionalInformation applies equality check predicate on the "additional_information" field. It's identical to AdditionalInformationEQ.
 func AdditionalInformation(v string) predicate.FnetDocument {
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.EQ(s.C(FieldAdditionalInformation), v))
-	})
+	return predicate.FnetDocument(sql.FieldEQ(FieldAdditionalInformation, v))
 }
 
 // CategoryStr applies equality check predicate on the "category_str" field. It's identical to CategoryStrEQ.
 func CategoryStr(v string) predicate.FnetDocument {
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.EQ(s.C(FieldCategoryStr), v))
-	})
+	return predicate.FnetDocument(sql.FieldEQ(FieldCategoryStr, v))
 }
 
 // FundDescription applies equality check predicate on the "fund_description" field. It's identical to FundDescriptionEQ.
 func FundDescription(v string) predicate.FnetDocument {
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.EQ(s.C(FieldFundDescription), v))
-	})
+	return predicate.FnetDocument(sql.FieldEQ(FieldFundDescription, v))
 }
 
 // FundMarketName applies equality check predicate on the "fund_market_name" field. It's identical to FundMarketNameEQ.
 func FundMarketName(v string) predicate.FnetDocument {
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.EQ(s.C(FieldFundMarketName), v))
-	})
+	return predicate.FnetDocument(sql.FieldEQ(FieldFundMarketName, v))
 }
 
 // HighPriority applies equality check predicate on the "high_priority" field. It's identical to HighPriorityEQ.
 func HighPriority(v bool) predicate.FnetDocument {
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.EQ(s.C(FieldHighPriority), v))
-	})
+	return predicate.FnetDocument(sql.FieldEQ(FieldHighPriority, v))
 }
 
 // ReferenceDate applies equality check predicate on the "reference_date" field. It's identical to ReferenceDateEQ.
 func ReferenceDate(v time.Time) predicate.FnetDocument {
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.EQ(s.C(FieldReferenceDate), v))
-	})
+	return predicate.FnetDocument(sql.FieldEQ(FieldReferenceDate, v))
 }
 
 // ReferenceDateFormat applies equality check predicate on the "reference_date_format" field. It's identical to ReferenceDateFormatEQ.
 func ReferenceDateFormat(v string) predicate.FnetDocument {
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.EQ(s.C(FieldReferenceDateFormat), v))
-	})
+	return predicate.FnetDocument(sql.FieldEQ(FieldReferenceDateFormat, v))
 }
 
 // ReferenceDateStr applies equality check predicate on the "reference_date_str" field. It's identical to ReferenceDateStrEQ.
 func ReferenceDateStr(v string) predicate.FnetDocument {
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.EQ(s.C(FieldReferenceDateStr), v))
-	})
+	return predicate.FnetDocument(sql.FieldEQ(FieldReferenceDateStr, v))
 }
 
 // Reviewed applies equality check predicate on the "reviewed" field. It's identical to ReviewedEQ.
 func Reviewed(v string) predicate.FnetDocument {
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.EQ(s.C(FieldReviewed), v))
-	})
+	return predicate.FnetDocument(sql.FieldEQ(FieldReviewed, v))
 }
 
 // Status applies equality check predicate on the "status" field. It's identical to StatusEQ.
 func Status(v string) predicate.FnetDocument {
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.EQ(s.C(FieldStatus), v))
-	})
+	return predicate.FnetDocument(sql.FieldEQ(FieldStatus, v))
 }
 
 // SubCategory1Str applies equality check predicate on the "sub_category1_str" field. It's identical to SubCategory1StrEQ.
 func SubCategory1Str(v string) predicate.FnetDocument {
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.EQ(s.C(FieldSubCategory1Str), v))
-	})
+	return predicate.FnetDocument(sql.FieldEQ(FieldSubCategory1Str, v))
 }
 
 // SubCategory2Str applies equality check predicate on the "sub_category2_str" field. It's identical to SubCategory2StrEQ.
 func SubCategory2Str(v string) predicate.FnetDocument {
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.EQ(s.C(FieldSubCategory2Str), v))
-	})
+	return predicate.FnetDocument(sql.FieldEQ(FieldSubCategory2Str, v))
 }
 
 // SubmissionDate applies equality check predicate on the "submission_date" field. It's identical to SubmissionDateEQ.
 func SubmissionDate(v time.Time) predicate.FnetDocument {
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.EQ(s.C(FieldSubmissionDate), v))
-	})
+	return predicate.FnetDocument(sql.FieldEQ(FieldSubmissionDate, v))
 }
 
 // SubmissionDateStr applies equality check predicate on the "submission_date_str" field. It's identical to SubmissionDateStrEQ.
 func SubmissionDateStr(v string) predicate.FnetDocument {
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.EQ(s.C(FieldSubmissionDateStr), v))
-	})
+	return predicate.FnetDocument(sql.FieldEQ(FieldSubmissionDateStr, v))
 }
 
 // SubmissionMethod applies equality check predicate on the "submission_method" field. It's identical to SubmissionMethodEQ.
 func SubmissionMethod(v string) predicate.FnetDocument {
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.EQ(s.C(FieldSubmissionMethod), v))
-	})
+	return predicate.FnetDocument(sql.FieldEQ(FieldSubmissionMethod, v))
 }
 
 // SubmissionMethodDescription applies equality check predicate on the "submission_method_description" field. It's identical to SubmissionMethodDescriptionEQ.
 func SubmissionMethodDescription(v string) predicate.FnetDocument {
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.EQ(s.C(FieldSubmissionMethodDescription), v))
-	})
+	return predicate.FnetDocument(sql.FieldEQ(FieldSubmissionMethodDescription, v))
 }
 
 // SubmissionStatus applies equality check predicate on the "submission_status" field. It's identical to SubmissionStatusEQ.
 func SubmissionStatus(v string) predicate.FnetDocument {
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.EQ(s.C(FieldSubmissionStatus), v))
-	})
+	return predicate.FnetDocument(sql.FieldEQ(FieldSubmissionStatus, v))
 }
 
 // SubmissionStatusDescription applies equality check predicate on the "submission_status_description" field. It's identical to SubmissionStatusDescriptionEQ.
 func SubmissionStatusDescription(v string) predicate.FnetDocument {
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.EQ(s.C(FieldSubmissionStatusDescription), v))
-	})
+	return predicate.FnetDocument(sql.FieldEQ(FieldSubmissionStatusDescription, v))
 }
 
 // Version applies equality check predicate on the "version" field. It's identical to VersionEQ.
 func Version(v int) predicate.FnetDocument {
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.EQ(s.C(FieldVersion), v))
-	})
+	return predicate.FnetDocument(sql.FieldEQ(FieldVersion, v))
 }
 
 // FnetIDEQ applies the EQ predicate on the "fnet_id" field.
 func FnetIDEQ(v int) predicate.FnetDocument {
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.EQ(s.C(FieldFnetID), v))
-	})
+	return predicate.FnetDocument(sql.FieldEQ(FieldFnetID, v))
 }
 
 // FnetIDNEQ applies the NEQ predicate on the "fnet_id" field.
 func FnetIDNEQ(v int) predicate.FnetDocument {
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.NEQ(s.C(FieldFnetID), v))
-	})
+	return predicate.FnetDocument(sql.FieldNEQ(FieldFnetID, v))
 }
 
 // FnetIDIn applies the In predicate on the "fnet_id" field.
 func FnetIDIn(vs ...int) predicate.FnetDocument {
-	v := make([]interface{}, len(vs))
-	for i := range v {
-		v[i] = vs[i]
-	}
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.In(s.C(FieldFnetID), v...))
-	})
+	return predicate.FnetDocument(sql.FieldIn(FieldFnetID, vs...))
 }
 
 // FnetIDNotIn applies the NotIn predicate on the "fnet_id" field.
 func FnetIDNotIn(vs ...int) predicate.FnetDocument {
-	v := make([]interface{}, len(vs))
-	for i := range v {
-		v[i] = vs[i]
-	}
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.NotIn(s.C(FieldFnetID), v...))
-	})
+	return predicate.FnetDocument(sql.FieldNotIn(FieldFnetID, vs...))
 }
 
 // FnetIDGT applies the GT predicate on the "fnet_id" field.
 func FnetIDGT(v int) predicate.FnetDocument {
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.GT(s.C(FieldFnetID), v))
-	})
+	return predicate.FnetDocument(sql.FieldGT(FieldFnetID, v))
 }
 
 // FnetIDGTE applies the GTE predicate on the "fnet_id" field.
 func FnetIDGTE(v int) predicate.FnetDocument {
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.GTE(s.C(FieldFnetID), v))
-	})
+	return predicate.FnetDocument(sql.FieldGTE(FieldFnetID, v))
 }
 
 // FnetIDLT applies the LT predicate on the "fnet_id" field.
 func FnetIDLT(v int) predicate.FnetDocument {
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.LT(s.C(FieldFnetID), v))
-	})
+	return predicate.FnetDocument(sql.FieldLT(FieldFnetID, v))
 }
 
 // FnetIDLTE applies the LTE predicate on the "fnet_id" field.
 func FnetIDLTE(v int) predicate.FnetDocument {
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.LTE(s.C(FieldFnetID), v))
-	})
+	return predicate.FnetDocument(sql.FieldLTE(FieldFnetID, v))
 }
 
 // AdditionalInformationEQ applies the EQ predicate on the "additional_information" field.
 func AdditionalInformationEQ(v string) predicate.FnetDocument {
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.EQ(s.C(FieldAdditionalInformation), v))
-	})
+	return predicate.FnetDocument(sql.FieldEQ(FieldAdditionalInformation, v))
 }
 
 // AdditionalInformationNEQ applies the NEQ predicate on the "additional_information" field.
 func AdditionalInformationNEQ(v string) predicate.FnetDocument {
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.NEQ(s.C(FieldAdditionalInformation), v))
-	})
+	return predicate.FnetDocument(sql.FieldNEQ(FieldAdditionalInformation, v))
 }
 
 // AdditionalInformationIn applies the In predicate on the "additional_information" field.
 func AdditionalInformationIn(vs ...string) predicate.FnetDocument {
-	v := make([]interface{}, len(vs))
-	for i := range v {
-		v[i] = vs[i]
-	}
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.In(s.C(FieldAdditionalInformation), v...))
-	})
+	return predicate.FnetDocument(sql.FieldIn(FieldAdditionalInformation, vs...))
 }
 
 // AdditionalInformationNotIn applies the NotIn predicate on the "additional_information" field.
 func AdditionalInformationNotIn(vs ...string) predicate.FnetDocument {
-	v := make([]interface{}, len(vs))
-	for i := range v {
-		v[i] = vs[i]
-	}
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.NotIn(s.C(FieldAdditionalInformation), v...))
-	})
+	return predicate.FnetDocument(sql.FieldNotIn(FieldAdditionalInformation, vs...))
 }
 
 // AdditionalInformationGT applies the GT predicate on the "additional_information" field.
 func AdditionalInformationGT(v string) predicate.FnetDocument {
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.GT(s.C(FieldAdditionalInformation), v))
-	})
+	return predicate.FnetDocument(sql.FieldGT(FieldAdditionalInformation, v))
 }
 
 // AdditionalInformationGTE applies the GTE predicate on the "additional_information" field.
 func AdditionalInformationGTE(v string) predicate.FnetDocument {
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.GTE(s.C(FieldAdditionalInformation), v))
-	})
+	return predicate.FnetDocument(sql.FieldGTE(FieldAdditionalInformation, v))
 }
 
 // AdditionalInformationLT applies the LT predicate on the "additional_information" field.
 func AdditionalInformationLT(v string) predicate.FnetDocument {
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.LT(s.C(FieldAdditionalInformation), v))
-	})
+	return predicate.FnetDocument(sql.FieldLT(FieldAdditionalInformation, v))
 }
 
 // AdditionalInformationLTE applies the LTE predicate on the "additional_information" field.
 func AdditionalInformationLTE(v string) predicate.FnetDocument {
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.LTE(s.C(FieldAdditionalInformation), v))
-	})
+	return predicate.FnetDocument(sql.FieldLTE(FieldAdditionalInformation, v))
 }
 
 // AdditionalInformationContains applies the Contains predicate on the "additional_information" field.
 func AdditionalInformationContains(v string) predicate.FnetDocument {
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.Contains(s.C(FieldAdditionalInformation), v))
-	})
+	return predicate.FnetDocument(sql.FieldContains(FieldAdditionalInformation, v))
 }
 
 // AdditionalInformationHasPrefix applies the HasPrefix predicate on the "additional_information" field.
 func AdditionalInformationHasPrefix(v string) predicate.FnetDocument {
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.HasPrefix(s.C(FieldAdditionalInformation), v))
-	})
+	return predicate.FnetDocument(sql.FieldHasPrefix(FieldAdditionalInformation, v))
 }
 
 // AdditionalInformationHasSuffix applies the HasSuffix predicate on the "additional_information" field.
 func AdditionalInformationHasSuffix(v string) predicate.FnetDocument {
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.HasSuffix(s.C(FieldAdditionalInformation), v))
-	})
+	return predicate.FnetDocument(sql.FieldHasSuffix(FieldAdditionalInformation, v))
 }
 
 // AdditionalInformationIsNil applies the IsNil predicate on the "additional_information" field.
 func AdditionalInformationIsNil() predicate.FnetDocument {
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.IsNull(s.C(FieldAdditionalInformation)))
-	})
+	return predicate.FnetDocument(sql.FieldIsNull(FieldAdditionalInformation))
 }
 
 // AdditionalInformationNotNil applies the NotNil predicate on the "additional_information" field.
 func AdditionalInformationNotNil() predicate.FnetDocument {
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.NotNull(s.C(FieldAdditionalInformation)))
-	})
+	return predicate.FnetDocument(sql.FieldNotNull(FieldAdditionalInformation))
 }
 
 // AdditionalInformationEqualFold applies the EqualFold predicate on the "additional_information" field.
 func AdditionalInformationEqualFold(v string) predicate.FnetDocument {
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.EqualFold(s.C(FieldAdditionalInformation), v))
-	})
+	return predicate.FnetDocument(sql.FieldEqualFold(FieldAdditionalInformation, v))
 }
 
 // AdditionalInformationContainsFold applies the ContainsFold predicate on the "additional_information" field.
 func AdditionalInformationContainsFold(v string) predicate.FnetDocument {
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.ContainsFold(s.C(FieldAdditionalInformation), v))
-	})
+	return predicate.FnetDocument(sql.FieldContainsFold(FieldAdditionalInformation, v))
 }
 
 // CategoryStrEQ applies the EQ predicate on the "category_str" field.
 func CategoryStrEQ(v string) predicate.FnetDocument {
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.EQ(s.C(FieldCategoryStr), v))
-	})
+	return predicate.FnetDocument(sql.FieldEQ(FieldCategoryStr, v))
 }
 
 // CategoryStrNEQ applies the NEQ predicate on the "category_str" field.
 func CategoryStrNEQ(v string) predicate.FnetDocument {
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.NEQ(s.C(FieldCategoryStr), v))
-	})
+	return predicate.FnetDocument(sql.FieldNEQ(FieldCategoryStr, v))
 }
 
 // CategoryStrIn applies the In predicate on the "category_str" field.
 func CategoryStrIn(vs ...string) predicate.FnetDocument {
-	v := make([]interface{}, len(vs))
-	for i := range v {
-		v[i] = vs[i]
-	}
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.In(s.C(FieldCategoryStr), v...))
-	})
+	return predicate.FnetDocument(sql.FieldIn(FieldCategoryStr, vs...))
 }
 
 // CategoryStrNotIn applies the NotIn predicate on the "category_str" field.
 func CategoryStrNotIn(vs ...string) predicate.FnetDocument {
-	v := make([]interface{}, len(vs))
-	for i := range v {
-		v[i] = vs[i]
-	}
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.NotIn(s.C(FieldCategoryStr), v...))
-	})
+	return predicate.FnetDocument(sql.FieldNotIn(FieldCategoryStr, vs...))
 }
 
 // CategoryStrGT applies the GT predicate on the "category_str" field.
 func CategoryStrGT(v string) predicate.FnetDocument {
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.GT(s.C(FieldCategoryStr), v))
-	})
+	return predicate.FnetDocument(sql.FieldGT(FieldCategoryStr, v))
 }
 
 // CategoryStrGTE applies the GTE predicate on the "category_str" field.
 func CategoryStrGTE(v string) predicate.FnetDocument {
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.GTE(s.C(FieldCategoryStr), v))
-	})
+	return predicate.FnetDocument(sql.FieldGTE(FieldCategoryStr, v))
 }
 
 // CategoryStrLT applies the LT predicate on the "category_str" field.
 func CategoryStrLT(v string) predicate.FnetDocument {
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.LT(s.C(FieldCategoryStr), v))
-	})
+	return predicate.FnetDocument(sql.FieldLT(FieldCategoryStr, v))
 }
 
 // CategoryStrLTE applies the LTE predicate on the "category_str" field.
 func CategoryStrLTE(v string) predicate.FnetDocument {
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.LTE(s.C(FieldCategoryStr), v))
-	})
+	return predicate.FnetDocument(sql.FieldLTE(FieldCategoryStr, v))
 }
 
 // CategoryStrContains applies the Contains predicate on the "category_str" field.
 func CategoryStrContains(v string) predicate.FnetDocument {
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.Contains(s.C(FieldCategoryStr), v))
-	})
+	return predicate.FnetDocument(sql.FieldContains(FieldCategoryStr, v))
 }
 
 // CategoryStrHasPrefix applies the HasPrefix predicate on the "category_str" field.
 func CategoryStrHasPrefix(v string) predicate.FnetDocument {
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.HasPrefix(s.C(FieldCategoryStr), v))
-	})
+	return predicate.FnetDocument(sql.FieldHasPrefix(FieldCategoryStr, v))
 }
 
 // CategoryStrHasSuffix applies the HasSuffix predicate on the "category_str" field.
 func CategoryStrHasSuffix(v string) predicate.FnetDocument {
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.HasSuffix(s.C(FieldCategoryStr), v))
-	})
+	return predicate.FnetDocument(sql.FieldHasSuffix(FieldCategoryStr, v))
 }
 
 // CategoryStrEqualFold applies the EqualFold predicate on the "category_str" field.
 func CategoryStrEqualFold(v string) predicate.FnetDocument {
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.EqualFold(s.C(FieldCategoryStr), v))
-	})
+	return predicate.FnetDocument(sql.FieldEqualFold(FieldCategoryStr, v))
 }
 
 // CategoryStrContainsFold applies the ContainsFold predicate on the "category_str" field.
 func CategoryStrContainsFold(v string) predicate.FnetDocument {
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.ContainsFold(s.C(FieldCategoryStr), v))
-	})
+	return predicate.FnetDocument(sql.FieldContainsFold(FieldCategoryStr, v))
 }
 
 // FundDescriptionEQ applies the EQ predicate on the "fund_description" field.
 func FundDescriptionEQ(v string) predicate.FnetDocument {
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.EQ(s.C(FieldFundDescription), v))
-	})
+	return predicate.FnetDocument(sql.FieldEQ(FieldFundDescription, v))
 }
 
 // FundDescriptionNEQ applies the NEQ predicate on the "fund_description" field.
 func FundDescriptionNEQ(v string) predicate.FnetDocument {
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.NEQ(s.C(FieldFundDescription), v))
-	})
+	return predicate.FnetDocument(sql.FieldNEQ(FieldFundDescription, v))
 }
 
 // FundDescriptionIn applies the In predicate on the "fund_description" field.
 func FundDescriptionIn(vs ...string) predicate.FnetDocument {
-	v := make([]interface{}, len(vs))
-	for i := range v {
-		v[i] = vs[i]
-	}
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.In(s.C(FieldFundDescription), v...))
-	})
+	return predicate.FnetDocument(sql.FieldIn(FieldFundDescription, vs...))
 }
 
 // FundDescriptionNotIn applies the NotIn predicate on the "fund_description" field.
 func FundDescriptionNotIn(vs ...string) predicate.FnetDocument {
-	v := make([]interface{}, len(vs))
-	for i := range v {
-		v[i] = vs[i]
-	}
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.NotIn(s.C(FieldFundDescription), v...))
-	})
+	return predicate.FnetDocument(sql.FieldNotIn(FieldFundDescription, vs...))
 }
 
 // FundDescriptionGT applies the GT predicate on the "fund_description" field.
 func FundDescriptionGT(v string) predicate.FnetDocument {
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.GT(s.C(FieldFundDescription), v))
-	})
+	return predicate.FnetDocument(sql.FieldGT(FieldFundDescription, v))
 }
 
 // FundDescriptionGTE applies the GTE predicate on the "fund_description" field.
 func FundDescriptionGTE(v string) predicate.FnetDocument {
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.GTE(s.C(FieldFundDescription), v))
-	})
+	return predicate.FnetDocument(sql.FieldGTE(FieldFundDescription, v))
 }
 
 // FundDescriptionLT applies the LT predicate on the "fund_description" field.
 func FundDescriptionLT(v string) predicate.FnetDocument {
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.LT(s.C(FieldFundDescription), v))
-	})
+	return predicate.FnetDocument(sql.FieldLT(FieldFundDescription, v))
 }
 
 // FundDescriptionLTE applies the LTE predicate on the "fund_description" field.
 func FundDescriptionLTE(v string) predicate.FnetDocument {
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.LTE(s.C(FieldFundDescription), v))
-	})
+	return predicate.FnetDocument(sql.FieldLTE(FieldFundDescription, v))
 }
 
 // FundDescriptionContains applies the Contains predicate on the "fund_description" field.
 func FundDescriptionContains(v string) predicate.FnetDocument {
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.Contains(s.C(FieldFundDescription), v))
-	})
+	return predicate.FnetDocument(sql.FieldContains(FieldFundDescription, v))
 }
 
 // FundDescriptionHasPrefix applies the HasPrefix predicate on the "fund_description" field.
 func FundDescriptionHasPrefix(v string) predicate.FnetDocument {
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.HasPrefix(s.C(FieldFundDescription), v))
-	})
+	return predicate.FnetDocument(sql.FieldHasPrefix(FieldFundDescription, v))
 }
 
 // FundDescriptionHasSuffix applies the HasSuffix predicate on the "fund_description" field.
 func FundDescriptionHasSuffix(v string) predicate.FnetDocument {
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.HasSuffix(s.C(FieldFundDescription), v))
-	})
+	return predicate.FnetDocument(sql.FieldHasSuffix(FieldFundDescription, v))
 }
 
 // FundDescriptionEqualFold applies the EqualFold predicate on the "fund_description" field.
 func FundDescriptionEqualFold(v string) predicate.FnetDocument {
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.EqualFold(s.C(FieldFundDescription), v))
-	})
+	return predicate.FnetDocument(sql.FieldEqualFold(FieldFundDescription, v))
 }
 
 // FundDescriptionContainsFold applies the ContainsFold predicate on the "fund_description" field.
 func FundDescriptionContainsFold(v string) predicate.FnetDocument {
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.ContainsFold(s.C(FieldFundDescription), v))
-	})
+	return predicate.FnetDocument(sql.FieldContainsFold(FieldFundDescription, v))
 }
 
 // FundMarketNameEQ applies the EQ predicate on the "fund_market_name" field.
 func FundMarketNameEQ(v string) predicate.FnetDocument {
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.EQ(s.C(FieldFundMarketName), v))
-	})
+	return predicate.FnetDocument(sql.FieldEQ(FieldFundMarketName, v))
 }
 
 // FundMarketNameNEQ applies the NEQ predicate on the "fund_market_name" field.
 func FundMarketNameNEQ(v string) predicate.FnetDocument {
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.NEQ(s.C(FieldFundMarketName), v))
-	})
+	return predicate.FnetDocument(sql.FieldNEQ(FieldFundMarketName, v))
 }
 
 // FundMarketNameIn applies the In predicate on the "fund_market_name" field.
 func FundMarketNameIn(vs ...string) predicate.FnetDocument {
-	v := make([]interface{}, len(vs))
-	for i := range v {
-		v[i] = vs[i]
-	}
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.In(s.C(FieldFundMarketName), v...))
-	})
+	return predicate.FnetDocument(sql.FieldIn(FieldFundMarketName, vs...))
 }
 
 // FundMarketNameNotIn applies the NotIn predicate on the "fund_market_name" field.
 func FundMarketNameNotIn(vs ...string) predicate.FnetDocument {
-	v := make([]interface{}, len(vs))
-	for i := range v {
-		v[i] = vs[i]
-	}
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.NotIn(s.C(FieldFundMarketName), v...))
-	})
+	return predicate.FnetDocument(sql.FieldNotIn(FieldFundMarketName, vs...))
 }
 
 // FundMarketNameGT applies the GT predicate on the "fund_market_name" field.
 func FundMarketNameGT(v string) predicate.FnetDocument {
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.GT(s.C(FieldFundMarketName), v))
-	})
+	return predicate.FnetDocument(sql.FieldGT(FieldFundMarketName, v))
 }
 
 // FundMarketNameGTE applies the GTE predicate on the "fund_market_name" field.
 func FundMarketNameGTE(v string) predicate.FnetDocument {
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.GTE(s.C(FieldFundMarketName), v))
-	})
+	return predicate.FnetDocument(sql.FieldGTE(FieldFundMarketName, v))
 }
 
 // FundMarketNameLT applies the LT predicate on the "fund_market_name" field.
 func FundMarketNameLT(v string) predicate.FnetDocument {
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.LT(s.C(FieldFundMarketName), v))
-	})
+	return predicate.FnetDocument(sql.FieldLT(FieldFundMarketName, v))
 }
 
 // FundMarketNameLTE applies the LTE predicate on the "fund_market_name" field.
 func FundMarketNameLTE(v string) predicate.FnetDocument {
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.LTE(s.C(FieldFundMarketName), v))
-	})
+	return predicate.FnetDocument(sql.FieldLTE(FieldFundMarketName, v))
 }
 
 // FundMarketNameContains applies the Contains predicate on the "fund_market_name" field.
 func FundMarketNameContains(v string) predicate.FnetDocument {
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.Contains(s.C(FieldFundMarketName), v))
-	})
+	return predicate.FnetDocument(sql.FieldContains(FieldFundMarketName, v))
 }
 
 // FundMarketNameHasPrefix applies the HasPrefix predicate on the "fund_market_name" field.
 func FundMarketNameHasPrefix(v string) predicate.FnetDocument {
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.HasPrefix(s.C(FieldFundMarketName), v))
-	})
+	return predicate.FnetDocument(sql.FieldHasPrefix(FieldFundMarketName, v))
 }
 
 // FundMarketNameHasSuffix applies the HasSuffix predicate on the "fund_market_name" field.
 func FundMarketNameHasSuffix(v string) predicate.FnetDocument {
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.HasSuffix(s.C(FieldFundMarketName), v))
-	})
+	return predicate.FnetDocument(sql.FieldHasSuffix(FieldFundMarketName, v))
 }
 
 // FundMarketNameIsNil applies the IsNil predicate on the "fund_market_name" field.
 func FundMarketNameIsNil() predicate.FnetDocument {
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.IsNull(s.C(FieldFundMarketName)))
-	})
+	return predicate.FnetDocument(sql.FieldIsNull(FieldFundMarketName))
 }
 
 // FundMarketNameNotNil applies the NotNil predicate on the "fund_market_name" field.
 func FundMarketNameNotNil() predicate.FnetDocument {
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.NotNull(s.C(FieldFundMarketName)))
-	})
+	return predicate.FnetDocument(sql.FieldNotNull(FieldFundMarketName))
 }
 
 // FundMarketNameEqualFold applies the EqualFold predicate on the "fund_market_name" field.
 func FundMarketNameEqualFold(v string) predicate.FnetDocument {
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.EqualFold(s.C(FieldFundMarketName), v))
-	})
+	return predicate.FnetDocument(sql.FieldEqualFold(FieldFundMarketName, v))
 }
 
 // FundMarketNameContainsFold applies the ContainsFold predicate on the "fund_market_name" field.
 func FundMarketNameContainsFold(v string) predicate.FnetDocument {
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.ContainsFold(s.C(FieldFundMarketName), v))
-	})
+	return predicate.FnetDocument(sql.FieldContainsFold(FieldFundMarketName, v))
 }
 
 // HighPriorityEQ applies the EQ predicate on the "high_priority" field.
 func HighPriorityEQ(v bool) predicate.FnetDocument {
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.EQ(s.C(FieldHighPriority), v))
-	})
+	return predicate.FnetDocument(sql.FieldEQ(FieldHighPriority, v))
 }
 
 // HighPriorityNEQ applies the NEQ predicate on the "high_priority" field.
 func HighPriorityNEQ(v bool) predicate.FnetDocument {
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.NEQ(s.C(FieldHighPriority), v))
-	})
+	return predicate.FnetDocument(sql.FieldNEQ(FieldHighPriority, v))
 }
 
 // ReferenceDateEQ applies the EQ predicate on the "reference_date" field.
 func ReferenceDateEQ(v time.Time) predicate.FnetDocument {
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.EQ(s.C(FieldReferenceDate), v))
-	})
+	return predicate.FnetDocument(sql.FieldEQ(FieldReferenceDate, v))
 }
 
 // ReferenceDateNEQ applies the NEQ predicate on the "reference_date" field.
 func ReferenceDateNEQ(v time.Time) predicate.FnetDocument {
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.NEQ(s.C(FieldReferenceDate), v))
-	})
+	return predicate.FnetDocument(sql.FieldNEQ(FieldReferenceDate, v))
 }
 
 // ReferenceDateIn applies the In predicate on the "reference_date" field.
 func ReferenceDateIn(vs ...time.Time) predicate.FnetDocument {
-	v := make([]interface{}, len(vs))
-	for i := range v {
-		v[i] = vs[i]
-	}
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.In(s.C(FieldReferenceDate), v...))
-	})
+	return predicate.FnetDocument(sql.FieldIn(FieldReferenceDate, vs...))
 }
 
 // ReferenceDateNotIn applies the NotIn predicate on the "reference_date" field.
 func ReferenceDateNotIn(vs ...time.Time) predicate.FnetDocument {
-	v := make([]interface{}, len(vs))
-	for i := range v {
-		v[i] = vs[i]
-	}
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.NotIn(s.C(FieldReferenceDate), v...))
-	})
+	return predicate.FnetDocument(sql.FieldNotIn(FieldReferenceDate, vs...))
 }
 
 // ReferenceDateGT applies the GT predicate on the "reference_date" field.
 func ReferenceDateGT(v time.Time) predicate.FnetDocument {
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.GT(s.C(FieldReferenceDate), v))
-	})
+	return predicate.FnetDocument(sql.FieldGT(FieldReferenceDate, v))
 }
 
 // ReferenceDateGTE applies the GTE predicate on the "reference_date" field.
 func ReferenceDateGTE(v time.Time) predicate.FnetDocument {
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.GTE(s.C(FieldReferenceDate), v))
-	})
+	return predicate.FnetDocument(sql.FieldGTE(FieldReferenceDate, v))
 }
 
 // ReferenceDateLT applies the LT predicate on the "reference_date" field.
 func ReferenceDateLT(v time.Time) predicate.FnetDocument {
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.LT(s.C(FieldReferenceDate), v))
-	})
+	return predicate.FnetDocument(sql.FieldLT(FieldReferenceDate, v))
 }
 
 // ReferenceDateLTE applies the LTE predicate on the "reference_date" field.
 func ReferenceDateLTE(v time.Time) predicate.FnetDocument {
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.LTE(s.C(FieldReferenceDate), v))
-	})
+	return predicate.FnetDocument(sql.FieldLTE(FieldReferenceDate, v))
 }
 
 // ReferenceDateFormatEQ applies the EQ predicate on the "reference_date_format" field.
 func ReferenceDateFormatEQ(v string) predicate.FnetDocument {
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.EQ(s.C(FieldReferenceDateFormat), v))
-	})
+	return predicate.FnetDocument(sql.FieldEQ(FieldReferenceDateFormat, v))
 }
 
 // ReferenceDateFormatNEQ applies the NEQ predicate on the "reference_date_format" field.
 func ReferenceDateFormatNEQ(v string) predicate.FnetDocument {
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.NEQ(s.C(FieldReferenceDateFormat), v))
-	})
+	return predicate.FnetDocument(sql.FieldNEQ(FieldReferenceDateFormat, v))
 }
 
 // ReferenceDateFormatIn applies the In predicate on the "reference_date_format" field.
 func ReferenceDateFormatIn(vs ...string) predicate.FnetDocument {
-	v := make([]interface{}, len(vs))
-	for i := range v {
-		v[i] = vs[i]
-	}
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.In(s.C(FieldReferenceDateFormat), v...))
-	})
+	return predicate.FnetDocument(sql.FieldIn(FieldReferenceDateFormat, vs...))
 }
 
 // ReferenceDateFormatNotIn applies the NotIn predicate on the "reference_date_format" field.
 func ReferenceDateFormatNotIn(vs ...string) predicate.FnetDocument {
-	v := make([]interface{}, len(vs))
-	for i := range v {
-		v[i] = vs[i]
-	}
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.NotIn(s.C(FieldReferenceDateFormat), v...))
-	})
+	return predicate.FnetDocument(sql.FieldNotIn(FieldReferenceDateFormat, vs...))
 }
 
 // ReferenceDateFormatGT applies the GT predicate on the "reference_date_format" field.
 func ReferenceDateFormatGT(v string) predicate.FnetDocument {
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.GT(s.C(FieldReferenceDateFormat), v))
-	})
+	return predicate.FnetDocument(sql.FieldGT(FieldReferenceDateFormat, v))
 }
 
 // ReferenceDateFormatGTE applies the GTE predicate on the "reference_date_format" field.
 func ReferenceDateFormatGTE(v string) predicate.FnetDocument {
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.GTE(s.C(FieldReferenceDateFormat), v))
-	})
+	return predicate.FnetDocument(sql.FieldGTE(FieldReferenceDateFormat, v))
 }
 
 // ReferenceDateFormatLT applies the LT predicate on the "reference_date_format" field.
 func ReferenceDateFormatLT(v string) predicate.FnetDocument {
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.LT(s.C(FieldReferenceDateFormat), v))
-	})
+	return predicate.FnetDocument(sql.FieldLT(FieldReferenceDateFormat, v))
 }
 
 // ReferenceDateFormatLTE applies the LTE predicate on the "reference_date_format" field.
 func ReferenceDateFormatLTE(v string) predicate.FnetDocument {
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.LTE(s.C(FieldReferenceDateFormat), v))
-	})
+	return predicate.FnetDocument(sql.FieldLTE(FieldReferenceDateFormat, v))
 }
 
 // ReferenceDateFormatContains applies the Contains predicate on the "reference_date_format" field.
 func ReferenceDateFormatContains(v string) predicate.FnetDocument {
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.Contains(s.C(FieldReferenceDateFormat), v))
-	})
+	return predicate.FnetDocument(sql.FieldContains(FieldReferenceDateFormat, v))
 }
 
 // ReferenceDateFormatHasPrefix applies the HasPrefix predicate on the "reference_date_format" field.
 func ReferenceDateFormatHasPrefix(v string) predicate.FnetDocument {
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.HasPrefix(s.C(FieldReferenceDateFormat), v))
-	})
+	return predicate.FnetDocument(sql.FieldHasPrefix(FieldReferenceDateFormat, v))
 }
 
 // ReferenceDateFormatHasSuffix applies the HasSuffix predicate on the "reference_date_format" field.
 func ReferenceDateFormatHasSuffix(v string) predicate.FnetDocument {
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.HasSuffix(s.C(FieldReferenceDateFormat), v))
-	})
+	return predicate.FnetDocument(sql.FieldHasSuffix(FieldReferenceDateFormat, v))
 }
 
 // ReferenceDateFormatEqualFold applies the EqualFold predicate on the "reference_date_format" field.
 func ReferenceDateFormatEqualFold(v string) predicate.FnetDocument {
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.EqualFold(s.C(FieldReferenceDateFormat), v))
-	})
+	return predicate.FnetDocument(sql.FieldEqualFold(FieldReferenceDateFormat, v))
 }
 
 // ReferenceDateFormatContainsFold applies the ContainsFold predicate on the "reference_date_format" field.
 func ReferenceDateFormatContainsFold(v string) predicate.FnetDocument {
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.ContainsFold(s.C(FieldReferenceDateFormat), v))
-	})
+	return predicate.FnetDocument(sql.FieldContainsFold(FieldReferenceDateFormat, v))
 }
 
 // ReferenceDateStrEQ applies the EQ predicate on the "reference_date_str" field.
 func ReferenceDateStrEQ(v string) predicate.FnetDocument {
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.EQ(s.C(FieldReferenceDateStr), v))
-	})
+	return predicate.FnetDocument(sql.FieldEQ(FieldReferenceDateStr, v))
 }
 
 // ReferenceDateStrNEQ applies the NEQ predicate on the "reference_date_str" field.
 func ReferenceDateStrNEQ(v string) predicate.FnetDocument {
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.NEQ(s.C(FieldReferenceDateStr), v))
-	})
+	return predicate.FnetDocument(sql.FieldNEQ(FieldReferenceDateStr, v))
 }
 
 // ReferenceDateStrIn applies the In predicate on the "reference_date_str" field.
 func ReferenceDateStrIn(vs ...string) predicate.FnetDocument {
-	v := make([]interface{}, len(vs))
-	for i := range v {
-		v[i] = vs[i]
-	}
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.In(s.C(FieldReferenceDateStr), v...))
-	})
+	return predicate.FnetDocument(sql.FieldIn(FieldReferenceDateStr, vs...))
 }
 
 // ReferenceDateStrNotIn applies the NotIn predicate on the "reference_date_str" field.
 func ReferenceDateStrNotIn(vs ...string) predicate.FnetDocument {
-	v := make([]interface{}, len(vs))
-	for i := range v {
-		v[i] = vs[i]
-	}
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.NotIn(s.C(FieldReferenceDateStr), v...))
-	})
+	return predicate.FnetDocument(sql.FieldNotIn(FieldReferenceDateStr, vs...))
 }
 
 // ReferenceDateStrGT applies the GT predicate on the "reference_date_str" field.
 func ReferenceDateStrGT(v string) predicate.FnetDocument {
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.GT(s.C(FieldReferenceDateStr), v))
-	})
+	return predicate.FnetDocument(sql.FieldGT(FieldReferenceDateStr, v))
 }
 
 // ReferenceDateStrGTE applies the GTE predicate on the "reference_date_str" field.
 func ReferenceDateStrGTE(v string) predicate.FnetDocument {
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.GTE(s.C(FieldReferenceDateStr), v))
-	})
+	return predicate.FnetDocument(sql.FieldGTE(FieldReferenceDateStr, v))
 }
 
 // ReferenceDateStrLT applies the LT predicate on the "reference_date_str" field.
 func ReferenceDateStrLT(v string) predicate.FnetDocument {
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.LT(s.C(FieldReferenceDateStr), v))
-	})
+	return predicate.FnetDocument(sql.FieldLT(FieldReferenceDateStr, v))
 }
 
 // ReferenceDateStrLTE applies the LTE predicate on the "reference_date_str" field.
 func ReferenceDateStrLTE(v string) predicate.FnetDocument {
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.LTE(s.C(FieldReferenceDateStr), v))
-	})
+	return predicate.FnetDocument(sql.FieldLTE(FieldReferenceDateStr, v))
 }
 
 // ReferenceDateStrContains applies the Contains predicate on the "reference_date_str" field.
 func ReferenceDateStrContains(v string) predicate.FnetDocument {
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.Contains(s.C(FieldReferenceDateStr), v))
-	})
+	return predicate.FnetDocument(sql.FieldContains(FieldReferenceDateStr, v))
 }
 
 // ReferenceDateStrHasPrefix applies the HasPrefix predicate on the "reference_date_str" field.
 func ReferenceDateStrHasPrefix(v string) predicate.FnetDocument {
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.HasPrefix(s.C(FieldReferenceDateStr), v))
-	})
+	return predicate.FnetDocument(sql.FieldHasPrefix(FieldReferenceDateStr, v))
 }
 
 // ReferenceDateStrHasSuffix applies the HasSuffix predicate on the "reference_date_str" field.
 func ReferenceDateStrHasSuffix(v string) predicate.FnetDocument {
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.HasSuffix(s.C(FieldReferenceDateStr), v))
-	})
+	return predicate.FnetDocument(sql.FieldHasSuffix(FieldReferenceDateStr, v))
 }
 
 // ReferenceDateStrEqualFold applies the EqualFold predicate on the "reference_date_str" field.
 func ReferenceDateStrEqualFold(v string) predicate.FnetDocument {
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.EqualFold(s.C(FieldReferenceDateStr), v))
-	})
+	return predicate.FnetDocument(sql.FieldEqualFold(FieldReferenceDateStr, v))
 }
 
 // ReferenceDateStrContainsFold applies the ContainsFold predicate on the "reference_date_str" field.
 func ReferenceDateStrContainsFold(v string) predicate.FnetDocument {
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.ContainsFold(s.C(FieldReferenceDateStr), v))
-	})
+	return predicate.FnetDocument(sql.FieldContainsFold(FieldReferenceDateStr, v))
 }
 
 // ReviewedEQ applies the EQ predicate on the "reviewed" field.
 func ReviewedEQ(v string) predicate.FnetDocument {
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.EQ(s.C(FieldReviewed), v))
-	})
+	return predicate.FnetDocument(sql.FieldEQ(FieldReviewed, v))
 }
 
 // ReviewedNEQ applies the NEQ predicate on the "reviewed" field.
 func ReviewedNEQ(v string) predicate.FnetDocument {
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.NEQ(s.C(FieldReviewed), v))
-	})
+	return predicate.FnetDocument(sql.FieldNEQ(FieldReviewed, v))
 }
 
 // ReviewedIn applies the In predicate on the "reviewed" field.
 func ReviewedIn(vs ...string) predicate.FnetDocument {
-	v := make([]interface{}, len(vs))
-	for i := range v {
-		v[i] = vs[i]
-	}
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.In(s.C(FieldReviewed), v...))
-	})
+	return predicate.FnetDocument(sql.FieldIn(FieldReviewed, vs...))
 }
 
 // ReviewedNotIn applies the NotIn predicate on the "reviewed" field.
 func ReviewedNotIn(vs ...string) predicate.FnetDocument {
-	v := make([]interface{}, len(vs))
-	for i := range v {
-		v[i] = vs[i]
-	}
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.NotIn(s.C(FieldReviewed), v...))
-	})
+	return predicate.FnetDocument(sql.FieldNotIn(FieldReviewed, vs...))
 }
 
 // ReviewedGT applies the GT predicate on the "reviewed" field.
 func ReviewedGT(v string) predicate.FnetDocument {
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.GT(s.C(FieldReviewed), v))
-	})
+	return predicate.FnetDocument(sql.FieldGT(FieldReviewed, v))
 }
 
 // ReviewedGTE applies the GTE predicate on the "reviewed" field.
 func ReviewedGTE(v string) predicate.FnetDocument {
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.GTE(s.C(FieldReviewed), v))
-	})
+	return predicate.FnetDocument(sql.FieldGTE(FieldReviewed, v))
 }
 
 // ReviewedLT applies the LT predicate on the "reviewed" field.
 func ReviewedLT(v string) predicate.FnetDocument {
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.LT(s.C(FieldReviewed), v))
-	})
+	return predicate.FnetDocument(sql.FieldLT(FieldReviewed, v))
 }
 
 // ReviewedLTE applies the LTE predicate on the "reviewed" field.
 func ReviewedLTE(v string) predicate.FnetDocument {
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.LTE(s.C(FieldReviewed), v))
-	})
+	return predicate.FnetDocument(sql.FieldLTE(FieldReviewed, v))
 }
 
 // ReviewedContains applies the Contains predicate on the "reviewed" field.
 func ReviewedContains(v string) predicate.FnetDocument {
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.Contains(s.C(FieldReviewed), v))
-	})
+	return predicate.FnetDocument(sql.FieldContains(FieldReviewed, v))
 }
 
 // ReviewedHasPrefix applies the HasPrefix predicate on the "reviewed" field.
 func ReviewedHasPrefix(v string) predicate.FnetDocument {
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.HasPrefix(s.C(FieldReviewed), v))
-	})
+	return predicate.FnetDocument(sql.FieldHasPrefix(FieldReviewed, v))
 }
 
 // ReviewedHasSuffix applies the HasSuffix predicate on the "reviewed" field.
 func ReviewedHasSuffix(v string) predicate.FnetDocument {
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.HasSuffix(s.C(FieldReviewed), v))
-	})
+	return predicate.FnetDocument(sql.FieldHasSuffix(FieldReviewed, v))
 }
 
 // ReviewedEqualFold applies the EqualFold predicate on the "reviewed" field.
 func ReviewedEqualFold(v string) predicate.FnetDocument {
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.EqualFold(s.C(FieldReviewed), v))
-	})
+	return predicate.FnetDocument(sql.FieldEqualFold(FieldReviewed, v))
 }
 
 // ReviewedContainsFold applies the ContainsFold predicate on the "reviewed" field.
 func ReviewedContainsFold(v string) predicate.FnetDocument {
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.ContainsFold(s.C(FieldReviewed), v))
-	})
+	return predicate.FnetDocument(sql.FieldContainsFold(FieldReviewed, v))
 }
 
 // StatusEQ applies the EQ predicate on the "status" field.
 func StatusEQ(v string) predicate.FnetDocument {
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.EQ(s.C(FieldStatus), v))
-	})
+	return predicate.FnetDocument(sql.FieldEQ(FieldStatus, v))
 }
 
 // StatusNEQ applies the NEQ predicate on the "status" field.
 func StatusNEQ(v string) predicate.FnetDocument {
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.NEQ(s.C(FieldStatus), v))
-	})
+	return predicate.FnetDocument(sql.FieldNEQ(FieldStatus, v))
 }
 
 // StatusIn applies the In predicate on the "status" field.
 func StatusIn(vs ...string) predicate.FnetDocument {
-	v := make([]interface{}, len(vs))
-	for i := range v {
-		v[i] = vs[i]
-	}
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.In(s.C(FieldStatus), v...))
-	})
+	return predicate.FnetDocument(sql.FieldIn(FieldStatus, vs...))
 }
 
 // StatusNotIn applies the NotIn predicate on the "status" field.
 func StatusNotIn(vs ...string) predicate.FnetDocument {
-	v := make([]interface{}, len(vs))
-	for i := range v {
-		v[i] = vs[i]
-	}
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.NotIn(s.C(FieldStatus), v...))
-	})
+	return predicate.FnetDocument(sql.FieldNotIn(FieldStatus, vs...))
 }
 
 // StatusGT applies the GT predicate on the "status" field.
 func StatusGT(v string) predicate.FnetDocument {
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.GT(s.C(FieldStatus), v))
-	})
+	return predicate.FnetDocument(sql.FieldGT(FieldStatus, v))
 }
 
 // StatusGTE applies the GTE predicate on the "status" field.
 func StatusGTE(v string) predicate.FnetDocument {
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.GTE(s.C(FieldStatus), v))
-	})
+	return predicate.FnetDocument(sql.FieldGTE(FieldStatus, v))
 }
 
 // StatusLT applies the LT predicate on the "status" field.
 func StatusLT(v string) predicate.FnetDocument {
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.LT(s.C(FieldStatus), v))
-	})
+	return predicate.FnetDocument(sql.FieldLT(FieldStatus, v))
 }
 
 // StatusLTE applies the LTE predicate on the "status" field.
 func StatusLTE(v string) predicate.FnetDocument {
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.LTE(s.C(FieldStatus), v))
-	})
+	return predicate.FnetDocument(sql.FieldLTE(FieldStatus, v))
 }
 
 // StatusContains applies the Contains predicate on the "status" field.
 func StatusContains(v string) predicate.FnetDocument {
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.Contains(s.C(FieldStatus), v))
-	})
+	return predicate.FnetDocument(sql.FieldContains(FieldStatus, v))
 }
 
 // StatusHasPrefix applies the HasPrefix predicate on the "status" field.
 func StatusHasPrefix(v string) predicate.FnetDocument {
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.HasPrefix(s.C(FieldStatus), v))
-	})
+	return predicate.FnetDocument(sql.FieldHasPrefix(FieldStatus, v))
 }
 
 // StatusHasSuffix applies the HasSuffix predicate on the "status" field.
 func StatusHasSuffix(v string) predicate.FnetDocument {
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.HasSuffix(s.C(FieldStatus), v))
-	})
+	return predicate.FnetDocument(sql.FieldHasSuffix(FieldStatus, v))
 }
 
 // StatusEqualFold applies the EqualFold predicate on the "status" field.
 func StatusEqualFold(v string) predicate.FnetDocument {
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.EqualFold(s.C(FieldStatus), v))
-	})
+	return predicate.FnetDocument(sql.FieldEqualFold(FieldStatus, v))
 }
 
 // StatusContainsFold applies the ContainsFold predicate on the "status" field.
 func StatusContainsFold(v string) predicate.FnetDocument {
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.ContainsFold(s.C(FieldStatus), v))
-	})
+	return predicate.FnetDocument(sql.FieldContainsFold(FieldStatus, v))
 }
 
 // SubCategory1StrEQ applies the EQ predicate on the "sub_category1_str" field.
 func SubCategory1StrEQ(v string) predicate.FnetDocument {
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.EQ(s.C(FieldSubCategory1Str), v))
-	})
+	return predicate.FnetDocument(sql.FieldEQ(FieldSubCategory1Str, v))
 }
 
 // SubCategory1StrNEQ applies the NEQ predicate on the "sub_category1_str" field.
 func SubCategory1StrNEQ(v string) predicate.FnetDocument {
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.NEQ(s.C(FieldSubCategory1Str), v))
-	})
+	return predicate.FnetDocument(sql.FieldNEQ(FieldSubCategory1Str, v))
 }
 
 // SubCategory1StrIn applies the In predicate on the "sub_category1_str" field.
 func SubCategory1StrIn(vs ...string) predicate.FnetDocument {
-	v := make([]interface{}, len(vs))
-	for i := range v {
-		v[i] = vs[i]
-	}
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.In(s.C(FieldSubCategory1Str), v...))
-	})
+	return predicate.FnetDocument(sql.FieldIn(FieldSubCategory1Str, vs...))
 }
 
 // SubCategory1StrNotIn applies the NotIn predicate on the "sub_category1_str" field.
 func SubCategory1StrNotIn(vs ...string) predicate.FnetDocument {
-	v := make([]interface{}, len(vs))
-	for i := range v {
-		v[i] = vs[i]
-	}
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.NotIn(s.C(FieldSubCategory1Str), v...))
-	})
+	return predicate.FnetDocument(sql.FieldNotIn(FieldSubCategory1Str, vs...))
 }
 
 // SubCategory1StrGT applies the GT predicate on the "sub_category1_str" field.
 func SubCategory1StrGT(v string) predicate.FnetDocument {
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.GT(s.C(FieldSubCategory1Str), v))
-	})
+	return predicate.FnetDocument(sql.FieldGT(FieldSubCategory1Str, v))
 }
 
 // SubCategory1StrGTE applies the GTE predicate on the "sub_category1_str" field.
 func SubCategory1StrGTE(v string) predicate.FnetDocument {
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.GTE(s.C(FieldSubCategory1Str), v))
-	})
+	return predicate.FnetDocument(sql.FieldGTE(FieldSubCategory1Str, v))
 }
 
 // SubCategory1StrLT applies the LT predicate on the "sub_category1_str" field.
 func SubCategory1StrLT(v string) predicate.FnetDocument {
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.LT(s.C(FieldSubCategory1Str), v))
-	})
+	return predicate.FnetDocument(sql.FieldLT(FieldSubCategory1Str, v))
 }
 
 // SubCategory1StrLTE applies the LTE predicate on the "sub_category1_str" field.
 func SubCategory1StrLTE(v string) predicate.FnetDocument {
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.LTE(s.C(FieldSubCategory1Str), v))
-	})
+	return predicate.FnetDocument(sql.FieldLTE(FieldSubCategory1Str, v))
 }
 
 // SubCategory1StrContains applies the Contains predicate on the "sub_category1_str" field.
 func SubCategory1StrContains(v string) predicate.FnetDocument {
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.Contains(s.C(FieldSubCategory1Str), v))
-	})
+	return predicate.FnetDocument(sql.FieldContains(FieldSubCategory1Str, v))
 }
 
 // SubCategory1StrHasPrefix applies the HasPrefix predicate on the "sub_category1_str" field.
 func SubCategory1StrHasPrefix(v string) predicate.FnetDocument {
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.HasPrefix(s.C(FieldSubCategory1Str), v))
-	})
+	return predicate.FnetDocument(sql.FieldHasPrefix(FieldSubCategory1Str, v))
 }
 
 // SubCategory1StrHasSuffix applies the HasSuffix predicate on the "sub_category1_str" field.
 func SubCategory1StrHasSuffix(v string) predicate.FnetDocument {
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.HasSuffix(s.C(FieldSubCategory1Str), v))
-	})
+	return predicate.FnetDocument(sql.FieldHasSuffix(FieldSubCategory1Str, v))
 }
 
 // SubCategory1StrIsNil applies the IsNil predicate on the "sub_category1_str" field.
 func SubCategory1StrIsNil() predicate.FnetDocument {
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.IsNull(s.C(FieldSubCategory1Str)))
-	})
+	return predicate.FnetDocument(sql.FieldIsNull(FieldSubCategory1Str))
 }
 
 // SubCategory1StrNotNil applies the NotNil predicate on the "sub_category1_str" field.
 func SubCategory1StrNotNil() predicate.FnetDocument {
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.NotNull(s.C(FieldSubCategory1Str)))
-	})
+	return predicate.FnetDocument(sql.FieldNotNull(FieldSubCategory1Str))
 }
 
 // SubCategory1StrEqualFold applies the EqualFold predicate on the "sub_category1_str" field.
 func SubCategory1StrEqualFold(v string) predicate.FnetDocument {
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.EqualFold(s.C(FieldSubCategory1Str), v))
-	})
+	return predicate.FnetDocument(sql.FieldEqualFold(FieldSubCategory1Str, v))
 }
 
 // SubCategory1StrContainsFold applies the ContainsFold predicate on the "sub_category1_str" field.
 func SubCategory1StrContainsFold(v string) predicate.FnetDocument {
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.ContainsFold(s.C(FieldSubCategory1Str), v))
-	})
+	return predicate.FnetDocument(sql.FieldContainsFold(FieldSubCategory1Str, v))
 }
 
 // SubCategory2StrEQ applies the EQ predicate on the "sub_category2_str" field.
 func SubCategory2StrEQ(v string) predicate.FnetDocument {
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.EQ(s.C(FieldSubCategory2Str), v))
-	})
+	return predicate.FnetDocument(sql.FieldEQ(FieldSubCategory2Str, v))
 }
 
 // SubCategory2StrNEQ applies the NEQ predicate on the "sub_category2_str" field.
 func SubCategory2StrNEQ(v string) predicate.FnetDocument {
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.NEQ(s.C(FieldSubCategory2Str), v))
-	})
+	return predicate.FnetDocument(sql.FieldNEQ(FieldSubCategory2Str, v))
 }
 
 // SubCategory2StrIn applies the In predicate on the "sub_category2_str" field.
 func SubCategory2StrIn(vs ...string) predicate.FnetDocument {
-	v := make([]interface{}, len(vs))
-	for i := range v {
-		v[i] = vs[i]
-	}
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.In(s.C(FieldSubCategory2Str), v...))
-	})
+	return predicate.FnetDocument(sql.FieldIn(FieldSubCategory2Str, vs...))
 }
 
 // SubCategory2StrNotIn applies the NotIn predicate on the "sub_category2_str" field.
 func SubCategory2StrNotIn(vs ...string) predicate.FnetDocument {
-	v := make([]interface{}, len(vs))
-	for i := range v {
-		v[i] = vs[i]
-	}
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.NotIn(s.C(FieldSubCategory2Str), v...))
-	})
+	return predicate.FnetDocument(sql.FieldNotIn(FieldSubCategory2Str, vs...))
 }
 
 // SubCategory2StrGT applies the GT predicate on the "sub_category2_str" field.
 func SubCategory2StrGT(v string) predicate.FnetDocument {
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.GT(s.C(FieldSubCategory2Str), v))
-	})
+	return predicate.FnetDocument(sql.FieldGT(FieldSubCategory2Str, v))
 }
 
 // SubCategory2StrGTE applies the GTE predicate on the "sub_category2_str" field.
 func SubCategory2StrGTE(v string) predicate.FnetDocument {
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.GTE(s.C(FieldSubCategory2Str), v))
-	})
+	return predicate.FnetDocument(sql.FieldGTE(FieldSubCategory2Str, v))
 }
 
 // SubCategory2StrLT applies the LT predicate on the "sub_category2_str" field.
 func SubCategory2StrLT(v string) predicate.FnetDocument {
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.LT(s.C(FieldSubCategory2Str), v))
-	})
+	return predicate.FnetDocument(sql.FieldLT(FieldSubCategory2Str, v))
 }
 
 // SubCategory2StrLTE applies the LTE predicate on the "sub_category2_str" field.
 func SubCategory2StrLTE(v string) predicate.FnetDocument {
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.LTE(s.C(FieldSubCategory2Str), v))
-	})
+	return predicate.FnetDocument(sql.FieldLTE(FieldSubCategory2Str, v))
 }
 
 // SubCategory2StrContains applies the Contains predicate on the "sub_category2_str" field.
 func SubCategory2StrContains(v string) predicate.FnetDocument {
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.Contains(s.C(FieldSubCategory2Str), v))
-	})
+	return predicate.FnetDocument(sql.FieldContains(FieldSubCategory2Str, v))
 }
 
 // SubCategory2StrHasPrefix applies the HasPrefix predicate on the "sub_category2_str" field.
 func SubCategory2StrHasPrefix(v string) predicate.FnetDocument {
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.HasPrefix(s.C(FieldSubCategory2Str), v))
-	})
+	return predicate.FnetDocument(sql.FieldHasPrefix(FieldSubCategory2Str, v))
 }
 
 // SubCategory2StrHasSuffix applies the HasSuffix predicate on the "sub_category2_str" field.
 func SubCategory2StrHasSuffix(v string) predicate.FnetDocument {
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.HasSuffix(s.C(FieldSubCategory2Str), v))
-	})
+	return predicate.FnetDocument(sql.FieldHasSuffix(FieldSubCategory2Str, v))
 }
 
 // SubCategory2StrIsNil applies the IsNil predicate on the "sub_category2_str" field.
 func SubCategory2StrIsNil() predicate.FnetDocument {
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.IsNull(s.C(FieldSubCategory2Str)))
-	})
+	return predicate.FnetDocument(sql.FieldIsNull(FieldSubCategory2Str))
 }
 
 // SubCategory2StrNotNil applies the NotNil predicate on the "sub_category2_str" field.
 func SubCategory2StrNotNil() predicate.FnetDocument {
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.NotNull(s.C(FieldSubCategory2Str)))
-	})
+	return predicate.FnetDocument(sql.FieldNotNull(FieldSubCategory2Str))
 }
 
 // SubCategory2StrEqualFold applies the EqualFold predicate on the "sub_category2_str" field.
 func SubCategory2StrEqualFold(v string) predicate.FnetDocument {
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.EqualFold(s.C(FieldSubCategory2Str), v))
-	})
+	return predicate.FnetDocument(sql.FieldEqualFold(FieldSubCategory2Str, v))
 }
 
 // SubCategory2StrContainsFold applies the ContainsFold predicate on the "sub_category2_str" field.
 func SubCategory2StrContainsFold(v string) predicate.FnetDocument {
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.ContainsFold(s.C(FieldSubCategory2Str), v))
-	})
+	return predicate.FnetDocument(sql.FieldContainsFold(FieldSubCategory2Str, v))
 }
 
 // SubmissionDateEQ applies the EQ predicate on the "submission_date" field.
 func SubmissionDateEQ(v time.Time) predicate.FnetDocument {
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.EQ(s.C(FieldSubmissionDate), v))
-	})
+	return predicate.FnetDocument(sql.FieldEQ(FieldSubmissionDate, v))
 }
 
 // SubmissionDateNEQ applies the NEQ predicate on the "submission_date" field.
 func SubmissionDateNEQ(v time.Time) predicate.FnetDocument {
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.NEQ(s.C(FieldSubmissionDate), v))
-	})
+	return predicate.FnetDocument(sql.FieldNEQ(FieldSubmissionDate, v))
 }
 
 // SubmissionDateIn applies the In predicate on the "submission_date" field.
 func SubmissionDateIn(vs ...time.Time) predicate.FnetDocument {
-	v := make([]interface{}, len(vs))
-	for i := range v {
-		v[i] = vs[i]
-	}
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.In(s.C(FieldSubmissionDate), v...))
-	})
+	return predicate.FnetDocument(sql.FieldIn(FieldSubmissionDate, vs...))
 }
 
 // SubmissionDateNotIn applies the NotIn predicate on the "submission_date" field.
 func SubmissionDateNotIn(vs ...time.Time) predicate.FnetDocument {
-	v := make([]interface{}, len(vs))
-	for i := range v {
-		v[i] = vs[i]
-	}
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.NotIn(s.C(FieldSubmissionDate), v...))
-	})
+	return predicate.FnetDocument(sql.FieldNotIn(FieldSubmissionDate, vs...))
 }
 
 // SubmissionDateGT applies the GT predicate on the "submission_date" field.
 func SubmissionDateGT(v time.Time) predicate.FnetDocument {
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.GT(s.C(FieldSubmissionDate), v))
-	})
+	return predicate.FnetDocument(sql.FieldGT(FieldSubmissionDate, v))
 }
 
 // SubmissionDateGTE applies the GTE predicate on the "submission_date" field.
 func SubmissionDateGTE(v time.Time) predicate.FnetDocument {
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.GTE(s.C(FieldSubmissionDate), v))
-	})
+	return predicate.FnetDocument(sql.FieldGTE(FieldSubmissionDate, v))
 }
 
 // SubmissionDateLT applies the LT predicate on the "submission_date" field.
 func SubmissionDateLT(v time.Time) predicate.FnetDocument {
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.LT(s.C(FieldSubmissionDate), v))
-	})
+	return predicate.FnetDocument(sql.FieldLT(FieldSubmissionDate, v))
 }
 
 // SubmissionDateLTE applies the LTE predicate on the "submission_date" field.
 func SubmissionDateLTE(v time.Time) predicate.FnetDocument {
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.LTE(s.C(FieldSubmissionDate), v))
-	})
+	return predicate.FnetDocument(sql.FieldLTE(FieldSubmissionDate, v))
 }
 
 // SubmissionDateStrEQ applies the EQ predicate on the "submission_date_str" field.
 func SubmissionDateStrEQ(v string) predicate.FnetDocument {
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.EQ(s.C(FieldSubmissionDateStr), v))
-	})
+	return predicate.FnetDocument(sql.FieldEQ(FieldSubmissionDateStr, v))
 }
 
 // SubmissionDateStrNEQ applies the NEQ predicate on the "submission_date_str" field.
 func SubmissionDateStrNEQ(v string) predicate.FnetDocument {
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.NEQ(s.C(FieldSubmissionDateStr), v))
-	})
+	return predicate.FnetDocument(sql.FieldNEQ(FieldSubmissionDateStr, v))
 }
 
 // SubmissionDateStrIn applies the In predicate on the "submission_date_str" field.
 func SubmissionDateStrIn(vs ...string) predicate.FnetDocument {
-	v := make([]interface{}, len(vs))
-	for i := range v {
-		v[i] = vs[i]
-	}
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.In(s.C(FieldSubmissionDateStr), v...))
-	})
+	return predicate.FnetDocument(sql.FieldIn(FieldSubmissionDateStr, vs...))
 }
 
 // SubmissionDateStrNotIn applies the NotIn predicate on the "submission_date_str" field.
 func SubmissionDateStrNotIn(vs ...string) predicate.FnetDocument {
-	v := make([]interface{}, len(vs))
-	for i := range v {
-		v[i] = vs[i]
-	}
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.NotIn(s.C(FieldSubmissionDateStr), v...))
-	})
+	return predicate.FnetDocument(sql.FieldNotIn(FieldSubmissionDateStr, vs...))
 }
 
 // SubmissionDateStrGT applies the GT predicate on the "submission_date_str" field.
 func SubmissionDateStrGT(v string) predicate.FnetDocument {
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.GT(s.C(FieldSubmissionDateStr), v))
-	})
+	return predicate.FnetDocument(sql.FieldGT(FieldSubmissionDateStr, v))
 }
 
 // SubmissionDateStrGTE applies the GTE predicate on the "submission_date_str" field.
 func SubmissionDateStrGTE(v string) predicate.FnetDocument {
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.GTE(s.C(FieldSubmissionDateStr), v))
-	})
+	return predicate.FnetDocument(sql.FieldGTE(FieldSubmissionDateStr, v))
 }
 
 // SubmissionDateStrLT applies the LT predicate on the "submission_date_str" field.
 func SubmissionDateStrLT(v string) predicate.FnetDocument {
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.LT(s.C(FieldSubmissionDateStr), v))
-	})
+	return predicate.FnetDocument(sql.FieldLT(FieldSubmissionDateStr, v))
 }
 
 // SubmissionDateStrLTE applies the LTE predicate on the "submission_date_str" field.
 func SubmissionDateStrLTE(v string) predicate.FnetDocument {
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.LTE(s.C(FieldSubmissionDateStr), v))
-	})
+	return predicate.FnetDocument(sql.FieldLTE(FieldSubmissionDateStr, v))
 }
 
 // SubmissionDateStrContains applies the Contains predicate on the "submission_date_str" field.
 func SubmissionDateStrContains(v string) predicate.FnetDocument {
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.Contains(s.C(FieldSubmissionDateStr), v))
-	})
+	return predicate.FnetDocument(sql.FieldContains(FieldSubmissionDateStr, v))
 }
 
 // SubmissionDateStrHasPrefix applies the HasPrefix predicate on the "submission_date_str" field.
 func SubmissionDateStrHasPrefix(v string) predicate.FnetDocument {
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.HasPrefix(s.C(FieldSubmissionDateStr), v))
-	})
+	return predicate.FnetDocument(sql.FieldHasPrefix(FieldSubmissionDateStr, v))
 }
 
 // SubmissionDateStrHasSuffix applies the HasSuffix predicate on the "submission_date_str" field.
 func SubmissionDateStrHasSuffix(v string) predicate.FnetDocument {
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.HasSuffix(s.C(FieldSubmissionDateStr), v))
-	})
+	return predicate.FnetDocument(sql.FieldHasSuffix(FieldSubmissionDateStr, v))
 }
 
 // SubmissionDateStrEqualFold applies the EqualFold predicate on the "submission_date_str" field.
 func SubmissionDateStrEqualFold(v string) predicate.FnetDocument {
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.EqualFold(s.C(FieldSubmissionDateStr), v))
-	})
+	return predicate.FnetDocument(sql.FieldEqualFold(FieldSubmissionDateStr, v))
 }
 
 // SubmissionDateStrContainsFold applies the ContainsFold predicate on the "submission_date_str" field.
 func SubmissionDateStrContainsFold(v string) predicate.FnetDocument {
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.ContainsFold(s.C(FieldSubmissionDateStr), v))
-	})
+	return predicate.FnetDocument(sql.FieldContainsFold(FieldSubmissionDateStr, v))
 }
 
 // SubmissionMethodEQ applies the EQ predicate on the "submission_method" field.
 func SubmissionMethodEQ(v string) predicate.FnetDocument {
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.EQ(s.C(FieldSubmissionMethod), v))
-	})
+	return predicate.FnetDocument(sql.FieldEQ(FieldSubmissionMethod, v))
 }
 
 // SubmissionMethodNEQ applies the NEQ predicate on the "submission_method" field.
 func SubmissionMethodNEQ(v string) predicate.FnetDocument {
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.NEQ(s.C(FieldSubmissionMethod), v))
-	})
+	return predicate.FnetDocument(sql.FieldNEQ(FieldSubmissionMethod, v))
 }
 
 // SubmissionMethodIn applies the In predicate on the "submission_method" field.
 func SubmissionMethodIn(vs ...string) predicate.FnetDocument {
-	v := make([]interface{}, len(vs))
-	for i := range v {
-		v[i] = vs[i]
-	}
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.In(s.C(FieldSubmissionMethod), v...))
-	})
+	return predicate.FnetDocument(sql.FieldIn(FieldSubmissionMethod, vs...))
 }
 
 // SubmissionMethodNotIn applies the NotIn predicate on the "submission_method" field.
 func SubmissionMethodNotIn(vs ...string) predicate.FnetDocument {
-	v := make([]interface{}, len(vs))
-	for i := range v {
-		v[i] = vs[i]
-	}
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.NotIn(s.C(FieldSubmissionMethod), v...))
-	})
+	return predicate.FnetDocument(sql.FieldNotIn(FieldSubmissionMethod, vs...))
 }
 
 // SubmissionMethodGT applies the GT predicate on the "submission_method" field.
 func SubmissionMethodGT(v string) predicate.FnetDocument {
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.GT(s.C(FieldSubmissionMethod), v))
-	})
+	return predicate.FnetDocument(sql.FieldGT(FieldSubmissionMethod, v))
 }
 
 // SubmissionMethodGTE applies the GTE predicate on the "submission_method" field.
 func SubmissionMethodGTE(v string) predicate.FnetDocument {
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.GTE(s.C(FieldSubmissionMethod), v))
-	})
+	return predicate.FnetDocument(sql.FieldGTE(FieldSubmissionMethod, v))
 }
 
 // SubmissionMethodLT applies the LT predicate on the "submission_method" field.
 func SubmissionMethodLT(v string) predicate.FnetDocument {
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.LT(s.C(FieldSubmissionMethod), v))
-	})
+	return predicate.FnetDocument(sql.FieldLT(FieldSubmissionMethod, v))
 }
 
 // SubmissionMethodLTE applies the LTE predicate on the "submission_method" field.
 func SubmissionMethodLTE(v string) predicate.FnetDocument {
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.LTE(s.C(FieldSubmissionMethod), v))
-	})
+	return predicate.FnetDocument(sql.FieldLTE(FieldSubmissionMethod, v))
 }
 
 // SubmissionMethodContains applies the Contains predicate on the "submission_method" field.
 func SubmissionMethodContains(v string) predicate.FnetDocument {
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.Contains(s.C(FieldSubmissionMethod), v))
-	})
+	return predicate.FnetDocument(sql.FieldContains(FieldSubmissionMethod, v))
 }
 
 // SubmissionMethodHasPrefix applies the HasPrefix predicate on the "submission_method" field.
 func SubmissionMethodHasPrefix(v string) predicate.FnetDocument {
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.HasPrefix(s.C(FieldSubmissionMethod), v))
-	})
+	return predicate.FnetDocument(sql.FieldHasPrefix(FieldSubmissionMethod, v))
 }
 
 // SubmissionMethodHasSuffix applies the HasSuffix predicate on the "submission_method" field.
 func SubmissionMethodHasSuffix(v string) predicate.FnetDocument {
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.HasSuffix(s.C(FieldSubmissionMethod), v))
-	})
+	return predicate.FnetDocument(sql.FieldHasSuffix(FieldSubmissionMethod, v))
 }
 
 // SubmissionMethodEqualFold applies the EqualFold predicate on the "submission_method" field.
 func SubmissionMethodEqualFold(v string) predicate.FnetDocument {
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.EqualFold(s.C(FieldSubmissionMethod), v))
-	})
+	return predicate.FnetDocument(sql.FieldEqualFold(FieldSubmissionMethod, v))
 }
 
 // SubmissionMethodContainsFold applies the ContainsFold predicate on the "submission_method" field.
 func SubmissionMethodContainsFold(v string) predicate.FnetDocument {
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.ContainsFold(s.C(FieldSubmissionMethod), v))
-	})
+	return predicate.FnetDocument(sql.FieldContainsFold(FieldSubmissionMethod, v))
 }
 
 // SubmissionMethodDescriptionEQ applies the EQ predicate on the "submission_method_description" field.
 func SubmissionMethodDescriptionEQ(v string) predicate.FnetDocument {
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.EQ(s.C(FieldSubmissionMethodDescription), v))
-	})
+	return predicate.FnetDocument(sql.FieldEQ(FieldSubmissionMethodDescription, v))
 }
 
 // SubmissionMethodDescriptionNEQ applies the NEQ predicate on the "submission_method_description" field.
 func SubmissionMethodDescriptionNEQ(v string) predicate.FnetDocument {
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.NEQ(s.C(FieldSubmissionMethodDescription), v))
-	})
+	return predicate.FnetDocument(sql.FieldNEQ(FieldSubmissionMethodDescription, v))
 }
 
 // SubmissionMethodDescriptionIn applies the In predicate on the "submission_method_description" field.
 func SubmissionMethodDescriptionIn(vs ...string) predicate.FnetDocument {
-	v := make([]interface{}, len(vs))
-	for i := range v {
-		v[i] = vs[i]
-	}
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.In(s.C(FieldSubmissionMethodDescription), v...))
-	})
+	return predicate.FnetDocument(sql.FieldIn(FieldSubmissionMethodDescription, vs...))
 }
 
 // SubmissionMethodDescriptionNotIn applies the NotIn predicate on the "submission_method_description" field.
 func SubmissionMethodDescriptionNotIn(vs ...string) predicate.FnetDocument {
-	v := make([]interface{}, len(vs))
-	for i := range v {
-		v[i] = vs[i]
-	}
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.NotIn(s.C(FieldSubmissionMethodDescription), v...))
-	})
+	return predicate.FnetDocument(sql.FieldNotIn(FieldSubmissionMethodDescription, vs...))
 }
 
 // SubmissionMethodDescriptionGT applies the GT predicate on the "submission_method_description" field.
 func SubmissionMethodDescriptionGT(v string) predicate.FnetDocument {
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.GT(s.C(FieldSubmissionMethodDescription), v))
-	})
+	return predicate.FnetDocument(sql.FieldGT(FieldSubmissionMethodDescription, v))
 }
 
 // SubmissionMethodDescriptionGTE applies the GTE predicate on the "submission_method_description" field.
 func SubmissionMethodDescriptionGTE(v string) predicate.FnetDocument {
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.GTE(s.C(FieldSubmissionMethodDescription), v))
-	})
+	return predicate.FnetDocument(sql.FieldGTE(FieldSubmissionMethodDescription, v))
 }
 
 // SubmissionMethodDescriptionLT applies the LT predicate on the "submission_method_description" field.
 func SubmissionMethodDescriptionLT(v string) predicate.FnetDocument {
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.LT(s.C(FieldSubmissionMethodDescription), v))
-	})
+	return predicate.FnetDocument(sql.FieldLT(FieldSubmissionMethodDescription, v))
 }
 
 // SubmissionMethodDescriptionLTE applies the LTE predicate on the "submission_method_description" field.
 func SubmissionMethodDescriptionLTE(v string) predicate.FnetDocument {
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.LTE(s.C(FieldSubmissionMethodDescription), v))
-	})
+	return predicate.FnetDocument(sql.FieldLTE(FieldSubmissionMethodDescription, v))
 }
 
 // SubmissionMethodDescriptionContains applies the Contains predicate on the "submission_method_description" field.
 func SubmissionMethodDescriptionContains(v string) predicate.FnetDocument {
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.Contains(s.C(FieldSubmissionMethodDescription), v))
-	})
+	return predicate.FnetDocument(sql.FieldContains(FieldSubmissionMethodDescription, v))
 }
 
 // SubmissionMethodDescriptionHasPrefix applies the HasPrefix predicate on the "submission_method_description" field.
 func SubmissionMethodDescriptionHasPrefix(v string) predicate.FnetDocument {
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.HasPrefix(s.C(FieldSubmissionMethodDescription), v))
-	})
+	return predicate.FnetDocument(sql.FieldHasPrefix(FieldSubmissionMethodDescription, v))
 }
 
 // SubmissionMethodDescriptionHasSuffix applies the HasSuffix predicate on the "submission_method_description" field.
 func SubmissionMethodDescriptionHasSuffix(v string) predicate.FnetDocument {
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.HasSuffix(s.C(FieldSubmissionMethodDescription), v))
-	})
+	return predicate.FnetDocument(sql.FieldHasSuffix(FieldSubmissionMethodDescription, v))
 }
 
 // SubmissionMethodDescriptionEqualFold applies the EqualFold predicate on the "submission_method_description" field.
 func SubmissionMethodDescriptionEqualFold(v string) predicate.FnetDocument {
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.EqualFold(s.C(FieldSubmissionMethodDescription), v))
-	})
+	return predicate.FnetDocument(sql.FieldEqualFold(FieldSubmissionMethodDescription, v))
 }
 
 // SubmissionMethodDescriptionContainsFold applies the ContainsFold predicate on the "submission_method_description" field.
 func SubmissionMethodDescriptionContainsFold(v string) predicate.FnetDocument {
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.ContainsFold(s.C(FieldSubmissionMethodDescription), v))
-	})
+	return predicate.FnetDocument(sql.FieldContainsFold(FieldSubmissionMethodDescription, v))
 }
 
 // SubmissionStatusEQ applies the EQ predicate on the "submission_status" field.
 func SubmissionStatusEQ(v string) predicate.FnetDocument {
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.EQ(s.C(FieldSubmissionStatus), v))
-	})
+	return predicate.FnetDocument(sql.FieldEQ(FieldSubmissionStatus, v))
 }
 
 // SubmissionStatusNEQ applies the NEQ predicate on the "submission_status" field.
 func SubmissionStatusNEQ(v string) predicate.FnetDocument {
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.NEQ(s.C(FieldSubmissionStatus), v))
-	})
+	return predicate.FnetDocument(sql.FieldNEQ(FieldSubmissionStatus, v))
 }
 
 // SubmissionStatusIn applies the In predicate on the "submission_status" field.
 func SubmissionStatusIn(vs ...string) predicate.FnetDocument {
-	v := make([]interface{}, len(vs))
-	for i := range v {
-		v[i] = vs[i]
-	}
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.In(s.C(FieldSubmissionStatus), v...))
-	})
+	return predicate.FnetDocument(sql.FieldIn(FieldSubmissionStatus, vs...))
 }
 
 // SubmissionStatusNotIn applies the NotIn predicate on the "submission_status" field.
 func SubmissionStatusNotIn(vs ...string) predicate.FnetDocument {
-	v := make([]interface{}, len(vs))
-	for i := range v {
-		v[i] = vs[i]
-	}
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.NotIn(s.C(FieldSubmissionStatus), v...))
-	})
+	return predicate.FnetDocument(sql.FieldNotIn(FieldSubmissionStatus, vs...))
 }
 
 // SubmissionStatusGT applies the GT predicate on the "submission_status" field.
 func SubmissionStatusGT(v string) predicate.FnetDocument {
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.GT(s.C(FieldSubmissionStatus), v))
-	})
+	return predicate.FnetDocument(sql.FieldGT(FieldSubmissionStatus, v))
 }
 
 // SubmissionStatusGTE applies the GTE predicate on the "submission_status" field.
 func SubmissionStatusGTE(v string) predicate.FnetDocument {
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.GTE(s.C(FieldSubmissionStatus), v))
-	})
+	return predicate.FnetDocument(sql.FieldGTE(FieldSubmissionStatus, v))
 }
 
 // SubmissionStatusLT applies the LT predicate on the "submission_status" field.
 func SubmissionStatusLT(v string) predicate.FnetDocument {
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.LT(s.C(FieldSubmissionStatus), v))
-	})
+	return predicate.FnetDocument(sql.FieldLT(FieldSubmissionStatus, v))
 }
 
 // SubmissionStatusLTE applies the LTE predicate on the "submission_status" field.
 func SubmissionStatusLTE(v string) predicate.FnetDocument {
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.LTE(s.C(FieldSubmissionStatus), v))
-	})
+	return predicate.FnetDocument(sql.FieldLTE(FieldSubmissionStatus, v))
 }
 
 // SubmissionStatusContains applies the Contains predicate on the "submission_status" field.
 func SubmissionStatusContains(v string) predicate.FnetDocument {
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.Contains(s.C(FieldSubmissionStatus), v))
-	})
+	return predicate.FnetDocument(sql.FieldContains(FieldSubmissionStatus, v))
 }
 
 // SubmissionStatusHasPrefix applies the HasPrefix predicate on the "submission_status" field.
 func SubmissionStatusHasPrefix(v string) predicate.FnetDocument {
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.HasPrefix(s.C(FieldSubmissionStatus), v))
-	})
+	return predicate.FnetDocument(sql.FieldHasPrefix(FieldSubmissionStatus, v))
 }
 
 // SubmissionStatusHasSuffix applies the HasSuffix predicate on the "submission_status" field.
 func SubmissionStatusHasSuffix(v string) predicate.FnetDocument {
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.HasSuffix(s.C(FieldSubmissionStatus), v))
-	})
+	return predicate.FnetDocument(sql.FieldHasSuffix(FieldSubmissionStatus, v))
 }
 
 // SubmissionStatusEqualFold applies the EqualFold predicate on the "submission_status" field.
 func SubmissionStatusEqualFold(v string) predicate.FnetDocument {
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.EqualFold(s.C(FieldSubmissionStatus), v))
-	})
+	return predicate.FnetDocument(sql.FieldEqualFold(FieldSubmissionStatus, v))
 }
 
 // SubmissionStatusContainsFold applies the ContainsFold predicate on the "submission_status" field.
 func SubmissionStatusContainsFold(v string) predicate.FnetDocument {
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.ContainsFold(s.C(FieldSubmissionStatus), v))
-	})
+	return predicate.FnetDocument(sql.FieldContainsFold(FieldSubmissionStatus, v))
 }
 
 // SubmissionStatusDescriptionEQ applies the EQ predicate on the "submission_status_description" field.
 func SubmissionStatusDescriptionEQ(v string) predicate.FnetDocument {
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.EQ(s.C(FieldSubmissionStatusDescription), v))
-	})
+	return predicate.FnetDocument(sql.FieldEQ(FieldSubmissionStatusDescription, v))
 }
 
 // SubmissionStatusDescriptionNEQ applies the NEQ predicate on the "submission_status_description" field.
 func SubmissionStatusDescriptionNEQ(v string) predicate.FnetDocument {
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.NEQ(s.C(FieldSubmissionStatusDescription), v))
-	})
+	return predicate.FnetDocument(sql.FieldNEQ(FieldSubmissionStatusDescription, v))
 }
 
 // SubmissionStatusDescriptionIn applies the In predicate on the "submission_status_description" field.
 func SubmissionStatusDescriptionIn(vs ...string) predicate.FnetDocument {
-	v := make([]interface{}, len(vs))
-	for i := range v {
-		v[i] = vs[i]
-	}
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.In(s.C(FieldSubmissionStatusDescription), v...))
-	})
+	return predicate.FnetDocument(sql.FieldIn(FieldSubmissionStatusDescription, vs...))
 }
 
 // SubmissionStatusDescriptionNotIn applies the NotIn predicate on the "submission_status_description" field.
 func SubmissionStatusDescriptionNotIn(vs ...string) predicate.FnetDocument {
-	v := make([]interface{}, len(vs))
-	for i := range v {
-		v[i] = vs[i]
-	}
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.NotIn(s.C(FieldSubmissionStatusDescription), v...))
-	})
+	return predicate.FnetDocument(sql.FieldNotIn(FieldSubmissionStatusDescription, vs...))
 }
 
 // SubmissionStatusDescriptionGT applies the GT predicate on the "submission_status_description" field.
 func SubmissionStatusDescriptionGT(v string) predicate.FnetDocument {
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.GT(s.C(FieldSubmissionStatusDescription), v))
-	})
+	return predicate.FnetDocument(sql.FieldGT(FieldSubmissionStatusDescription, v))
 }
 
 // SubmissionStatusDescriptionGTE applies the GTE predicate on the "submission_status_description" field.
 func SubmissionStatusDescriptionGTE(v string) predicate.FnetDocument {
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.GTE(s.C(FieldSubmissionStatusDescription), v))
-	})
+	return predicate.FnetDocument(sql.FieldGTE(FieldSubmissionStatusDescription, v))
 }
 
 // SubmissionStatusDescriptionLT applies the LT predicate on the "submission_status_description" field.
 func SubmissionStatusDescriptionLT(v string) predicate.FnetDocument {
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.LT(s.C(FieldSubmissionStatusDescription), v))
-	})
+	return predicate.FnetDocument(sql.FieldLT(FieldSubmissionStatusDescription, v))
 }
 
 // SubmissionStatusDescriptionLTE applies the LTE predicate on the "submission_status_description" field.
 func SubmissionStatusDescriptionLTE(v string) predicate.FnetDocument {
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.LTE(s.C(FieldSubmissionStatusDescription), v))
-	})
+	return predicate.FnetDocument(sql.FieldLTE(FieldSubmissionStatusDescription, v))
 }
 
 // SubmissionStatusDescriptionContains applies the Contains predicate on the "submission_status_description" field.
 func SubmissionStatusDescriptionContains(v string) predicate.FnetDocument {
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.Contains(s.C(FieldSubmissionStatusDescription), v))
-	})
+	return predicate.FnetDocument(sql.FieldContains(FieldSubmissionStatusDescription, v))
 }
 
 // SubmissionStatusDescriptionHasPrefix applies the HasPrefix predicate on the "submission_status_description" field.
 func SubmissionStatusDescriptionHasPrefix(v string) predicate.FnetDocument {
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.HasPrefix(s.C(FieldSubmissionStatusDescription), v))
-	})
+	return predicate.FnetDocument(sql.FieldHasPrefix(FieldSubmissionStatusDescription, v))
 }
 
 // SubmissionStatusDescriptionHasSuffix applies the HasSuffix predicate on the "submission_status_description" field.
 func SubmissionStatusDescriptionHasSuffix(v string) predicate.FnetDocument {
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.HasSuffix(s.C(FieldSubmissionStatusDescription), v))
-	})
+	return predicate.FnetDocument(sql.FieldHasSuffix(FieldSubmissionStatusDescription, v))
 }
 
 // SubmissionStatusDescriptionEqualFold applies the EqualFold predicate on the "submission_status_description" field.
 func SubmissionStatusDescriptionEqualFold(v string) predicate.FnetDocument {
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.EqualFold(s.C(FieldSubmissionStatusDescription), v))
-	})
+	return predicate.FnetDocument(sql.FieldEqualFold(FieldSubmissionStatusDescription, v))
 }
 
 // SubmissionStatusDescriptionContainsFold applies the ContainsFold predicate on the "submission_status_description" field.
 func SubmissionStatusDescriptionContainsFold(v string) predicate.FnetDocument {
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.ContainsFold(s.C(FieldSubmissionStatusDescription), v))
-	})
+	return predicate.FnetDocument(sql.FieldContainsFold(FieldSubmissionStatusDescription, v))
 }
 
 // VersionEQ applies the EQ predicate on the "version" field.
 func VersionEQ(v int) predicate.FnetDocument {
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.EQ(s.C(FieldVersion), v))
-	})
+	return predicate.FnetDocument(sql.FieldEQ(FieldVersion, v))
 }
 
 // VersionNEQ applies the NEQ predicate on the "version" field.
 func VersionNEQ(v int) predicate.FnetDocument {
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.NEQ(s.C(FieldVersion), v))
-	})
+	return predicate.FnetDocument(sql.FieldNEQ(FieldVersion, v))
 }
 
 // VersionIn applies the In predicate on the "version" field.
 func VersionIn(vs ...int) predicate.FnetDocument {
-	v := make([]interface{}, len(vs))
-	for i := range v {
-		v[i] = vs[i]
-	}
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.In(s.C(FieldVersion), v...))
-	})
+	return predicate.FnetDocument(sql.FieldIn(FieldVersion, vs...))
 }
 
 // VersionNotIn applies the NotIn predicate on the "version" field.
 func VersionNotIn(vs ...int) predicate.FnetDocument {
-	v := make([]interface{}, len(vs))
-	for i := range v {
-		v[i] = vs[i]
-	}
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.NotIn(s.C(FieldVersion), v...))
-	})
+	return predicate.FnetDocument(sql.FieldNotIn(FieldVersion, vs...))
 }
 
 // VersionGT applies the GT predicate on the "version" field.
 func VersionGT(v int) predicate.FnetDocument {
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.GT(s.C(FieldVersion), v))
-	})
+	return predicate.FnetDocument(sql.FieldGT(FieldVersion, v))
 }
 
 // VersionGTE applies the GTE predicate on the "version" field.
 func VersionGTE(v int) predicate.FnetDocument {
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.GTE(s.C(FieldVersion), v))
-	})
+	return predicate.FnetDocument(sql.FieldGTE(FieldVersion, v))
 }
 
 // VersionLT applies the LT predicate on the "version" field.
 func VersionLT(v int) predicate.FnetDocument {
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.LT(s.C(FieldVersion), v))
-	})
+	return predicate.FnetDocument(sql.FieldLT(FieldVersion, v))
 }
 
 // VersionLTE applies the LTE predicate on the "version" field.
 func VersionLTE(v int) predicate.FnetDocument {
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.LTE(s.C(FieldVersion), v))
-	})
+	return predicate.FnetDocument(sql.FieldLTE(FieldVersion, v))
 }
 
 // HasCategory applies the HasEdge predicate on the "category" edge.
@@ -2037,7 +1345,6 @@ func HasCategory() predicate.FnetDocument {
 	return predicate.FnetDocument(func(s *sql.Selector) {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(Table, FieldID),
-			sqlgraph.To(CategoryTable, FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, CategoryTable, CategoryColumn),
 		)
 		sqlgraph.HasNeighbors(s, step)
@@ -2047,11 +1354,7 @@ func HasCategory() predicate.FnetDocument {
 // HasCategoryWith applies the HasEdge predicate on the "category" edge with a given conditions (other predicates).
 func HasCategoryWith(preds ...predicate.FnetCategory) predicate.FnetDocument {
 	return predicate.FnetDocument(func(s *sql.Selector) {
-		step := sqlgraph.NewStep(
-			sqlgraph.From(Table, FieldID),
-			sqlgraph.To(CategoryInverseTable, FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, true, CategoryTable, CategoryColumn),
-		)
+		step := newCategoryStep()
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)
@@ -2065,7 +1368,6 @@ func HasSubCategory1() predicate.FnetDocument {
 	return predicate.FnetDocument(func(s *sql.Selector) {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(Table, FieldID),
-			sqlgraph.To(SubCategory1Table, FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, SubCategory1Table, SubCategory1Column),
 		)
 		sqlgraph.HasNeighbors(s, step)
@@ -2075,11 +1377,7 @@ func HasSubCategory1() predicate.FnetDocument {
 // HasSubCategory1With applies the HasEdge predicate on the "sub_category1" edge with a given conditions (other predicates).
 func HasSubCategory1With(preds ...predicate.FnetSubCategory1) predicate.FnetDocument {
 	return predicate.FnetDocument(func(s *sql.Selector) {
-		step := sqlgraph.NewStep(
-			sqlgraph.From(Table, FieldID),
-			sqlgraph.To(SubCategory1InverseTable, FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, true, SubCategory1Table, SubCategory1Column),
-		)
+		step := newSubCategory1Step()
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)
@@ -2093,7 +1391,6 @@ func HasSubCategory2() predicate.FnetDocument {
 	return predicate.FnetDocument(func(s *sql.Selector) {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(Table, FieldID),
-			sqlgraph.To(SubCategory2Table, FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, SubCategory2Table, SubCategory2Column),
 		)
 		sqlgraph.HasNeighbors(s, step)
@@ -2103,11 +1400,7 @@ func HasSubCategory2() predicate.FnetDocument {
 // HasSubCategory2With applies the HasEdge predicate on the "sub_category2" edge with a given conditions (other predicates).
 func HasSubCategory2With(preds ...predicate.FnetSubCategory2) predicate.FnetDocument {
 	return predicate.FnetDocument(func(s *sql.Selector) {
-		step := sqlgraph.NewStep(
-			sqlgraph.From(Table, FieldID),
-			sqlgraph.To(SubCategory2InverseTable, FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, true, SubCategory2Table, SubCategory2Column),
-		)
+		step := newSubCategory2Step()
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)
@@ -2118,32 +1411,15 @@ func HasSubCategory2With(preds ...predicate.FnetSubCategory2) predicate.FnetDocu
 
 // And groups predicates with the AND operator between them.
 func And(predicates ...predicate.FnetDocument) predicate.FnetDocument {
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s1 := s.Clone().SetP(nil)
-		for _, p := range predicates {
-			p(s1)
-		}
-		s.Where(s1.P())
-	})
+	return predicate.FnetDocument(sql.AndPredicates(predicates...))
 }
 
 // Or groups predicates with the OR operator between them.
 func Or(predicates ...predicate.FnetDocument) predicate.FnetDocument {
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		s1 := s.Clone().SetP(nil)
-		for i, p := range predicates {
-			if i > 0 {
-				s1.Or()
-			}
-			p(s1)
-		}
-		s.Where(s1.P())
-	})
+	return predicate.FnetDocument(sql.OrPredicates(predicates...))
 }
 
 // Not applies the not operator on the given predicate.
 func Not(p predicate.FnetDocument) predicate.FnetDocument {
-	return predicate.FnetDocument(func(s *sql.Selector) {
-		p(s.Not())
-	})
+	return predicate.FnetDocument(sql.NotPredicates(p))
 }

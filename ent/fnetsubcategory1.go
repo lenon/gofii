@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"strings"
 
+	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"github.com/lenon/gofii/ent/fnetsubcategory1"
 )
@@ -19,7 +20,8 @@ type FnetSubCategory1 struct {
 	Name string `json:"name,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the FnetSubCategory1Query when eager-loading is set.
-	Edges FnetSubCategory1Edges `json:"edges"`
+	Edges        FnetSubCategory1Edges `json:"edges"`
+	selectValues sql.SelectValues
 }
 
 // FnetSubCategory1Edges holds the relations/edges for other nodes in the graph.
@@ -41,8 +43,8 @@ func (e FnetSubCategory1Edges) DocumentsOrErr() ([]*FnetDocument, error) {
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
-func (*FnetSubCategory1) scanValues(columns []string) ([]interface{}, error) {
-	values := make([]interface{}, len(columns))
+func (*FnetSubCategory1) scanValues(columns []string) ([]any, error) {
+	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
 		case fnetsubcategory1.FieldID:
@@ -50,7 +52,7 @@ func (*FnetSubCategory1) scanValues(columns []string) ([]interface{}, error) {
 		case fnetsubcategory1.FieldName:
 			values[i] = new(sql.NullString)
 		default:
-			return nil, fmt.Errorf("unexpected column %q for type FnetSubCategory1", columns[i])
+			values[i] = new(sql.UnknownType)
 		}
 	}
 	return values, nil
@@ -58,7 +60,7 @@ func (*FnetSubCategory1) scanValues(columns []string) ([]interface{}, error) {
 
 // assignValues assigns the values that were returned from sql.Rows (after scanning)
 // to the FnetSubCategory1 fields.
-func (fsc *FnetSubCategory1) assignValues(columns []string, values []interface{}) error {
+func (fsc *FnetSubCategory1) assignValues(columns []string, values []any) error {
 	if m, n := len(values), len(columns); m < n {
 		return fmt.Errorf("mismatch number of scan values: %d != %d", m, n)
 	}
@@ -76,21 +78,29 @@ func (fsc *FnetSubCategory1) assignValues(columns []string, values []interface{}
 			} else if value.Valid {
 				fsc.Name = value.String
 			}
+		default:
+			fsc.selectValues.Set(columns[i], values[i])
 		}
 	}
 	return nil
 }
 
+// Value returns the ent.Value that was dynamically selected and assigned to the FnetSubCategory1.
+// This includes values selected through modifiers, order, etc.
+func (fsc *FnetSubCategory1) Value(name string) (ent.Value, error) {
+	return fsc.selectValues.Get(name)
+}
+
 // QueryDocuments queries the "documents" edge of the FnetSubCategory1 entity.
 func (fsc *FnetSubCategory1) QueryDocuments() *FnetDocumentQuery {
-	return (&FnetSubCategory1Client{config: fsc.config}).QueryDocuments(fsc)
+	return NewFnetSubCategory1Client(fsc.config).QueryDocuments(fsc)
 }
 
 // Update returns a builder for updating this FnetSubCategory1.
 // Note that you need to call FnetSubCategory1.Unwrap() before calling this method if this FnetSubCategory1
 // was returned from a transaction, and the transaction was committed or rolled back.
 func (fsc *FnetSubCategory1) Update() *FnetSubCategory1UpdateOne {
-	return (&FnetSubCategory1Client{config: fsc.config}).UpdateOne(fsc)
+	return NewFnetSubCategory1Client(fsc.config).UpdateOne(fsc)
 }
 
 // Unwrap unwraps the FnetSubCategory1 entity that was returned from a transaction after it was closed,
@@ -117,9 +127,3 @@ func (fsc *FnetSubCategory1) String() string {
 
 // FnetSubCategory1s is a parsable slice of FnetSubCategory1.
 type FnetSubCategory1s []*FnetSubCategory1
-
-func (fsc FnetSubCategory1s) config(cfg config) {
-	for _i := range fsc {
-		fsc[_i].config = cfg
-	}
-}

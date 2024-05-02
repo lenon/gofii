@@ -50,49 +50,7 @@ func (fsc *FnetSubCategory2Create) Mutation() *FnetSubCategory2Mutation {
 
 // Save creates the FnetSubCategory2 in the database.
 func (fsc *FnetSubCategory2Create) Save(ctx context.Context) (*FnetSubCategory2, error) {
-	var (
-		err  error
-		node *FnetSubCategory2
-	)
-	if len(fsc.hooks) == 0 {
-		if err = fsc.check(); err != nil {
-			return nil, err
-		}
-		node, err = fsc.sqlSave(ctx)
-	} else {
-		var mut Mutator = MutateFunc(func(ctx context.Context, m Mutation) (Value, error) {
-			mutation, ok := m.(*FnetSubCategory2Mutation)
-			if !ok {
-				return nil, fmt.Errorf("unexpected mutation type %T", m)
-			}
-			if err = fsc.check(); err != nil {
-				return nil, err
-			}
-			fsc.mutation = mutation
-			if node, err = fsc.sqlSave(ctx); err != nil {
-				return nil, err
-			}
-			mutation.id = &node.ID
-			mutation.done = true
-			return node, err
-		})
-		for i := len(fsc.hooks) - 1; i >= 0; i-- {
-			if fsc.hooks[i] == nil {
-				return nil, fmt.Errorf("ent: uninitialized hook (forgotten import ent/runtime?)")
-			}
-			mut = fsc.hooks[i](mut)
-		}
-		v, err := mut.Mutate(ctx, fsc.mutation)
-		if err != nil {
-			return nil, err
-		}
-		nv, ok := v.(*FnetSubCategory2)
-		if !ok {
-			return nil, fmt.Errorf("unexpected node type %T returned from FnetSubCategory2Mutation", v)
-		}
-		node = nv
-	}
-	return node, err
+	return withHooks(ctx, fsc.sqlSave, fsc.mutation, fsc.hooks)
 }
 
 // SaveX calls Save and panics if Save returns an error.
@@ -131,6 +89,9 @@ func (fsc *FnetSubCategory2Create) check() error {
 }
 
 func (fsc *FnetSubCategory2Create) sqlSave(ctx context.Context) (*FnetSubCategory2, error) {
+	if err := fsc.check(); err != nil {
+		return nil, err
+	}
 	_node, _spec := fsc.createSpec()
 	if err := sqlgraph.CreateNode(ctx, fsc.driver, _spec); err != nil {
 		if sqlgraph.IsConstraintError(err) {
@@ -140,27 +101,19 @@ func (fsc *FnetSubCategory2Create) sqlSave(ctx context.Context) (*FnetSubCategor
 	}
 	id := _spec.ID.Value.(int64)
 	_node.ID = int(id)
+	fsc.mutation.id = &_node.ID
+	fsc.mutation.done = true
 	return _node, nil
 }
 
 func (fsc *FnetSubCategory2Create) createSpec() (*FnetSubCategory2, *sqlgraph.CreateSpec) {
 	var (
 		_node = &FnetSubCategory2{config: fsc.config}
-		_spec = &sqlgraph.CreateSpec{
-			Table: fnetsubcategory2.Table,
-			ID: &sqlgraph.FieldSpec{
-				Type:   field.TypeInt,
-				Column: fnetsubcategory2.FieldID,
-			},
-		}
+		_spec = sqlgraph.NewCreateSpec(fnetsubcategory2.Table, sqlgraph.NewFieldSpec(fnetsubcategory2.FieldID, field.TypeInt))
 	)
 	_spec.OnConflict = fsc.conflict
 	if value, ok := fsc.mutation.Name(); ok {
-		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
-			Type:   field.TypeString,
-			Value:  value,
-			Column: fnetsubcategory2.FieldName,
-		})
+		_spec.SetField(fnetsubcategory2.FieldName, field.TypeString, value)
 		_node.Name = value
 	}
 	if nodes := fsc.mutation.DocumentsIDs(); len(nodes) > 0 {
@@ -171,10 +124,7 @@ func (fsc *FnetSubCategory2Create) createSpec() (*FnetSubCategory2, *sqlgraph.Cr
 			Columns: []string{fnetsubcategory2.DocumentsColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: &sqlgraph.FieldSpec{
-					Type:   field.TypeInt,
-					Column: fnetdocument.FieldID,
-				},
+				IDSpec: sqlgraph.NewFieldSpec(fnetdocument.FieldID, field.TypeInt),
 			},
 		}
 		for _, k := range nodes {
@@ -234,18 +184,6 @@ type (
 	}
 )
 
-// SetName sets the "name" field.
-func (u *FnetSubCategory2Upsert) SetName(v string) *FnetSubCategory2Upsert {
-	u.Set(fnetsubcategory2.FieldName, v)
-	return u
-}
-
-// UpdateName sets the "name" field to the value that was provided on create.
-func (u *FnetSubCategory2Upsert) UpdateName() *FnetSubCategory2Upsert {
-	u.SetExcluded(fnetsubcategory2.FieldName)
-	return u
-}
-
 // UpdateNewValues updates the mutable fields using the new values that were set on create.
 // Using this option is equivalent to using:
 //
@@ -291,20 +229,6 @@ func (u *FnetSubCategory2UpsertOne) Update(set func(*FnetSubCategory2Upsert)) *F
 	return u
 }
 
-// SetName sets the "name" field.
-func (u *FnetSubCategory2UpsertOne) SetName(v string) *FnetSubCategory2UpsertOne {
-	return u.Update(func(s *FnetSubCategory2Upsert) {
-		s.SetName(v)
-	})
-}
-
-// UpdateName sets the "name" field to the value that was provided on create.
-func (u *FnetSubCategory2UpsertOne) UpdateName() *FnetSubCategory2UpsertOne {
-	return u.Update(func(s *FnetSubCategory2Upsert) {
-		s.UpdateName()
-	})
-}
-
 // Exec executes the query.
 func (u *FnetSubCategory2UpsertOne) Exec(ctx context.Context) error {
 	if len(u.create.conflict) == 0 {
@@ -341,12 +265,16 @@ func (u *FnetSubCategory2UpsertOne) IDX(ctx context.Context) int {
 // FnetSubCategory2CreateBulk is the builder for creating many FnetSubCategory2 entities in bulk.
 type FnetSubCategory2CreateBulk struct {
 	config
+	err      error
 	builders []*FnetSubCategory2Create
 	conflict []sql.ConflictOption
 }
 
 // Save creates the FnetSubCategory2 entities in the database.
 func (fscb *FnetSubCategory2CreateBulk) Save(ctx context.Context) ([]*FnetSubCategory2, error) {
+	if fscb.err != nil {
+		return nil, fscb.err
+	}
 	specs := make([]*sqlgraph.CreateSpec, len(fscb.builders))
 	nodes := make([]*FnetSubCategory2, len(fscb.builders))
 	mutators := make([]Mutator, len(fscb.builders))
@@ -362,8 +290,8 @@ func (fscb *FnetSubCategory2CreateBulk) Save(ctx context.Context) ([]*FnetSubCat
 					return nil, err
 				}
 				builder.mutation = mutation
-				nodes[i], specs[i] = builder.createSpec()
 				var err error
+				nodes[i], specs[i] = builder.createSpec()
 				if i < len(mutators)-1 {
 					_, err = mutators[i+1].Mutate(root, fscb.builders[i+1].mutation)
 				} else {
@@ -511,22 +439,11 @@ func (u *FnetSubCategory2UpsertBulk) Update(set func(*FnetSubCategory2Upsert)) *
 	return u
 }
 
-// SetName sets the "name" field.
-func (u *FnetSubCategory2UpsertBulk) SetName(v string) *FnetSubCategory2UpsertBulk {
-	return u.Update(func(s *FnetSubCategory2Upsert) {
-		s.SetName(v)
-	})
-}
-
-// UpdateName sets the "name" field to the value that was provided on create.
-func (u *FnetSubCategory2UpsertBulk) UpdateName() *FnetSubCategory2UpsertBulk {
-	return u.Update(func(s *FnetSubCategory2Upsert) {
-		s.UpdateName()
-	})
-}
-
 // Exec executes the query.
 func (u *FnetSubCategory2UpsertBulk) Exec(ctx context.Context) error {
+	if u.create.err != nil {
+		return u.create.err
+	}
 	for i, b := range u.create.builders {
 		if len(b.conflict) != 0 {
 			return fmt.Errorf("ent: OnConflict was set for builder %d. Set it on the FnetSubCategory2CreateBulk instead", i)

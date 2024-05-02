@@ -15,11 +15,10 @@ type FnetCategoryFunc func(context.Context, *ent.FnetCategoryMutation) (ent.Valu
 
 // Mutate calls f(ctx, m).
 func (f FnetCategoryFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
-	mv, ok := m.(*ent.FnetCategoryMutation)
-	if !ok {
-		return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.FnetCategoryMutation", m)
+	if mv, ok := m.(*ent.FnetCategoryMutation); ok {
+		return f(ctx, mv)
 	}
-	return f(ctx, mv)
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.FnetCategoryMutation", m)
 }
 
 // The FnetDocumentFunc type is an adapter to allow the use of ordinary
@@ -28,11 +27,10 @@ type FnetDocumentFunc func(context.Context, *ent.FnetDocumentMutation) (ent.Valu
 
 // Mutate calls f(ctx, m).
 func (f FnetDocumentFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
-	mv, ok := m.(*ent.FnetDocumentMutation)
-	if !ok {
-		return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.FnetDocumentMutation", m)
+	if mv, ok := m.(*ent.FnetDocumentMutation); ok {
+		return f(ctx, mv)
 	}
-	return f(ctx, mv)
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.FnetDocumentMutation", m)
 }
 
 // The FnetSubCategory1Func type is an adapter to allow the use of ordinary
@@ -41,11 +39,10 @@ type FnetSubCategory1Func func(context.Context, *ent.FnetSubCategory1Mutation) (
 
 // Mutate calls f(ctx, m).
 func (f FnetSubCategory1Func) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
-	mv, ok := m.(*ent.FnetSubCategory1Mutation)
-	if !ok {
-		return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.FnetSubCategory1Mutation", m)
+	if mv, ok := m.(*ent.FnetSubCategory1Mutation); ok {
+		return f(ctx, mv)
 	}
-	return f(ctx, mv)
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.FnetSubCategory1Mutation", m)
 }
 
 // The FnetSubCategory2Func type is an adapter to allow the use of ordinary
@@ -54,11 +51,10 @@ type FnetSubCategory2Func func(context.Context, *ent.FnetSubCategory2Mutation) (
 
 // Mutate calls f(ctx, m).
 func (f FnetSubCategory2Func) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
-	mv, ok := m.(*ent.FnetSubCategory2Mutation)
-	if !ok {
-		return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.FnetSubCategory2Mutation", m)
+	if mv, ok := m.(*ent.FnetSubCategory2Mutation); ok {
+		return f(ctx, mv)
 	}
-	return f(ctx, mv)
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.FnetSubCategory2Mutation", m)
 }
 
 // Condition is a hook condition function.

@@ -7,17 +7,18 @@ import (
 	"errors"
 	"fmt"
 	"log"
+	"reflect"
 
 	"github.com/lenon/gofii/ent/migrate"
 
+	"entgo.io/ent"
+	"entgo.io/ent/dialect"
+	"entgo.io/ent/dialect/sql"
+	"entgo.io/ent/dialect/sql/sqlgraph"
 	"github.com/lenon/gofii/ent/fnetcategory"
 	"github.com/lenon/gofii/ent/fnetdocument"
 	"github.com/lenon/gofii/ent/fnetsubcategory1"
 	"github.com/lenon/gofii/ent/fnetsubcategory2"
-
-	"entgo.io/ent/dialect"
-	"entgo.io/ent/dialect/sql"
-	"entgo.io/ent/dialect/sql/sqlgraph"
 )
 
 // Client is the client that holds all ent builders.
@@ -37,9 +38,7 @@ type Client struct {
 
 // NewClient creates a new client configured with the given options.
 func NewClient(opts ...Option) *Client {
-	cfg := config{log: log.Println, hooks: &hooks{}}
-	cfg.options(opts...)
-	client := &Client{config: cfg}
+	client := &Client{config: newConfig(opts...)}
 	client.init()
 	return client
 }
@@ -50,6 +49,62 @@ func (c *Client) init() {
 	c.FnetDocument = NewFnetDocumentClient(c.config)
 	c.FnetSubCategory1 = NewFnetSubCategory1Client(c.config)
 	c.FnetSubCategory2 = NewFnetSubCategory2Client(c.config)
+}
+
+type (
+	// config is the configuration for the client and its builder.
+	config struct {
+		// driver used for executing database requests.
+		driver dialect.Driver
+		// debug enable a debug logging.
+		debug bool
+		// log used for logging on debug mode.
+		log func(...any)
+		// hooks to execute on mutations.
+		hooks *hooks
+		// interceptors to execute on queries.
+		inters *inters
+	}
+	// Option function to configure the client.
+	Option func(*config)
+)
+
+// newConfig creates a new config for the client.
+func newConfig(opts ...Option) config {
+	cfg := config{log: log.Println, hooks: &hooks{}, inters: &inters{}}
+	cfg.options(opts...)
+	return cfg
+}
+
+// options applies the options on the config object.
+func (c *config) options(opts ...Option) {
+	for _, opt := range opts {
+		opt(c)
+	}
+	if c.debug {
+		c.driver = dialect.Debug(c.driver, c.log)
+	}
+}
+
+// Debug enables debug logging on the ent.Driver.
+func Debug() Option {
+	return func(c *config) {
+		c.debug = true
+	}
+}
+
+// Log sets the logging function for debug mode.
+func Log(fn func(...any)) Option {
+	return func(c *config) {
+		c.log = fn
+	}
+}
+
+// Driver configures the client driver.
+func Driver(driver dialect.Driver) Option {
+	return func(c *config) {
+		c.driver = driver
+	}
 }
 
 // Open opens a database/sql.DB specified by the driver name and
@@ -68,11 +123,14 @@ func Open(driverName, dataSourceName string, options ...Option) (*Client, error)
 	}
 }
 
+// ErrTxStarted is returned when trying to start a new transaction from a transactional client.
+var ErrTxStarted = errors.New("ent: cannot start a transaction within a transaction")
+
 // Tx returns a new transactional client. The provided context
 // is used until the transaction is committed or rolled back.
 func (c *Client) Tx(ctx context.Context) (*Tx, error) {
 	if _, ok := c.driver.(*txDriver); ok {
-		return nil, errors.New("ent: cannot start a transaction within a transaction")
+		return nil, ErrTxStarted
 	}
 	tx, err := newTx(ctx, c.driver)
 	if err != nil {
@@ -144,6 +202,31 @@ func (c *Client) Use(hooks ...Hook) {
 	c.FnetSubCategory2.Use(hooks...)
 }
 
+// Intercept adds the query interceptors to all the entity clients.
+// In order to add interceptors to a specific client, call: `client.Node.Intercept(...)`.
+func (c *Client) Intercept(interceptors ...Interceptor) {
+	c.FnetCategory.Intercept(interceptors...)
+	c.FnetDocument.Intercept(interceptors...)
+	c.FnetSubCategory1.Intercept(interceptors...)
+	c.FnetSubCategory2.Intercept(interceptors...)
+}
+
+// Mutate implements the ent.Mutator interface.
+func (c *Client) Mutate(ctx context.Context, m Mutation) (Value, error) {
+	switch m := m.(type) {
+	case *FnetCategoryMutation:
+		return c.FnetCategory.mutate(ctx, m)
+	case *FnetDocumentMutation:
+		return c.FnetDocument.mutate(ctx, m)
+	case *FnetSubCategory1Mutation:
+		return c.FnetSubCategory1.mutate(ctx, m)
+	case *FnetSubCategory2Mutation:
+		return c.FnetSubCategory2.mutate(ctx, m)
+	default:
+		return nil, fmt.Errorf("ent: unknown mutation type %T", m)
+	}
+}
+
 // FnetCategoryClient is a client for the FnetCategory schema.
 type FnetCategoryClient struct {
 	config
@@ -160,6 +243,12 @@ func (c *FnetCategoryClient) Use(hooks ...Hook) {
 	c.hooks.FnetCategory = append(c.hooks.FnetCategory, hooks...)
 }
 
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `fnetcategory.Intercept(f(g(h())))`.
+func (c *FnetCategoryClient) Intercept(interceptors ...Interceptor) {
+	c.inters.FnetCategory = append(c.inters.FnetCategory, interceptors...)
+}
+
 // Create returns a builder for creating a FnetCategory entity.
 func (c *FnetCategoryClient) Create() *FnetCategoryCreate {
 	mutation := newFnetCategoryMutation(c.config, OpCreate)
@@ -168,6 +257,21 @@ func (c *FnetCategoryClient) Create() *FnetCategoryCreate {
 
 // CreateBulk returns a builder for creating a bulk of FnetCategory entities.
 func (c *FnetCategoryClient) CreateBulk(builders ...*FnetCategoryCreate) *FnetCategoryCreateBulk {
+	return &FnetCategoryCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *FnetCategoryClient) MapCreateBulk(slice any, setFunc func(*FnetCategoryCreate, int)) *FnetCategoryCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &FnetCategoryCreateBulk{err: fmt.Errorf("calling to FnetCategoryClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*FnetCategoryCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
 	return &FnetCategoryCreateBulk{config: c.config, builders: builders}
 }
 
@@ -200,7 +304,7 @@ func (c *FnetCategoryClient) DeleteOne(fc *FnetCategory) *FnetCategoryDeleteOne 
 	return c.DeleteOneID(fc.ID)
 }
 
-// DeleteOne returns a builder for deleting the given entity by its id.
+// DeleteOneID returns a builder for deleting the given entity by its id.
 func (c *FnetCategoryClient) DeleteOneID(id int) *FnetCategoryDeleteOne {
 	builder := c.Delete().Where(fnetcategory.ID(id))
 	builder.mutation.id = &id
@@ -212,6 +316,8 @@ func (c *FnetCategoryClient) DeleteOneID(id int) *FnetCategoryDeleteOne {
 func (c *FnetCategoryClient) Query() *FnetCategoryQuery {
 	return &FnetCategoryQuery{
 		config: c.config,
+		ctx:    &QueryContext{Type: TypeFnetCategory},
+		inters: c.Interceptors(),
 	}
 }
 
@@ -231,8 +337,8 @@ func (c *FnetCategoryClient) GetX(ctx context.Context, id int) *FnetCategory {
 
 // QueryDocuments queries the documents edge of a FnetCategory.
 func (c *FnetCategoryClient) QueryDocuments(fc *FnetCategory) *FnetDocumentQuery {
-	query := &FnetDocumentQuery{config: c.config}
-	query.path = func(ctx context.Context) (fromV *sql.Selector, _ error) {
+	query := (&FnetDocumentClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
 		id := fc.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(fnetcategory.Table, fnetcategory.FieldID, id),
@@ -248,6 +354,26 @@ func (c *FnetCategoryClient) QueryDocuments(fc *FnetCategory) *FnetDocumentQuery
 // Hooks returns the client hooks.
 func (c *FnetCategoryClient) Hooks() []Hook {
 	return c.hooks.FnetCategory
+}
+
+// Interceptors returns the client interceptors.
+func (c *FnetCategoryClient) Interceptors() []Interceptor {
+	return c.inters.FnetCategory
+}
+
+func (c *FnetCategoryClient) mutate(ctx context.Context, m *FnetCategoryMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&FnetCategoryCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&FnetCategoryUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&FnetCategoryUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&FnetCategoryDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("ent: unknown FnetCategory mutation op: %q", m.Op())
+	}
 }
 
 // FnetDocumentClient is a client for the FnetDocument schema.
@@ -266,6 +392,12 @@ func (c *FnetDocumentClient) Use(hooks ...Hook) {
 	c.hooks.FnetDocument = append(c.hooks.FnetDocument, hooks...)
 }
 
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `fnetdocument.Intercept(f(g(h())))`.
+func (c *FnetDocumentClient) Intercept(interceptors ...Interceptor) {
+	c.inters.FnetDocument = append(c.inters.FnetDocument, interceptors...)
+}
+
 // Create returns a builder for creating a FnetDocument entity.
 func (c *FnetDocumentClient) Create() *FnetDocumentCreate {
 	mutation := newFnetDocumentMutation(c.config, OpCreate)
@@ -274,6 +406,21 @@ func (c *FnetDocumentClient) Create() *FnetDocumentCreate {
 
 // CreateBulk returns a builder for creating a bulk of FnetDocument entities.
 func (c *FnetDocumentClient) CreateBulk(builders ...*FnetDocumentCreate) *FnetDocumentCreateBulk {
+	return &FnetDocumentCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *FnetDocumentClient) MapCreateBulk(slice any, setFunc func(*FnetDocumentCreate, int)) *FnetDocumentCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &FnetDocumentCreateBulk{err: fmt.Errorf("calling to FnetDocumentClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*FnetDocumentCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
 	return &FnetDocumentCreateBulk{config: c.config, builders: builders}
 }
 
@@ -306,7 +453,7 @@ func (c *FnetDocumentClient) DeleteOne(fd *FnetDocument) *FnetDocumentDeleteOne 
 	return c.DeleteOneID(fd.ID)
 }
 
-// DeleteOne returns a builder for deleting the given entity by its id.
+// DeleteOneID returns a builder for deleting the given entity by its id.
 func (c *FnetDocumentClient) DeleteOneID(id int) *FnetDocumentDeleteOne {
 	builder := c.Delete().Where(fnetdocument.ID(id))
 	builder.mutation.id = &id
@@ -318,6 +465,8 @@ func (c *FnetDocumentClient) DeleteOneID(id int) *FnetDocumentDeleteOne {
 func (c *FnetDocumentClient) Query() *FnetDocumentQuery {
 	return &FnetDocumentQuery{
 		config: c.config,
+		ctx:    &QueryContext{Type: TypeFnetDocument},
+		inters: c.Interceptors(),
 	}
 }
 
@@ -337,8 +486,8 @@ func (c *FnetDocumentClient) GetX(ctx context.Context, id int) *FnetDocument {
 
 // QueryCategory queries the category edge of a FnetDocument.
 func (c *FnetDocumentClient) QueryCategory(fd *FnetDocument) *FnetCategoryQuery {
-	query := &FnetCategoryQuery{config: c.config}
-	query.path = func(ctx context.Context) (fromV *sql.Selector, _ error) {
+	query := (&FnetCategoryClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
 		id := fd.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(fnetdocument.Table, fnetdocument.FieldID, id),
@@ -353,8 +502,8 @@ func (c *FnetDocumentClient) QueryCategory(fd *FnetDocument) *FnetCategoryQuery 
 
 // QuerySubCategory1 queries the sub_category1 edge of a FnetDocument.
 func (c *FnetDocumentClient) QuerySubCategory1(fd *FnetDocument) *FnetSubCategory1Query {
-	query := &FnetSubCategory1Query{config: c.config}
-	query.path = func(ctx context.Context) (fromV *sql.Selector, _ error) {
+	query := (&FnetSubCategory1Client{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
 		id := fd.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(fnetdocument.Table, fnetdocument.FieldID, id),
@@ -369,8 +518,8 @@ func (c *FnetDocumentClient) QuerySubCategory1(fd *FnetDocument) *FnetSubCategor
 
 // QuerySubCategory2 queries the sub_category2 edge of a FnetDocument.
 func (c *FnetDocumentClient) QuerySubCategory2(fd *FnetDocument) *FnetSubCategory2Query {
-	query := &FnetSubCategory2Query{config: c.config}
-	query.path = func(ctx context.Context) (fromV *sql.Selector, _ error) {
+	query := (&FnetSubCategory2Client{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
 		id := fd.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(fnetdocument.Table, fnetdocument.FieldID, id),
@@ -386,6 +535,26 @@ func (c *FnetDocumentClient) QuerySubCategory2(fd *FnetDocument) *FnetSubCategor
 // Hooks returns the client hooks.
 func (c *FnetDocumentClient) Hooks() []Hook {
 	return c.hooks.FnetDocument
+}
+
+// Interceptors returns the client interceptors.
+func (c *FnetDocumentClient) Interceptors() []Interceptor {
+	return c.inters.FnetDocument
+}
+
+func (c *FnetDocumentClient) mutate(ctx context.Context, m *FnetDocumentMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&FnetDocumentCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&FnetDocumentUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&FnetDocumentUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&FnetDocumentDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("ent: unknown FnetDocument mutation op: %q", m.Op())
+	}
 }
 
 // FnetSubCategory1Client is a client for the FnetSubCategory1 schema.
@@ -404,6 +573,12 @@ func (c *FnetSubCategory1Client) Use(hooks ...Hook) {
 	c.hooks.FnetSubCategory1 = append(c.hooks.FnetSubCategory1, hooks...)
 }
 
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `fnetsubcategory1.Intercept(f(g(h())))`.
+func (c *FnetSubCategory1Client) Intercept(interceptors ...Interceptor) {
+	c.inters.FnetSubCategory1 = append(c.inters.FnetSubCategory1, interceptors...)
+}
+
 // Create returns a builder for creating a FnetSubCategory1 entity.
 func (c *FnetSubCategory1Client) Create() *FnetSubCategory1Create {
 	mutation := newFnetSubCategory1Mutation(c.config, OpCreate)
@@ -412,6 +587,21 @@ func (c *FnetSubCategory1Client) Create() *FnetSubCategory1Create {
 
 // CreateBulk returns a builder for creating a bulk of FnetSubCategory1 entities.
 func (c *FnetSubCategory1Client) CreateBulk(builders ...*FnetSubCategory1Create) *FnetSubCategory1CreateBulk {
+	return &FnetSubCategory1CreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *FnetSubCategory1Client) MapCreateBulk(slice any, setFunc func(*FnetSubCategory1Create, int)) *FnetSubCategory1CreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &FnetSubCategory1CreateBulk{err: fmt.Errorf("calling to FnetSubCategory1Client.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*FnetSubCategory1Create, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
 	return &FnetSubCategory1CreateBulk{config: c.config, builders: builders}
 }
 
@@ -444,7 +634,7 @@ func (c *FnetSubCategory1Client) DeleteOne(fsc *FnetSubCategory1) *FnetSubCatego
 	return c.DeleteOneID(fsc.ID)
 }
 
-// DeleteOne returns a builder for deleting the given entity by its id.
+// DeleteOneID returns a builder for deleting the given entity by its id.
 func (c *FnetSubCategory1Client) DeleteOneID(id int) *FnetSubCategory1DeleteOne {
 	builder := c.Delete().Where(fnetsubcategory1.ID(id))
 	builder.mutation.id = &id
@@ -456,6 +646,8 @@ func (c *FnetSubCategory1Client) DeleteOneID(id int) *FnetSubCategory1DeleteOne 
 func (c *FnetSubCategory1Client) Query() *FnetSubCategory1Query {
 	return &FnetSubCategory1Query{
 		config: c.config,
+		ctx:    &QueryContext{Type: TypeFnetSubCategory1},
+		inters: c.Interceptors(),
 	}
 }
 
@@ -475,8 +667,8 @@ func (c *FnetSubCategory1Client) GetX(ctx context.Context, id int) *FnetSubCateg
 
 // QueryDocuments queries the documents edge of a FnetSubCategory1.
 func (c *FnetSubCategory1Client) QueryDocuments(fsc *FnetSubCategory1) *FnetDocumentQuery {
-	query := &FnetDocumentQuery{config: c.config}
-	query.path = func(ctx context.Context) (fromV *sql.Selector, _ error) {
+	query := (&FnetDocumentClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
 		id := fsc.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(fnetsubcategory1.Table, fnetsubcategory1.FieldID, id),
@@ -492,6 +684,26 @@ func (c *FnetSubCategory1Client) QueryDocuments(fsc *FnetSubCategory1) *FnetDocu
 // Hooks returns the client hooks.
 func (c *FnetSubCategory1Client) Hooks() []Hook {
 	return c.hooks.FnetSubCategory1
+}
+
+// Interceptors returns the client interceptors.
+func (c *FnetSubCategory1Client) Interceptors() []Interceptor {
+	return c.inters.FnetSubCategory1
+}
+
+func (c *FnetSubCategory1Client) mutate(ctx context.Context, m *FnetSubCategory1Mutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&FnetSubCategory1Create{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&FnetSubCategory1Update{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&FnetSubCategory1UpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&FnetSubCategory1Delete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("ent: unknown FnetSubCategory1 mutation op: %q", m.Op())
+	}
 }
 
 // FnetSubCategory2Client is a client for the FnetSubCategory2 schema.
@@ -510,6 +722,12 @@ func (c *FnetSubCategory2Client) Use(hooks ...Hook) {
 	c.hooks.FnetSubCategory2 = append(c.hooks.FnetSubCategory2, hooks...)
 }
 
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `fnetsubcategory2.Intercept(f(g(h())))`.
+func (c *FnetSubCategory2Client) Intercept(interceptors ...Interceptor) {
+	c.inters.FnetSubCategory2 = append(c.inters.FnetSubCategory2, interceptors...)
+}
+
 // Create returns a builder for creating a FnetSubCategory2 entity.
 func (c *FnetSubCategory2Client) Create() *FnetSubCategory2Create {
 	mutation := newFnetSubCategory2Mutation(c.config, OpCreate)
@@ -518,6 +736,21 @@ func (c *FnetSubCategory2Client) Create() *FnetSubCategory2Create {
 
 // CreateBulk returns a builder for creating a bulk of FnetSubCategory2 entities.
 func (c *FnetSubCategory2Client) CreateBulk(builders ...*FnetSubCategory2Create) *FnetSubCategory2CreateBulk {
+	return &FnetSubCategory2CreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *FnetSubCategory2Client) MapCreateBulk(slice any, setFunc func(*FnetSubCategory2Create, int)) *FnetSubCategory2CreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &FnetSubCategory2CreateBulk{err: fmt.Errorf("calling to FnetSubCategory2Client.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*FnetSubCategory2Create, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
 	return &FnetSubCategory2CreateBulk{config: c.config, builders: builders}
 }
 
@@ -550,7 +783,7 @@ func (c *FnetSubCategory2Client) DeleteOne(fsc *FnetSubCategory2) *FnetSubCatego
 	return c.DeleteOneID(fsc.ID)
 }
 
-// DeleteOne returns a builder for deleting the given entity by its id.
+// DeleteOneID returns a builder for deleting the given entity by its id.
 func (c *FnetSubCategory2Client) DeleteOneID(id int) *FnetSubCategory2DeleteOne {
 	builder := c.Delete().Where(fnetsubcategory2.ID(id))
 	builder.mutation.id = &id
@@ -562,6 +795,8 @@ func (c *FnetSubCategory2Client) DeleteOneID(id int) *FnetSubCategory2DeleteOne 
 func (c *FnetSubCategory2Client) Query() *FnetSubCategory2Query {
 	return &FnetSubCategory2Query{
 		config: c.config,
+		ctx:    &QueryContext{Type: TypeFnetSubCategory2},
+		inters: c.Interceptors(),
 	}
 }
 
@@ -581,8 +816,8 @@ func (c *FnetSubCategory2Client) GetX(ctx context.Context, id int) *FnetSubCateg
 
 // QueryDocuments queries the documents edge of a FnetSubCategory2.
 func (c *FnetSubCategory2Client) QueryDocuments(fsc *FnetSubCategory2) *FnetDocumentQuery {
-	query := &FnetDocumentQuery{config: c.config}
-	query.path = func(ctx context.Context) (fromV *sql.Selector, _ error) {
+	query := (&FnetDocumentClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
 		id := fsc.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(fnetsubcategory2.Table, fnetsubcategory2.FieldID, id),
@@ -599,3 +834,33 @@ func (c *FnetSubCategory2Client) QueryDocuments(fsc *FnetSubCategory2) *FnetDocu
 func (c *FnetSubCategory2Client) Hooks() []Hook {
 	return c.hooks.FnetSubCategory2
 }
+
+// Interceptors returns the client interceptors.
+func (c *FnetSubCategory2Client) Interceptors() []Interceptor {
+	return c.inters.FnetSubCategory2
+}
+
+func (c *FnetSubCategory2Client) mutate(ctx context.Context, m *FnetSubCategory2Mutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&FnetSubCategory2Create{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&FnetSubCategory2Update{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&FnetSubCategory2UpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&FnetSubCategory2Delete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("ent: unknown FnetSubCategory2 mutation op: %q", m.Op())
+	}
+}
+
+// hooks and interceptors per client, for fast access.
+type (
+	hooks struct {
+		FnetCategory, FnetDocument, FnetSubCategory1, FnetSubCategory2 []ent.Hook
+	}
+	inters struct {
+		FnetCategory, FnetDocument, FnetSubCategory1, FnetSubCategory2 []ent.Interceptor
+	}
+)

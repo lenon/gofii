@@ -4,7 +4,6 @@ package ent
 
 import (
 	"context"
-	"fmt"
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
@@ -28,34 +27,7 @@ func (fcd *FnetCategoryDelete) Where(ps ...predicate.FnetCategory) *FnetCategory
 
 // Exec executes the deletion query and returns how many vertices were deleted.
 func (fcd *FnetCategoryDelete) Exec(ctx context.Context) (int, error) {
-	var (
-		err      error
-		affected int
-	)
-	if len(fcd.hooks) == 0 {
-		affected, err = fcd.sqlExec(ctx)
-	} else {
-		var mut Mutator = MutateFunc(func(ctx context.Context, m Mutation) (Value, error) {
-			mutation, ok := m.(*FnetCategoryMutation)
-			if !ok {
-				return nil, fmt.Errorf("unexpected mutation type %T", m)
-			}
-			fcd.mutation = mutation
-			affected, err = fcd.sqlExec(ctx)
-			mutation.done = true
-			return affected, err
-		})
-		for i := len(fcd.hooks) - 1; i >= 0; i-- {
-			if fcd.hooks[i] == nil {
-				return 0, fmt.Errorf("ent: uninitialized hook (forgotten import ent/runtime?)")
-			}
-			mut = fcd.hooks[i](mut)
-		}
-		if _, err := mut.Mutate(ctx, fcd.mutation); err != nil {
-			return 0, err
-		}
-	}
-	return affected, err
+	return withHooks(ctx, fcd.sqlExec, fcd.mutation, fcd.hooks)
 }
 
 // ExecX is like Exec, but panics if an error occurs.
@@ -68,15 +40,7 @@ func (fcd *FnetCategoryDelete) ExecX(ctx context.Context) int {
 }
 
 func (fcd *FnetCategoryDelete) sqlExec(ctx context.Context) (int, error) {
-	_spec := &sqlgraph.DeleteSpec{
-		Node: &sqlgraph.NodeSpec{
-			Table: fnetcategory.Table,
-			ID: &sqlgraph.FieldSpec{
-				Type:   field.TypeInt,
-				Column: fnetcategory.FieldID,
-			},
-		},
-	}
+	_spec := sqlgraph.NewDeleteSpec(fnetcategory.Table, sqlgraph.NewFieldSpec(fnetcategory.FieldID, field.TypeInt))
 	if ps := fcd.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
@@ -88,12 +52,19 @@ func (fcd *FnetCategoryDelete) sqlExec(ctx context.Context) (int, error) {
 	if err != nil && sqlgraph.IsConstraintError(err) {
 		err = &ConstraintError{msg: err.Error(), wrap: err}
 	}
+	fcd.mutation.done = true
 	return affected, err
 }
 
 // FnetCategoryDeleteOne is the builder for deleting a single FnetCategory entity.
 type FnetCategoryDeleteOne struct {
 	fcd *FnetCategoryDelete
+}
+
+// Where appends a list predicates to the FnetCategoryDelete builder.
+func (fcdo *FnetCategoryDeleteOne) Where(ps ...predicate.FnetCategory) *FnetCategoryDeleteOne {
+	fcdo.fcd.mutation.Where(ps...)
+	return fcdo
 }
 
 // Exec executes the deletion query.
@@ -111,5 +82,7 @@ func (fcdo *FnetCategoryDeleteOne) Exec(ctx context.Context) error {
 
 // ExecX is like Exec, but panics if an error occurs.
 func (fcdo *FnetCategoryDeleteOne) ExecX(ctx context.Context) {
-	fcdo.fcd.ExecX(ctx)
+	if err := fcdo.Exec(ctx); err != nil {
+		panic(err)
+	}
 }

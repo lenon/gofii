@@ -9,13 +9,13 @@ import (
 	"sync"
 	"time"
 
+	"entgo.io/ent"
+	"entgo.io/ent/dialect/sql"
 	"github.com/lenon/gofii/ent/fnetcategory"
 	"github.com/lenon/gofii/ent/fnetdocument"
 	"github.com/lenon/gofii/ent/fnetsubcategory1"
 	"github.com/lenon/gofii/ent/fnetsubcategory2"
 	"github.com/lenon/gofii/ent/predicate"
-
-	"entgo.io/ent"
 )
 
 const (
@@ -242,9 +242,24 @@ func (m *FnetCategoryMutation) Where(ps ...predicate.FnetCategory) {
 	m.predicates = append(m.predicates, ps...)
 }
 
+// WhereP appends storage-level predicates to the FnetCategoryMutation builder. Using this method,
+// users can use type-assertion to append predicates that do not depend on any generated package.
+func (m *FnetCategoryMutation) WhereP(ps ...func(*sql.Selector)) {
+	p := make([]predicate.FnetCategory, len(ps))
+	for i := range ps {
+		p[i] = ps[i]
+	}
+	m.Where(p...)
+}
+
 // Op returns the operation name.
 func (m *FnetCategoryMutation) Op() Op {
 	return m.op
+}
+
+// SetOp allows setting the mutation operation.
+func (m *FnetCategoryMutation) SetOp(op Op) {
+	m.op = op
 }
 
 // Type returns the node type of this mutation (FnetCategory).
@@ -1509,9 +1524,24 @@ func (m *FnetDocumentMutation) Where(ps ...predicate.FnetDocument) {
 	m.predicates = append(m.predicates, ps...)
 }
 
+// WhereP appends storage-level predicates to the FnetDocumentMutation builder. Using this method,
+// users can use type-assertion to append predicates that do not depend on any generated package.
+func (m *FnetDocumentMutation) WhereP(ps ...func(*sql.Selector)) {
+	p := make([]predicate.FnetDocument, len(ps))
+	for i := range ps {
+		p[i] = ps[i]
+	}
+	m.Where(p...)
+}
+
 // Op returns the operation name.
 func (m *FnetDocumentMutation) Op() Op {
 	return m.op
+}
+
+// SetOp allows setting the mutation operation.
+func (m *FnetDocumentMutation) SetOp(op Op) {
+	m.op = op
 }
 
 // Type returns the node type of this mutation (FnetDocument).
@@ -2041,8 +2071,6 @@ func (m *FnetDocumentMutation) RemovedEdges() []string {
 // RemovedIDs returns all IDs (to other nodes) that were removed for the edge with
 // the given name in this mutation.
 func (m *FnetDocumentMutation) RemovedIDs(name string) []ent.Value {
-	switch name {
-	}
 	return nil
 }
 
@@ -2318,9 +2346,24 @@ func (m *FnetSubCategory1Mutation) Where(ps ...predicate.FnetSubCategory1) {
 	m.predicates = append(m.predicates, ps...)
 }
 
+// WhereP appends storage-level predicates to the FnetSubCategory1Mutation builder. Using this method,
+// users can use type-assertion to append predicates that do not depend on any generated package.
+func (m *FnetSubCategory1Mutation) WhereP(ps ...func(*sql.Selector)) {
+	p := make([]predicate.FnetSubCategory1, len(ps))
+	for i := range ps {
+		p[i] = ps[i]
+	}
+	m.Where(p...)
+}
+
 // Op returns the operation name.
 func (m *FnetSubCategory1Mutation) Op() Op {
 	return m.op
+}
+
+// SetOp allows setting the mutation operation.
+func (m *FnetSubCategory1Mutation) SetOp(op Op) {
+	m.op = op
 }
 
 // Type returns the node type of this mutation (FnetSubCategory1).
@@ -2722,9 +2765,24 @@ func (m *FnetSubCategory2Mutation) Where(ps ...predicate.FnetSubCategory2) {
 	m.predicates = append(m.predicates, ps...)
 }
 
+// WhereP appends storage-level predicates to the FnetSubCategory2Mutation builder. Using this method,
+// users can use type-assertion to append predicates that do not depend on any generated package.
+func (m *FnetSubCategory2Mutation) WhereP(ps ...func(*sql.Selector)) {
+	p := make([]predicate.FnetSubCategory2, len(ps))
+	for i := range ps {
+		p[i] = ps[i]
+	}
+	m.Where(p...)
+}
+
 // Op returns the operation name.
 func (m *FnetSubCategory2Mutation) Op() Op {
 	return m.op
+}
+
+// SetOp allows setting the mutation operation.
+func (m *FnetSubCategory2Mutation) SetOp(op Op) {
+	m.op = op
 }
 
 // Type returns the node type of this mutation (FnetSubCategory2).

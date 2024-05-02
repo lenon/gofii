@@ -71,34 +71,7 @@ func (fsc *FnetSubCategory1Update) RemoveDocuments(f ...*FnetDocument) *FnetSubC
 
 // Save executes the query and returns the number of nodes affected by the update operation.
 func (fsc *FnetSubCategory1Update) Save(ctx context.Context) (int, error) {
-	var (
-		err      error
-		affected int
-	)
-	if len(fsc.hooks) == 0 {
-		affected, err = fsc.sqlSave(ctx)
-	} else {
-		var mut Mutator = MutateFunc(func(ctx context.Context, m Mutation) (Value, error) {
-			mutation, ok := m.(*FnetSubCategory1Mutation)
-			if !ok {
-				return nil, fmt.Errorf("unexpected mutation type %T", m)
-			}
-			fsc.mutation = mutation
-			affected, err = fsc.sqlSave(ctx)
-			mutation.done = true
-			return affected, err
-		})
-		for i := len(fsc.hooks) - 1; i >= 0; i-- {
-			if fsc.hooks[i] == nil {
-				return 0, fmt.Errorf("ent: uninitialized hook (forgotten import ent/runtime?)")
-			}
-			mut = fsc.hooks[i](mut)
-		}
-		if _, err := mut.Mutate(ctx, fsc.mutation); err != nil {
-			return 0, err
-		}
-	}
-	return affected, err
+	return withHooks(ctx, fsc.sqlSave, fsc.mutation, fsc.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
@@ -124,16 +97,7 @@ func (fsc *FnetSubCategory1Update) ExecX(ctx context.Context) {
 }
 
 func (fsc *FnetSubCategory1Update) sqlSave(ctx context.Context) (n int, err error) {
-	_spec := &sqlgraph.UpdateSpec{
-		Node: &sqlgraph.NodeSpec{
-			Table:   fnetsubcategory1.Table,
-			Columns: fnetsubcategory1.Columns,
-			ID: &sqlgraph.FieldSpec{
-				Type:   field.TypeInt,
-				Column: fnetsubcategory1.FieldID,
-			},
-		},
-	}
+	_spec := sqlgraph.NewUpdateSpec(fnetsubcategory1.Table, fnetsubcategory1.Columns, sqlgraph.NewFieldSpec(fnetsubcategory1.FieldID, field.TypeInt))
 	if ps := fsc.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
@@ -149,10 +113,7 @@ func (fsc *FnetSubCategory1Update) sqlSave(ctx context.Context) (n int, err erro
 			Columns: []string{fnetsubcategory1.DocumentsColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: &sqlgraph.FieldSpec{
-					Type:   field.TypeInt,
-					Column: fnetdocument.FieldID,
-				},
+				IDSpec: sqlgraph.NewFieldSpec(fnetdocument.FieldID, field.TypeInt),
 			},
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
@@ -165,10 +126,7 @@ func (fsc *FnetSubCategory1Update) sqlSave(ctx context.Context) (n int, err erro
 			Columns: []string{fnetsubcategory1.DocumentsColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: &sqlgraph.FieldSpec{
-					Type:   field.TypeInt,
-					Column: fnetdocument.FieldID,
-				},
+				IDSpec: sqlgraph.NewFieldSpec(fnetdocument.FieldID, field.TypeInt),
 			},
 		}
 		for _, k := range nodes {
@@ -184,10 +142,7 @@ func (fsc *FnetSubCategory1Update) sqlSave(ctx context.Context) (n int, err erro
 			Columns: []string{fnetsubcategory1.DocumentsColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: &sqlgraph.FieldSpec{
-					Type:   field.TypeInt,
-					Column: fnetdocument.FieldID,
-				},
+				IDSpec: sqlgraph.NewFieldSpec(fnetdocument.FieldID, field.TypeInt),
 			},
 		}
 		for _, k := range nodes {
@@ -203,6 +158,7 @@ func (fsc *FnetSubCategory1Update) sqlSave(ctx context.Context) (n int, err erro
 		}
 		return 0, err
 	}
+	fsc.mutation.done = true
 	return n, nil
 }
 
@@ -255,6 +211,12 @@ func (fsco *FnetSubCategory1UpdateOne) RemoveDocuments(f ...*FnetDocument) *Fnet
 	return fsco.RemoveDocumentIDs(ids...)
 }
 
+// Where appends a list predicates to the FnetSubCategory1Update builder.
+func (fsco *FnetSubCategory1UpdateOne) Where(ps ...predicate.FnetSubCategory1) *FnetSubCategory1UpdateOne {
+	fsco.mutation.Where(ps...)
+	return fsco
+}
+
 // Select allows selecting one or more fields (columns) of the returned entity.
 // The default is selecting all fields defined in the entity schema.
 func (fsco *FnetSubCategory1UpdateOne) Select(field string, fields ...string) *FnetSubCategory1UpdateOne {
@@ -264,40 +226,7 @@ func (fsco *FnetSubCategory1UpdateOne) Select(field string, fields ...string) *F
 
 // Save executes the query and returns the updated FnetSubCategory1 entity.
 func (fsco *FnetSubCategory1UpdateOne) Save(ctx context.Context) (*FnetSubCategory1, error) {
-	var (
-		err  error
-		node *FnetSubCategory1
-	)
-	if len(fsco.hooks) == 0 {
-		node, err = fsco.sqlSave(ctx)
-	} else {
-		var mut Mutator = MutateFunc(func(ctx context.Context, m Mutation) (Value, error) {
-			mutation, ok := m.(*FnetSubCategory1Mutation)
-			if !ok {
-				return nil, fmt.Errorf("unexpected mutation type %T", m)
-			}
-			fsco.mutation = mutation
-			node, err = fsco.sqlSave(ctx)
-			mutation.done = true
-			return node, err
-		})
-		for i := len(fsco.hooks) - 1; i >= 0; i-- {
-			if fsco.hooks[i] == nil {
-				return nil, fmt.Errorf("ent: uninitialized hook (forgotten import ent/runtime?)")
-			}
-			mut = fsco.hooks[i](mut)
-		}
-		v, err := mut.Mutate(ctx, fsco.mutation)
-		if err != nil {
-			return nil, err
-		}
-		nv, ok := v.(*FnetSubCategory1)
-		if !ok {
-			return nil, fmt.Errorf("unexpected node type %T returned from FnetSubCategory1Mutation", v)
-		}
-		node = nv
-	}
-	return node, err
+	return withHooks(ctx, fsco.sqlSave, fsco.mutation, fsco.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
@@ -323,16 +252,7 @@ func (fsco *FnetSubCategory1UpdateOne) ExecX(ctx context.Context) {
 }
 
 func (fsco *FnetSubCategory1UpdateOne) sqlSave(ctx context.Context) (_node *FnetSubCategory1, err error) {
-	_spec := &sqlgraph.UpdateSpec{
-		Node: &sqlgraph.NodeSpec{
-			Table:   fnetsubcategory1.Table,
-			Columns: fnetsubcategory1.Columns,
-			ID: &sqlgraph.FieldSpec{
-				Type:   field.TypeInt,
-				Column: fnetsubcategory1.FieldID,
-			},
-		},
-	}
+	_spec := sqlgraph.NewUpdateSpec(fnetsubcategory1.Table, fnetsubcategory1.Columns, sqlgraph.NewFieldSpec(fnetsubcategory1.FieldID, field.TypeInt))
 	id, ok := fsco.mutation.ID()
 	if !ok {
 		return nil, &ValidationError{Name: "id", err: errors.New(`ent: missing "FnetSubCategory1.id" for update`)}
@@ -365,10 +285,7 @@ func (fsco *FnetSubCategory1UpdateOne) sqlSave(ctx context.Context) (_node *Fnet
 			Columns: []string{fnetsubcategory1.DocumentsColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: &sqlgraph.FieldSpec{
-					Type:   field.TypeInt,
-					Column: fnetdocument.FieldID,
-				},
+				IDSpec: sqlgraph.NewFieldSpec(fnetdocument.FieldID, field.TypeInt),
 			},
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
@@ -381,10 +298,7 @@ func (fsco *FnetSubCategory1UpdateOne) sqlSave(ctx context.Context) (_node *Fnet
 			Columns: []string{fnetsubcategory1.DocumentsColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: &sqlgraph.FieldSpec{
-					Type:   field.TypeInt,
-					Column: fnetdocument.FieldID,
-				},
+				IDSpec: sqlgraph.NewFieldSpec(fnetdocument.FieldID, field.TypeInt),
 			},
 		}
 		for _, k := range nodes {
@@ -400,10 +314,7 @@ func (fsco *FnetSubCategory1UpdateOne) sqlSave(ctx context.Context) (_node *Fnet
 			Columns: []string{fnetsubcategory1.DocumentsColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: &sqlgraph.FieldSpec{
-					Type:   field.TypeInt,
-					Column: fnetdocument.FieldID,
-				},
+				IDSpec: sqlgraph.NewFieldSpec(fnetdocument.FieldID, field.TypeInt),
 			},
 		}
 		for _, k := range nodes {
@@ -422,5 +333,6 @@ func (fsco *FnetSubCategory1UpdateOne) sqlSave(ctx context.Context) (_node *Fnet
 		}
 		return nil, err
 	}
+	fsco.mutation.done = true
 	return _node, nil
 }

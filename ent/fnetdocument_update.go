@@ -57,9 +57,25 @@ func (fdu *FnetDocumentUpdate) SetCategoryStr(s string) *FnetDocumentUpdate {
 	return fdu
 }
 
+// SetNillableCategoryStr sets the "category_str" field if the given value is not nil.
+func (fdu *FnetDocumentUpdate) SetNillableCategoryStr(s *string) *FnetDocumentUpdate {
+	if s != nil {
+		fdu.SetCategoryStr(*s)
+	}
+	return fdu
+}
+
 // SetFundDescription sets the "fund_description" field.
 func (fdu *FnetDocumentUpdate) SetFundDescription(s string) *FnetDocumentUpdate {
 	fdu.mutation.SetFundDescription(s)
+	return fdu
+}
+
+// SetNillableFundDescription sets the "fund_description" field if the given value is not nil.
+func (fdu *FnetDocumentUpdate) SetNillableFundDescription(s *string) *FnetDocumentUpdate {
+	if s != nil {
+		fdu.SetFundDescription(*s)
+	}
 	return fdu
 }
 
@@ -89,9 +105,25 @@ func (fdu *FnetDocumentUpdate) SetHighPriority(b bool) *FnetDocumentUpdate {
 	return fdu
 }
 
+// SetNillableHighPriority sets the "high_priority" field if the given value is not nil.
+func (fdu *FnetDocumentUpdate) SetNillableHighPriority(b *bool) *FnetDocumentUpdate {
+	if b != nil {
+		fdu.SetHighPriority(*b)
+	}
+	return fdu
+}
+
 // SetReferenceDate sets the "reference_date" field.
 func (fdu *FnetDocumentUpdate) SetReferenceDate(t time.Time) *FnetDocumentUpdate {
 	fdu.mutation.SetReferenceDate(t)
+	return fdu
+}
+
+// SetNillableReferenceDate sets the "reference_date" field if the given value is not nil.
+func (fdu *FnetDocumentUpdate) SetNillableReferenceDate(t *time.Time) *FnetDocumentUpdate {
+	if t != nil {
+		fdu.SetReferenceDate(*t)
+	}
 	return fdu
 }
 
@@ -101,9 +133,25 @@ func (fdu *FnetDocumentUpdate) SetReferenceDateFormat(s string) *FnetDocumentUpd
 	return fdu
 }
 
+// SetNillableReferenceDateFormat sets the "reference_date_format" field if the given value is not nil.
+func (fdu *FnetDocumentUpdate) SetNillableReferenceDateFormat(s *string) *FnetDocumentUpdate {
+	if s != nil {
+		fdu.SetReferenceDateFormat(*s)
+	}
+	return fdu
+}
+
 // SetReferenceDateStr sets the "reference_date_str" field.
 func (fdu *FnetDocumentUpdate) SetReferenceDateStr(s string) *FnetDocumentUpdate {
 	fdu.mutation.SetReferenceDateStr(s)
+	return fdu
+}
+
+// SetNillableReferenceDateStr sets the "reference_date_str" field if the given value is not nil.
+func (fdu *FnetDocumentUpdate) SetNillableReferenceDateStr(s *string) *FnetDocumentUpdate {
+	if s != nil {
+		fdu.SetReferenceDateStr(*s)
+	}
 	return fdu
 }
 
@@ -113,9 +161,25 @@ func (fdu *FnetDocumentUpdate) SetReviewed(s string) *FnetDocumentUpdate {
 	return fdu
 }
 
+// SetNillableReviewed sets the "reviewed" field if the given value is not nil.
+func (fdu *FnetDocumentUpdate) SetNillableReviewed(s *string) *FnetDocumentUpdate {
+	if s != nil {
+		fdu.SetReviewed(*s)
+	}
+	return fdu
+}
+
 // SetStatus sets the "status" field.
 func (fdu *FnetDocumentUpdate) SetStatus(s string) *FnetDocumentUpdate {
 	fdu.mutation.SetStatus(s)
+	return fdu
+}
+
+// SetNillableStatus sets the "status" field if the given value is not nil.
+func (fdu *FnetDocumentUpdate) SetNillableStatus(s *string) *FnetDocumentUpdate {
+	if s != nil {
+		fdu.SetStatus(*s)
+	}
 	return fdu
 }
 
@@ -165,9 +229,25 @@ func (fdu *FnetDocumentUpdate) SetSubmissionDate(t time.Time) *FnetDocumentUpdat
 	return fdu
 }
 
+// SetNillableSubmissionDate sets the "submission_date" field if the given value is not nil.
+func (fdu *FnetDocumentUpdate) SetNillableSubmissionDate(t *time.Time) *FnetDocumentUpdate {
+	if t != nil {
+		fdu.SetSubmissionDate(*t)
+	}
+	return fdu
+}
+
 // SetSubmissionDateStr sets the "submission_date_str" field.
 func (fdu *FnetDocumentUpdate) SetSubmissionDateStr(s string) *FnetDocumentUpdate {
 	fdu.mutation.SetSubmissionDateStr(s)
+	return fdu
+}
+
+// SetNillableSubmissionDateStr sets the "submission_date_str" field if the given value is not nil.
+func (fdu *FnetDocumentUpdate) SetNillableSubmissionDateStr(s *string) *FnetDocumentUpdate {
+	if s != nil {
+		fdu.SetSubmissionDateStr(*s)
+	}
 	return fdu
 }
 
@@ -177,9 +257,25 @@ func (fdu *FnetDocumentUpdate) SetSubmissionMethod(s string) *FnetDocumentUpdate
 	return fdu
 }
 
+// SetNillableSubmissionMethod sets the "submission_method" field if the given value is not nil.
+func (fdu *FnetDocumentUpdate) SetNillableSubmissionMethod(s *string) *FnetDocumentUpdate {
+	if s != nil {
+		fdu.SetSubmissionMethod(*s)
+	}
+	return fdu
+}
+
 // SetSubmissionMethodDescription sets the "submission_method_description" field.
 func (fdu *FnetDocumentUpdate) SetSubmissionMethodDescription(s string) *FnetDocumentUpdate {
 	fdu.mutation.SetSubmissionMethodDescription(s)
+	return fdu
+}
+
+// SetNillableSubmissionMethodDescription sets the "submission_method_description" field if the given value is not nil.
+func (fdu *FnetDocumentUpdate) SetNillableSubmissionMethodDescription(s *string) *FnetDocumentUpdate {
+	if s != nil {
+		fdu.SetSubmissionMethodDescription(*s)
+	}
 	return fdu
 }
 
@@ -189,9 +285,25 @@ func (fdu *FnetDocumentUpdate) SetSubmissionStatus(s string) *FnetDocumentUpdate
 	return fdu
 }
 
+// SetNillableSubmissionStatus sets the "submission_status" field if the given value is not nil.
+func (fdu *FnetDocumentUpdate) SetNillableSubmissionStatus(s *string) *FnetDocumentUpdate {
+	if s != nil {
+		fdu.SetSubmissionStatus(*s)
+	}
+	return fdu
+}
+
 // SetSubmissionStatusDescription sets the "submission_status_description" field.
 func (fdu *FnetDocumentUpdate) SetSubmissionStatusDescription(s string) *FnetDocumentUpdate {
 	fdu.mutation.SetSubmissionStatusDescription(s)
+	return fdu
+}
+
+// SetNillableSubmissionStatusDescription sets the "submission_status_description" field if the given value is not nil.
+func (fdu *FnetDocumentUpdate) SetNillableSubmissionStatusDescription(s *string) *FnetDocumentUpdate {
+	if s != nil {
+		fdu.SetSubmissionStatusDescription(*s)
+	}
 	return fdu
 }
 
@@ -199,6 +311,14 @@ func (fdu *FnetDocumentUpdate) SetSubmissionStatusDescription(s string) *FnetDoc
 func (fdu *FnetDocumentUpdate) SetVersion(i int) *FnetDocumentUpdate {
 	fdu.mutation.ResetVersion()
 	fdu.mutation.SetVersion(i)
+	return fdu
+}
+
+// SetNillableVersion sets the "version" field if the given value is not nil.
+func (fdu *FnetDocumentUpdate) SetNillableVersion(i *int) *FnetDocumentUpdate {
+	if i != nil {
+		fdu.SetVersion(*i)
+	}
 	return fdu
 }
 
@@ -282,40 +402,7 @@ func (fdu *FnetDocumentUpdate) ClearSubCategory2() *FnetDocumentUpdate {
 
 // Save executes the query and returns the number of nodes affected by the update operation.
 func (fdu *FnetDocumentUpdate) Save(ctx context.Context) (int, error) {
-	var (
-		err      error
-		affected int
-	)
-	if len(fdu.hooks) == 0 {
-		if err = fdu.check(); err != nil {
-			return 0, err
-		}
-		affected, err = fdu.sqlSave(ctx)
-	} else {
-		var mut Mutator = MutateFunc(func(ctx context.Context, m Mutation) (Value, error) {
-			mutation, ok := m.(*FnetDocumentMutation)
-			if !ok {
-				return nil, fmt.Errorf("unexpected mutation type %T", m)
-			}
-			if err = fdu.check(); err != nil {
-				return 0, err
-			}
-			fdu.mutation = mutation
-			affected, err = fdu.sqlSave(ctx)
-			mutation.done = true
-			return affected, err
-		})
-		for i := len(fdu.hooks) - 1; i >= 0; i-- {
-			if fdu.hooks[i] == nil {
-				return 0, fmt.Errorf("ent: uninitialized hook (forgotten import ent/runtime?)")
-			}
-			mut = fdu.hooks[i](mut)
-		}
-		if _, err := mut.Mutate(ctx, fdu.mutation); err != nil {
-			return 0, err
-		}
-	}
-	return affected, err
+	return withHooks(ctx, fdu.sqlSave, fdu.mutation, fdu.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
@@ -409,16 +496,10 @@ func (fdu *FnetDocumentUpdate) check() error {
 }
 
 func (fdu *FnetDocumentUpdate) sqlSave(ctx context.Context) (n int, err error) {
-	_spec := &sqlgraph.UpdateSpec{
-		Node: &sqlgraph.NodeSpec{
-			Table:   fnetdocument.Table,
-			Columns: fnetdocument.Columns,
-			ID: &sqlgraph.FieldSpec{
-				Type:   field.TypeInt,
-				Column: fnetdocument.FieldID,
-			},
-		},
+	if err := fdu.check(); err != nil {
+		return n, err
 	}
+	_spec := sqlgraph.NewUpdateSpec(fnetdocument.Table, fnetdocument.Columns, sqlgraph.NewFieldSpec(fnetdocument.FieldID, field.TypeInt))
 	if ps := fdu.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
@@ -427,168 +508,76 @@ func (fdu *FnetDocumentUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 	}
 	if value, ok := fdu.mutation.AdditionalInformation(); ok {
-		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeString,
-			Value:  value,
-			Column: fnetdocument.FieldAdditionalInformation,
-		})
+		_spec.SetField(fnetdocument.FieldAdditionalInformation, field.TypeString, value)
 	}
 	if fdu.mutation.AdditionalInformationCleared() {
-		_spec.Fields.Clear = append(_spec.Fields.Clear, &sqlgraph.FieldSpec{
-			Type:   field.TypeString,
-			Column: fnetdocument.FieldAdditionalInformation,
-		})
+		_spec.ClearField(fnetdocument.FieldAdditionalInformation, field.TypeString)
 	}
 	if value, ok := fdu.mutation.CategoryStr(); ok {
-		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeString,
-			Value:  value,
-			Column: fnetdocument.FieldCategoryStr,
-		})
+		_spec.SetField(fnetdocument.FieldCategoryStr, field.TypeString, value)
 	}
 	if value, ok := fdu.mutation.FundDescription(); ok {
-		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeString,
-			Value:  value,
-			Column: fnetdocument.FieldFundDescription,
-		})
+		_spec.SetField(fnetdocument.FieldFundDescription, field.TypeString, value)
 	}
 	if value, ok := fdu.mutation.FundMarketName(); ok {
-		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeString,
-			Value:  value,
-			Column: fnetdocument.FieldFundMarketName,
-		})
+		_spec.SetField(fnetdocument.FieldFundMarketName, field.TypeString, value)
 	}
 	if fdu.mutation.FundMarketNameCleared() {
-		_spec.Fields.Clear = append(_spec.Fields.Clear, &sqlgraph.FieldSpec{
-			Type:   field.TypeString,
-			Column: fnetdocument.FieldFundMarketName,
-		})
+		_spec.ClearField(fnetdocument.FieldFundMarketName, field.TypeString)
 	}
 	if value, ok := fdu.mutation.HighPriority(); ok {
-		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeBool,
-			Value:  value,
-			Column: fnetdocument.FieldHighPriority,
-		})
+		_spec.SetField(fnetdocument.FieldHighPriority, field.TypeBool, value)
 	}
 	if value, ok := fdu.mutation.ReferenceDate(); ok {
-		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeTime,
-			Value:  value,
-			Column: fnetdocument.FieldReferenceDate,
-		})
+		_spec.SetField(fnetdocument.FieldReferenceDate, field.TypeTime, value)
 	}
 	if value, ok := fdu.mutation.ReferenceDateFormat(); ok {
-		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeString,
-			Value:  value,
-			Column: fnetdocument.FieldReferenceDateFormat,
-		})
+		_spec.SetField(fnetdocument.FieldReferenceDateFormat, field.TypeString, value)
 	}
 	if value, ok := fdu.mutation.ReferenceDateStr(); ok {
-		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeString,
-			Value:  value,
-			Column: fnetdocument.FieldReferenceDateStr,
-		})
+		_spec.SetField(fnetdocument.FieldReferenceDateStr, field.TypeString, value)
 	}
 	if value, ok := fdu.mutation.Reviewed(); ok {
-		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeString,
-			Value:  value,
-			Column: fnetdocument.FieldReviewed,
-		})
+		_spec.SetField(fnetdocument.FieldReviewed, field.TypeString, value)
 	}
 	if value, ok := fdu.mutation.Status(); ok {
-		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeString,
-			Value:  value,
-			Column: fnetdocument.FieldStatus,
-		})
+		_spec.SetField(fnetdocument.FieldStatus, field.TypeString, value)
 	}
 	if value, ok := fdu.mutation.SubCategory1Str(); ok {
-		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeString,
-			Value:  value,
-			Column: fnetdocument.FieldSubCategory1Str,
-		})
+		_spec.SetField(fnetdocument.FieldSubCategory1Str, field.TypeString, value)
 	}
 	if fdu.mutation.SubCategory1StrCleared() {
-		_spec.Fields.Clear = append(_spec.Fields.Clear, &sqlgraph.FieldSpec{
-			Type:   field.TypeString,
-			Column: fnetdocument.FieldSubCategory1Str,
-		})
+		_spec.ClearField(fnetdocument.FieldSubCategory1Str, field.TypeString)
 	}
 	if value, ok := fdu.mutation.SubCategory2Str(); ok {
-		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeString,
-			Value:  value,
-			Column: fnetdocument.FieldSubCategory2Str,
-		})
+		_spec.SetField(fnetdocument.FieldSubCategory2Str, field.TypeString, value)
 	}
 	if fdu.mutation.SubCategory2StrCleared() {
-		_spec.Fields.Clear = append(_spec.Fields.Clear, &sqlgraph.FieldSpec{
-			Type:   field.TypeString,
-			Column: fnetdocument.FieldSubCategory2Str,
-		})
+		_spec.ClearField(fnetdocument.FieldSubCategory2Str, field.TypeString)
 	}
 	if value, ok := fdu.mutation.SubmissionDate(); ok {
-		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeTime,
-			Value:  value,
-			Column: fnetdocument.FieldSubmissionDate,
-		})
+		_spec.SetField(fnetdocument.FieldSubmissionDate, field.TypeTime, value)
 	}
 	if value, ok := fdu.mutation.SubmissionDateStr(); ok {
-		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeString,
-			Value:  value,
-			Column: fnetdocument.FieldSubmissionDateStr,
-		})
+		_spec.SetField(fnetdocument.FieldSubmissionDateStr, field.TypeString, value)
 	}
 	if value, ok := fdu.mutation.SubmissionMethod(); ok {
-		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeString,
-			Value:  value,
-			Column: fnetdocument.FieldSubmissionMethod,
-		})
+		_spec.SetField(fnetdocument.FieldSubmissionMethod, field.TypeString, value)
 	}
 	if value, ok := fdu.mutation.SubmissionMethodDescription(); ok {
-		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeString,
-			Value:  value,
-			Column: fnetdocument.FieldSubmissionMethodDescription,
-		})
+		_spec.SetField(fnetdocument.FieldSubmissionMethodDescription, field.TypeString, value)
 	}
 	if value, ok := fdu.mutation.SubmissionStatus(); ok {
-		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeString,
-			Value:  value,
-			Column: fnetdocument.FieldSubmissionStatus,
-		})
+		_spec.SetField(fnetdocument.FieldSubmissionStatus, field.TypeString, value)
 	}
 	if value, ok := fdu.mutation.SubmissionStatusDescription(); ok {
-		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeString,
-			Value:  value,
-			Column: fnetdocument.FieldSubmissionStatusDescription,
-		})
+		_spec.SetField(fnetdocument.FieldSubmissionStatusDescription, field.TypeString, value)
 	}
 	if value, ok := fdu.mutation.Version(); ok {
-		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt,
-			Value:  value,
-			Column: fnetdocument.FieldVersion,
-		})
+		_spec.SetField(fnetdocument.FieldVersion, field.TypeInt, value)
 	}
 	if value, ok := fdu.mutation.AddedVersion(); ok {
-		_spec.Fields.Add = append(_spec.Fields.Add, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt,
-			Value:  value,
-			Column: fnetdocument.FieldVersion,
-		})
+		_spec.AddField(fnetdocument.FieldVersion, field.TypeInt, value)
 	}
 	if fdu.mutation.CategoryCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -598,10 +587,7 @@ func (fdu *FnetDocumentUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Columns: []string{fnetdocument.CategoryColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: &sqlgraph.FieldSpec{
-					Type:   field.TypeInt,
-					Column: fnetcategory.FieldID,
-				},
+				IDSpec: sqlgraph.NewFieldSpec(fnetcategory.FieldID, field.TypeInt),
 			},
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
@@ -614,10 +600,7 @@ func (fdu *FnetDocumentUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Columns: []string{fnetdocument.CategoryColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: &sqlgraph.FieldSpec{
-					Type:   field.TypeInt,
-					Column: fnetcategory.FieldID,
-				},
+				IDSpec: sqlgraph.NewFieldSpec(fnetcategory.FieldID, field.TypeInt),
 			},
 		}
 		for _, k := range nodes {
@@ -633,10 +616,7 @@ func (fdu *FnetDocumentUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Columns: []string{fnetdocument.SubCategory1Column},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: &sqlgraph.FieldSpec{
-					Type:   field.TypeInt,
-					Column: fnetsubcategory1.FieldID,
-				},
+				IDSpec: sqlgraph.NewFieldSpec(fnetsubcategory1.FieldID, field.TypeInt),
 			},
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
@@ -649,10 +629,7 @@ func (fdu *FnetDocumentUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Columns: []string{fnetdocument.SubCategory1Column},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: &sqlgraph.FieldSpec{
-					Type:   field.TypeInt,
-					Column: fnetsubcategory1.FieldID,
-				},
+				IDSpec: sqlgraph.NewFieldSpec(fnetsubcategory1.FieldID, field.TypeInt),
 			},
 		}
 		for _, k := range nodes {
@@ -668,10 +645,7 @@ func (fdu *FnetDocumentUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Columns: []string{fnetdocument.SubCategory2Column},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: &sqlgraph.FieldSpec{
-					Type:   field.TypeInt,
-					Column: fnetsubcategory2.FieldID,
-				},
+				IDSpec: sqlgraph.NewFieldSpec(fnetsubcategory2.FieldID, field.TypeInt),
 			},
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
@@ -684,10 +658,7 @@ func (fdu *FnetDocumentUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Columns: []string{fnetdocument.SubCategory2Column},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: &sqlgraph.FieldSpec{
-					Type:   field.TypeInt,
-					Column: fnetsubcategory2.FieldID,
-				},
+				IDSpec: sqlgraph.NewFieldSpec(fnetsubcategory2.FieldID, field.TypeInt),
 			},
 		}
 		for _, k := range nodes {
@@ -703,6 +674,7 @@ func (fdu *FnetDocumentUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		return 0, err
 	}
+	fdu.mutation.done = true
 	return n, nil
 }
 
@@ -740,9 +712,25 @@ func (fduo *FnetDocumentUpdateOne) SetCategoryStr(s string) *FnetDocumentUpdateO
 	return fduo
 }
 
+// SetNillableCategoryStr sets the "category_str" field if the given value is not nil.
+func (fduo *FnetDocumentUpdateOne) SetNillableCategoryStr(s *string) *FnetDocumentUpdateOne {
+	if s != nil {
+		fduo.SetCategoryStr(*s)
+	}
+	return fduo
+}
+
 // SetFundDescription sets the "fund_description" field.
 func (fduo *FnetDocumentUpdateOne) SetFundDescription(s string) *FnetDocumentUpdateOne {
 	fduo.mutation.SetFundDescription(s)
+	return fduo
+}
+
+// SetNillableFundDescription sets the "fund_description" field if the given value is not nil.
+func (fduo *FnetDocumentUpdateOne) SetNillableFundDescription(s *string) *FnetDocumentUpdateOne {
+	if s != nil {
+		fduo.SetFundDescription(*s)
+	}
 	return fduo
 }
 
@@ -772,9 +760,25 @@ func (fduo *FnetDocumentUpdateOne) SetHighPriority(b bool) *FnetDocumentUpdateOn
 	return fduo
 }
 
+// SetNillableHighPriority sets the "high_priority" field if the given value is not nil.
+func (fduo *FnetDocumentUpdateOne) SetNillableHighPriority(b *bool) *FnetDocumentUpdateOne {
+	if b != nil {
+		fduo.SetHighPriority(*b)
+	}
+	return fduo
+}
+
 // SetReferenceDate sets the "reference_date" field.
 func (fduo *FnetDocumentUpdateOne) SetReferenceDate(t time.Time) *FnetDocumentUpdateOne {
 	fduo.mutation.SetReferenceDate(t)
+	return fduo
+}
+
+// SetNillableReferenceDate sets the "reference_date" field if the given value is not nil.
+func (fduo *FnetDocumentUpdateOne) SetNillableReferenceDate(t *time.Time) *FnetDocumentUpdateOne {
+	if t != nil {
+		fduo.SetReferenceDate(*t)
+	}
 	return fduo
 }
 
@@ -784,9 +788,25 @@ func (fduo *FnetDocumentUpdateOne) SetReferenceDateFormat(s string) *FnetDocumen
 	return fduo
 }
 
+// SetNillableReferenceDateFormat sets the "reference_date_format" field if the given value is not nil.
+func (fduo *FnetDocumentUpdateOne) SetNillableReferenceDateFormat(s *string) *FnetDocumentUpdateOne {
+	if s != nil {
+		fduo.SetReferenceDateFormat(*s)
+	}
+	return fduo
+}
+
 // SetReferenceDateStr sets the "reference_date_str" field.
 func (fduo *FnetDocumentUpdateOne) SetReferenceDateStr(s string) *FnetDocumentUpdateOne {
 	fduo.mutation.SetReferenceDateStr(s)
+	return fduo
+}
+
+// SetNillableReferenceDateStr sets the "reference_date_str" field if the given value is not nil.
+func (fduo *FnetDocumentUpdateOne) SetNillableReferenceDateStr(s *string) *FnetDocumentUpdateOne {
+	if s != nil {
+		fduo.SetReferenceDateStr(*s)
+	}
 	return fduo
 }
 
@@ -796,9 +816,25 @@ func (fduo *FnetDocumentUpdateOne) SetReviewed(s string) *FnetDocumentUpdateOne 
 	return fduo
 }
 
+// SetNillableReviewed sets the "reviewed" field if the given value is not nil.
+func (fduo *FnetDocumentUpdateOne) SetNillableReviewed(s *string) *FnetDocumentUpdateOne {
+	if s != nil {
+		fduo.SetReviewed(*s)
+	}
+	return fduo
+}
+
 // SetStatus sets the "status" field.
 func (fduo *FnetDocumentUpdateOne) SetStatus(s string) *FnetDocumentUpdateOne {
 	fduo.mutation.SetStatus(s)
+	return fduo
+}
+
+// SetNillableStatus sets the "status" field if the given value is not nil.
+func (fduo *FnetDocumentUpdateOne) SetNillableStatus(s *string) *FnetDocumentUpdateOne {
+	if s != nil {
+		fduo.SetStatus(*s)
+	}
 	return fduo
 }
 
@@ -848,9 +884,25 @@ func (fduo *FnetDocumentUpdateOne) SetSubmissionDate(t time.Time) *FnetDocumentU
 	return fduo
 }
 
+// SetNillableSubmissionDate sets the "submission_date" field if the given value is not nil.
+func (fduo *FnetDocumentUpdateOne) SetNillableSubmissionDate(t *time.Time) *FnetDocumentUpdateOne {
+	if t != nil {
+		fduo.SetSubmissionDate(*t)
+	}
+	return fduo
+}
+
 // SetSubmissionDateStr sets the "submission_date_str" field.
 func (fduo *FnetDocumentUpdateOne) SetSubmissionDateStr(s string) *FnetDocumentUpdateOne {
 	fduo.mutation.SetSubmissionDateStr(s)
+	return fduo
+}
+
+// SetNillableSubmissionDateStr sets the "submission_date_str" field if the given value is not nil.
+func (fduo *FnetDocumentUpdateOne) SetNillableSubmissionDateStr(s *string) *FnetDocumentUpdateOne {
+	if s != nil {
+		fduo.SetSubmissionDateStr(*s)
+	}
 	return fduo
 }
 
@@ -860,9 +912,25 @@ func (fduo *FnetDocumentUpdateOne) SetSubmissionMethod(s string) *FnetDocumentUp
 	return fduo
 }
 
+// SetNillableSubmissionMethod sets the "submission_method" field if the given value is not nil.
+func (fduo *FnetDocumentUpdateOne) SetNillableSubmissionMethod(s *string) *FnetDocumentUpdateOne {
+	if s != nil {
+		fduo.SetSubmissionMethod(*s)
+	}
+	return fduo
+}
+
 // SetSubmissionMethodDescription sets the "submission_method_description" field.
 func (fduo *FnetDocumentUpdateOne) SetSubmissionMethodDescription(s string) *FnetDocumentUpdateOne {
 	fduo.mutation.SetSubmissionMethodDescription(s)
+	return fduo
+}
+
+// SetNillableSubmissionMethodDescription sets the "submission_method_description" field if the given value is not nil.
+func (fduo *FnetDocumentUpdateOne) SetNillableSubmissionMethodDescription(s *string) *FnetDocumentUpdateOne {
+	if s != nil {
+		fduo.SetSubmissionMethodDescription(*s)
+	}
 	return fduo
 }
 
@@ -872,9 +940,25 @@ func (fduo *FnetDocumentUpdateOne) SetSubmissionStatus(s string) *FnetDocumentUp
 	return fduo
 }
 
+// SetNillableSubmissionStatus sets the "submission_status" field if the given value is not nil.
+func (fduo *FnetDocumentUpdateOne) SetNillableSubmissionStatus(s *string) *FnetDocumentUpdateOne {
+	if s != nil {
+		fduo.SetSubmissionStatus(*s)
+	}
+	return fduo
+}
+
 // SetSubmissionStatusDescription sets the "submission_status_description" field.
 func (fduo *FnetDocumentUpdateOne) SetSubmissionStatusDescription(s string) *FnetDocumentUpdateOne {
 	fduo.mutation.SetSubmissionStatusDescription(s)
+	return fduo
+}
+
+// SetNillableSubmissionStatusDescription sets the "submission_status_description" field if the given value is not nil.
+func (fduo *FnetDocumentUpdateOne) SetNillableSubmissionStatusDescription(s *string) *FnetDocumentUpdateOne {
+	if s != nil {
+		fduo.SetSubmissionStatusDescription(*s)
+	}
 	return fduo
 }
 
@@ -882,6 +966,14 @@ func (fduo *FnetDocumentUpdateOne) SetSubmissionStatusDescription(s string) *Fne
 func (fduo *FnetDocumentUpdateOne) SetVersion(i int) *FnetDocumentUpdateOne {
 	fduo.mutation.ResetVersion()
 	fduo.mutation.SetVersion(i)
+	return fduo
+}
+
+// SetNillableVersion sets the "version" field if the given value is not nil.
+func (fduo *FnetDocumentUpdateOne) SetNillableVersion(i *int) *FnetDocumentUpdateOne {
+	if i != nil {
+		fduo.SetVersion(*i)
+	}
 	return fduo
 }
 
@@ -963,6 +1055,12 @@ func (fduo *FnetDocumentUpdateOne) ClearSubCategory2() *FnetDocumentUpdateOne {
 	return fduo
 }
 
+// Where appends a list predicates to the FnetDocumentUpdate builder.
+func (fduo *FnetDocumentUpdateOne) Where(ps ...predicate.FnetDocument) *FnetDocumentUpdateOne {
+	fduo.mutation.Where(ps...)
+	return fduo
+}
+
 // Select allows selecting one or more fields (columns) of the returned entity.
 // The default is selecting all fields defined in the entity schema.
 func (fduo *FnetDocumentUpdateOne) Select(field string, fields ...string) *FnetDocumentUpdateOne {
@@ -972,46 +1070,7 @@ func (fduo *FnetDocumentUpdateOne) Select(field string, fields ...string) *FnetD
 
 // Save executes the query and returns the updated FnetDocument entity.
 func (fduo *FnetDocumentUpdateOne) Save(ctx context.Context) (*FnetDocument, error) {
-	var (
-		err  error
-		node *FnetDocument
-	)
-	if len(fduo.hooks) == 0 {
-		if err = fduo.check(); err != nil {
-			return nil, err
-		}
-		node, err = fduo.sqlSave(ctx)
-	} else {
-		var mut Mutator = MutateFunc(func(ctx context.Context, m Mutation) (Value, error) {
-			mutation, ok := m.(*FnetDocumentMutation)
-			if !ok {
-				return nil, fmt.Errorf("unexpected mutation type %T", m)
-			}
-			if err = fduo.check(); err != nil {
-				return nil, err
-			}
-			fduo.mutation = mutation
-			node, err = fduo.sqlSave(ctx)
-			mutation.done = true
-			return node, err
-		})
-		for i := len(fduo.hooks) - 1; i >= 0; i-- {
-			if fduo.hooks[i] == nil {
-				return nil, fmt.Errorf("ent: uninitialized hook (forgotten import ent/runtime?)")
-			}
-			mut = fduo.hooks[i](mut)
-		}
-		v, err := mut.Mutate(ctx, fduo.mutation)
-		if err != nil {
-			return nil, err
-		}
-		nv, ok := v.(*FnetDocument)
-		if !ok {
-			return nil, fmt.Errorf("unexpected node type %T returned from FnetDocumentMutation", v)
-		}
-		node = nv
-	}
-	return node, err
+	return withHooks(ctx, fduo.sqlSave, fduo.mutation, fduo.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
@@ -1105,16 +1164,10 @@ func (fduo *FnetDocumentUpdateOne) check() error {
 }
 
 func (fduo *FnetDocumentUpdateOne) sqlSave(ctx context.Context) (_node *FnetDocument, err error) {
-	_spec := &sqlgraph.UpdateSpec{
-		Node: &sqlgraph.NodeSpec{
-			Table:   fnetdocument.Table,
-			Columns: fnetdocument.Columns,
-			ID: &sqlgraph.FieldSpec{
-				Type:   field.TypeInt,
-				Column: fnetdocument.FieldID,
-			},
-		},
+	if err := fduo.check(); err != nil {
+		return _node, err
 	}
+	_spec := sqlgraph.NewUpdateSpec(fnetdocument.Table, fnetdocument.Columns, sqlgraph.NewFieldSpec(fnetdocument.FieldID, field.TypeInt))
 	id, ok := fduo.mutation.ID()
 	if !ok {
 		return nil, &ValidationError{Name: "id", err: errors.New(`ent: missing "FnetDocument.id" for update`)}
@@ -1140,168 +1193,76 @@ func (fduo *FnetDocumentUpdateOne) sqlSave(ctx context.Context) (_node *FnetDocu
 		}
 	}
 	if value, ok := fduo.mutation.AdditionalInformation(); ok {
-		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeString,
-			Value:  value,
-			Column: fnetdocument.FieldAdditionalInformation,
-		})
+		_spec.SetField(fnetdocument.FieldAdditionalInformation, field.TypeString, value)
 	}
 	if fduo.mutation.AdditionalInformationCleared() {
-		_spec.Fields.Clear = append(_spec.Fields.Clear, &sqlgraph.FieldSpec{
-			Type:   field.TypeString,
-			Column: fnetdocument.FieldAdditionalInformation,
-		})
+		_spec.ClearField(fnetdocument.FieldAdditionalInformation, field.TypeString)
 	}
 	if value, ok := fduo.mutation.CategoryStr(); ok {
-		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeString,
-			Value:  value,
-			Column: fnetdocument.FieldCategoryStr,
-		})
+		_spec.SetField(fnetdocument.FieldCategoryStr, field.TypeString, value)
 	}
 	if value, ok := fduo.mutation.FundDescription(); ok {
-		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeString,
-			Value:  value,
-			Column: fnetdocument.FieldFundDescription,
-		})
+		_spec.SetField(fnetdocument.FieldFundDescription, field.TypeString, value)
 	}
 	if value, ok := fduo.mutation.FundMarketName(); ok {
-		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeString,
-			Value:  value,
-			Column: fnetdocument.FieldFundMarketName,
-		})
+		_spec.SetField(fnetdocument.FieldFundMarketName, field.TypeString, value)
 	}
 	if fduo.mutation.FundMarketNameCleared() {
-		_spec.Fields.Clear = append(_spec.Fields.Clear, &sqlgraph.FieldSpec{
-			Type:   field.TypeString,
-			Column: fnetdocument.FieldFundMarketName,
-		})
+		_spec.ClearField(fnetdocument.FieldFundMarketName, field.TypeString)
 	}
 	if value, ok := fduo.mutation.HighPriority(); ok {
-		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeBool,
-			Value:  value,
-			Column: fnetdocument.FieldHighPriority,
-		})
+		_spec.SetField(fnetdocument.FieldHighPriority, field.TypeBool, value)
 	}
 	if value, ok := fduo.mutation.ReferenceDate(); ok {
-		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeTime,
-			Value:  value,
-			Column: fnetdocument.FieldReferenceDate,
-		})
+		_spec.SetField(fnetdocument.FieldReferenceDate, field.TypeTime, value)
 	}
 	if value, ok := fduo.mutation.ReferenceDateFormat(); ok {
-		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeString,
-			Value:  value,
-			Column: fnetdocument.FieldReferenceDateFormat,
-		})
+		_spec.SetField(fnetdocument.FieldReferenceDateFormat, field.TypeString, value)
 	}
 	if value, ok := fduo.mutation.ReferenceDateStr(); ok {
-		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeString,
-			Value:  value,
-			Column: fnetdocument.FieldReferenceDateStr,
-		})
+		_spec.SetField(fnetdocument.FieldReferenceDateStr, field.TypeString, value)
 	}
 	if value, ok := fduo.mutation.Reviewed(); ok {
-		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeString,
-			Value:  value,
-			Column: fnetdocument.FieldReviewed,
-		})
+		_spec.SetField(fnetdocument.FieldReviewed, field.TypeString, value)
 	}
 	if value, ok := fduo.mutation.Status(); ok {
-		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeString,
-			Value:  value,
-			Column: fnetdocument.FieldStatus,
-		})
+		_spec.SetField(fnetdocument.FieldStatus, field.TypeString, value)
 	}
 	if value, ok := fduo.mutation.SubCategory1Str(); ok {
-		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeString,
-			Value:  value,
-			Column: fnetdocument.FieldSubCategory1Str,
-		})
+		_spec.SetField(fnetdocument.FieldSubCategory1Str, field.TypeString, value)
 	}
 	if fduo.mutation.SubCategory1StrCleared() {
-		_spec.Fields.Clear = append(_spec.Fields.Clear, &sqlgraph.FieldSpec{
-			Type:   field.TypeString,
-			Column: fnetdocument.FieldSubCategory1Str,
-		})
+		_spec.ClearField(fnetdocument.FieldSubCategory1Str, field.TypeString)
 	}
 	if value, ok := fduo.mutation.SubCategory2Str(); ok {
-		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeString,
-			Value:  value,
-			Column: fnetdocument.FieldSubCategory2Str,
-		})
+		_spec.SetField(fnetdocument.FieldSubCategory2Str, field.TypeString, value)
 	}
 	if fduo.mutation.SubCategory2StrCleared() {
-		_spec.Fields.Clear = append(_spec.Fields.Clear, &sqlgraph.FieldSpec{
-			Type:   field.TypeString,
-			Column: fnetdocument.FieldSubCategory2Str,
-		})
+		_spec.ClearField(fnetdocument.FieldSubCategory2Str, field.TypeString)
 	}
 	if value, ok := fduo.mutation.SubmissionDate(); ok {
-		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeTime,
-			Value:  value,
-			Column: fnetdocument.FieldSubmissionDate,
-		})
+		_spec.SetField(fnetdocument.FieldSubmissionDate, field.TypeTime, value)
 	}
 	if value, ok := fduo.mutation.SubmissionDateStr(); ok {
-		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeString,
-			Value:  value,
-			Column: fnetdocument.FieldSubmissionDateStr,
-		})
+		_spec.SetField(fnetdocument.FieldSubmissionDateStr, field.TypeString, value)
 	}
 	if value, ok := fduo.mutation.SubmissionMethod(); ok {
-		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeString,
-			Value:  value,
-			Column: fnetdocument.FieldSubmissionMethod,
-		})
+		_spec.SetField(fnetdocument.FieldSubmissionMethod, field.TypeString, value)
 	}
 	if value, ok := fduo.mutation.SubmissionMethodDescription(); ok {
-		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeString,
-			Value:  value,
-			Column: fnetdocument.FieldSubmissionMethodDescription,
-		})
+		_spec.SetField(fnetdocument.FieldSubmissionMethodDescription, field.TypeString, value)
 	}
 	if value, ok := fduo.mutation.SubmissionStatus(); ok {
-		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeString,
-			Value:  value,
-			Column: fnetdocument.FieldSubmissionStatus,
-		})
+		_spec.SetField(fnetdocument.FieldSubmissionStatus, field.TypeString, value)
 	}
 	if value, ok := fduo.mutation.SubmissionStatusDescription(); ok {
-		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeString,
-			Value:  value,
-			Column: fnetdocument.FieldSubmissionStatusDescription,
-		})
+		_spec.SetField(fnetdocument.FieldSubmissionStatusDescription, field.TypeString, value)
 	}
 	if value, ok := fduo.mutation.Version(); ok {
-		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt,
-			Value:  value,
-			Column: fnetdocument.FieldVersion,
-		})
+		_spec.SetField(fnetdocument.FieldVersion, field.TypeInt, value)
 	}
 	if value, ok := fduo.mutation.AddedVersion(); ok {
-		_spec.Fields.Add = append(_spec.Fields.Add, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt,
-			Value:  value,
-			Column: fnetdocument.FieldVersion,
-		})
+		_spec.AddField(fnetdocument.FieldVersion, field.TypeInt, value)
 	}
 	if fduo.mutation.CategoryCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -1311,10 +1272,7 @@ func (fduo *FnetDocumentUpdateOne) sqlSave(ctx context.Context) (_node *FnetDocu
 			Columns: []string{fnetdocument.CategoryColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: &sqlgraph.FieldSpec{
-					Type:   field.TypeInt,
-					Column: fnetcategory.FieldID,
-				},
+				IDSpec: sqlgraph.NewFieldSpec(fnetcategory.FieldID, field.TypeInt),
 			},
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
@@ -1327,10 +1285,7 @@ func (fduo *FnetDocumentUpdateOne) sqlSave(ctx context.Context) (_node *FnetDocu
 			Columns: []string{fnetdocument.CategoryColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: &sqlgraph.FieldSpec{
-					Type:   field.TypeInt,
-					Column: fnetcategory.FieldID,
-				},
+				IDSpec: sqlgraph.NewFieldSpec(fnetcategory.FieldID, field.TypeInt),
 			},
 		}
 		for _, k := range nodes {
@@ -1346,10 +1301,7 @@ func (fduo *FnetDocumentUpdateOne) sqlSave(ctx context.Context) (_node *FnetDocu
 			Columns: []string{fnetdocument.SubCategory1Column},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: &sqlgraph.FieldSpec{
-					Type:   field.TypeInt,
-					Column: fnetsubcategory1.FieldID,
-				},
+				IDSpec: sqlgraph.NewFieldSpec(fnetsubcategory1.FieldID, field.TypeInt),
 			},
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
@@ -1362,10 +1314,7 @@ func (fduo *FnetDocumentUpdateOne) sqlSave(ctx context.Context) (_node *FnetDocu
 			Columns: []string{fnetdocument.SubCategory1Column},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: &sqlgraph.FieldSpec{
-					Type:   field.TypeInt,
-					Column: fnetsubcategory1.FieldID,
-				},
+				IDSpec: sqlgraph.NewFieldSpec(fnetsubcategory1.FieldID, field.TypeInt),
 			},
 		}
 		for _, k := range nodes {
@@ -1381,10 +1330,7 @@ func (fduo *FnetDocumentUpdateOne) sqlSave(ctx context.Context) (_node *FnetDocu
 			Columns: []string{fnetdocument.SubCategory2Column},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: &sqlgraph.FieldSpec{
-					Type:   field.TypeInt,
-					Column: fnetsubcategory2.FieldID,
-				},
+				IDSpec: sqlgraph.NewFieldSpec(fnetsubcategory2.FieldID, field.TypeInt),
 			},
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
@@ -1397,10 +1343,7 @@ func (fduo *FnetDocumentUpdateOne) sqlSave(ctx context.Context) (_node *FnetDocu
 			Columns: []string{fnetdocument.SubCategory2Column},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: &sqlgraph.FieldSpec{
-					Type:   field.TypeInt,
-					Column: fnetsubcategory2.FieldID,
-				},
+				IDSpec: sqlgraph.NewFieldSpec(fnetsubcategory2.FieldID, field.TypeInt),
 			},
 		}
 		for _, k := range nodes {
@@ -1419,5 +1362,6 @@ func (fduo *FnetDocumentUpdateOne) sqlSave(ctx context.Context) (_node *FnetDocu
 		}
 		return nil, err
 	}
+	fduo.mutation.done = true
 	return _node, nil
 }

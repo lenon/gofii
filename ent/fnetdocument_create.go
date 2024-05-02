@@ -233,49 +233,7 @@ func (fdc *FnetDocumentCreate) Mutation() *FnetDocumentMutation {
 
 // Save creates the FnetDocument in the database.
 func (fdc *FnetDocumentCreate) Save(ctx context.Context) (*FnetDocument, error) {
-	var (
-		err  error
-		node *FnetDocument
-	)
-	if len(fdc.hooks) == 0 {
-		if err = fdc.check(); err != nil {
-			return nil, err
-		}
-		node, err = fdc.sqlSave(ctx)
-	} else {
-		var mut Mutator = MutateFunc(func(ctx context.Context, m Mutation) (Value, error) {
-			mutation, ok := m.(*FnetDocumentMutation)
-			if !ok {
-				return nil, fmt.Errorf("unexpected mutation type %T", m)
-			}
-			if err = fdc.check(); err != nil {
-				return nil, err
-			}
-			fdc.mutation = mutation
-			if node, err = fdc.sqlSave(ctx); err != nil {
-				return nil, err
-			}
-			mutation.id = &node.ID
-			mutation.done = true
-			return node, err
-		})
-		for i := len(fdc.hooks) - 1; i >= 0; i-- {
-			if fdc.hooks[i] == nil {
-				return nil, fmt.Errorf("ent: uninitialized hook (forgotten import ent/runtime?)")
-			}
-			mut = fdc.hooks[i](mut)
-		}
-		v, err := mut.Mutate(ctx, fdc.mutation)
-		if err != nil {
-			return nil, err
-		}
-		nv, ok := v.(*FnetDocument)
-		if !ok {
-			return nil, fmt.Errorf("unexpected node type %T returned from FnetDocumentMutation", v)
-		}
-		node = nv
-	}
-	return node, err
+	return withHooks(ctx, fdc.sqlSave, fdc.mutation, fdc.hooks)
 }
 
 // SaveX calls Save and panics if Save returns an error.
@@ -422,6 +380,9 @@ func (fdc *FnetDocumentCreate) check() error {
 }
 
 func (fdc *FnetDocumentCreate) sqlSave(ctx context.Context) (*FnetDocument, error) {
+	if err := fdc.check(); err != nil {
+		return nil, err
+	}
 	_node, _spec := fdc.createSpec()
 	if err := sqlgraph.CreateNode(ctx, fdc.driver, _spec); err != nil {
 		if sqlgraph.IsConstraintError(err) {
@@ -431,179 +392,95 @@ func (fdc *FnetDocumentCreate) sqlSave(ctx context.Context) (*FnetDocument, erro
 	}
 	id := _spec.ID.Value.(int64)
 	_node.ID = int(id)
+	fdc.mutation.id = &_node.ID
+	fdc.mutation.done = true
 	return _node, nil
 }
 
 func (fdc *FnetDocumentCreate) createSpec() (*FnetDocument, *sqlgraph.CreateSpec) {
 	var (
 		_node = &FnetDocument{config: fdc.config}
-		_spec = &sqlgraph.CreateSpec{
-			Table: fnetdocument.Table,
-			ID: &sqlgraph.FieldSpec{
-				Type:   field.TypeInt,
-				Column: fnetdocument.FieldID,
-			},
-		}
+		_spec = sqlgraph.NewCreateSpec(fnetdocument.Table, sqlgraph.NewFieldSpec(fnetdocument.FieldID, field.TypeInt))
 	)
 	_spec.OnConflict = fdc.conflict
 	if value, ok := fdc.mutation.FnetID(); ok {
-		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt,
-			Value:  value,
-			Column: fnetdocument.FieldFnetID,
-		})
+		_spec.SetField(fnetdocument.FieldFnetID, field.TypeInt, value)
 		_node.FnetID = value
 	}
 	if value, ok := fdc.mutation.AdditionalInformation(); ok {
-		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
-			Type:   field.TypeString,
-			Value:  value,
-			Column: fnetdocument.FieldAdditionalInformation,
-		})
+		_spec.SetField(fnetdocument.FieldAdditionalInformation, field.TypeString, value)
 		_node.AdditionalInformation = value
 	}
 	if value, ok := fdc.mutation.CategoryStr(); ok {
-		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
-			Type:   field.TypeString,
-			Value:  value,
-			Column: fnetdocument.FieldCategoryStr,
-		})
+		_spec.SetField(fnetdocument.FieldCategoryStr, field.TypeString, value)
 		_node.CategoryStr = value
 	}
 	if value, ok := fdc.mutation.FundDescription(); ok {
-		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
-			Type:   field.TypeString,
-			Value:  value,
-			Column: fnetdocument.FieldFundDescription,
-		})
+		_spec.SetField(fnetdocument.FieldFundDescription, field.TypeString, value)
 		_node.FundDescription = value
 	}
 	if value, ok := fdc.mutation.FundMarketName(); ok {
-		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
-			Type:   field.TypeString,
-			Value:  value,
-			Column: fnetdocument.FieldFundMarketName,
-		})
+		_spec.SetField(fnetdocument.FieldFundMarketName, field.TypeString, value)
 		_node.FundMarketName = value
 	}
 	if value, ok := fdc.mutation.HighPriority(); ok {
-		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
-			Type:   field.TypeBool,
-			Value:  value,
-			Column: fnetdocument.FieldHighPriority,
-		})
+		_spec.SetField(fnetdocument.FieldHighPriority, field.TypeBool, value)
 		_node.HighPriority = value
 	}
 	if value, ok := fdc.mutation.ReferenceDate(); ok {
-		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
-			Type:   field.TypeTime,
-			Value:  value,
-			Column: fnetdocument.FieldReferenceDate,
-		})
+		_spec.SetField(fnetdocument.FieldReferenceDate, field.TypeTime, value)
 		_node.ReferenceDate = value
 	}
 	if value, ok := fdc.mutation.ReferenceDateFormat(); ok {
-		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
-			Type:   field.TypeString,
-			Value:  value,
-			Column: fnetdocument.FieldReferenceDateFormat,
-		})
+		_spec.SetField(fnetdocument.FieldReferenceDateFormat, field.TypeString, value)
 		_node.ReferenceDateFormat = value
 	}
 	if value, ok := fdc.mutation.ReferenceDateStr(); ok {
-		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
-			Type:   field.TypeString,
-			Value:  value,
-			Column: fnetdocument.FieldReferenceDateStr,
-		})
+		_spec.SetField(fnetdocument.FieldReferenceDateStr, field.TypeString, value)
 		_node.ReferenceDateStr = value
 	}
 	if value, ok := fdc.mutation.Reviewed(); ok {
-		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
-			Type:   field.TypeString,
-			Value:  value,
-			Column: fnetdocument.FieldReviewed,
-		})
+		_spec.SetField(fnetdocument.FieldReviewed, field.TypeString, value)
 		_node.Reviewed = value
 	}
 	if value, ok := fdc.mutation.Status(); ok {
-		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
-			Type:   field.TypeString,
-			Value:  value,
-			Column: fnetdocument.FieldStatus,
-		})
+		_spec.SetField(fnetdocument.FieldStatus, field.TypeString, value)
 		_node.Status = value
 	}
 	if value, ok := fdc.mutation.SubCategory1Str(); ok {
-		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
-			Type:   field.TypeString,
-			Value:  value,
-			Column: fnetdocument.FieldSubCategory1Str,
-		})
+		_spec.SetField(fnetdocument.FieldSubCategory1Str, field.TypeString, value)
 		_node.SubCategory1Str = value
 	}
 	if value, ok := fdc.mutation.SubCategory2Str(); ok {
-		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
-			Type:   field.TypeString,
-			Value:  value,
-			Column: fnetdocument.FieldSubCategory2Str,
-		})
+		_spec.SetField(fnetdocument.FieldSubCategory2Str, field.TypeString, value)
 		_node.SubCategory2Str = value
 	}
 	if value, ok := fdc.mutation.SubmissionDate(); ok {
-		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
-			Type:   field.TypeTime,
-			Value:  value,
-			Column: fnetdocument.FieldSubmissionDate,
-		})
+		_spec.SetField(fnetdocument.FieldSubmissionDate, field.TypeTime, value)
 		_node.SubmissionDate = value
 	}
 	if value, ok := fdc.mutation.SubmissionDateStr(); ok {
-		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
-			Type:   field.TypeString,
-			Value:  value,
-			Column: fnetdocument.FieldSubmissionDateStr,
-		})
+		_spec.SetField(fnetdocument.FieldSubmissionDateStr, field.TypeString, value)
 		_node.SubmissionDateStr = value
 	}
 	if value, ok := fdc.mutation.SubmissionMethod(); ok {
-		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
-			Type:   field.TypeString,
-			Value:  value,
-			Column: fnetdocument.FieldSubmissionMethod,
-		})
+		_spec.SetField(fnetdocument.FieldSubmissionMethod, field.TypeString, value)
 		_node.SubmissionMethod = value
 	}
 	if value, ok := fdc.mutation.SubmissionMethodDescription(); ok {
-		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
-			Type:   field.TypeString,
-			Value:  value,
-			Column: fnetdocument.FieldSubmissionMethodDescription,
-		})
+		_spec.SetField(fnetdocument.FieldSubmissionMethodDescription, field.TypeString, value)
 		_node.SubmissionMethodDescription = value
 	}
 	if value, ok := fdc.mutation.SubmissionStatus(); ok {
-		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
-			Type:   field.TypeString,
-			Value:  value,
-			Column: fnetdocument.FieldSubmissionStatus,
-		})
+		_spec.SetField(fnetdocument.FieldSubmissionStatus, field.TypeString, value)
 		_node.SubmissionStatus = value
 	}
 	if value, ok := fdc.mutation.SubmissionStatusDescription(); ok {
-		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
-			Type:   field.TypeString,
-			Value:  value,
-			Column: fnetdocument.FieldSubmissionStatusDescription,
-		})
+		_spec.SetField(fnetdocument.FieldSubmissionStatusDescription, field.TypeString, value)
 		_node.SubmissionStatusDescription = value
 	}
 	if value, ok := fdc.mutation.Version(); ok {
-		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt,
-			Value:  value,
-			Column: fnetdocument.FieldVersion,
-		})
+		_spec.SetField(fnetdocument.FieldVersion, field.TypeInt, value)
 		_node.Version = value
 	}
 	if nodes := fdc.mutation.CategoryIDs(); len(nodes) > 0 {
@@ -614,10 +491,7 @@ func (fdc *FnetDocumentCreate) createSpec() (*FnetDocument, *sqlgraph.CreateSpec
 			Columns: []string{fnetdocument.CategoryColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: &sqlgraph.FieldSpec{
-					Type:   field.TypeInt,
-					Column: fnetcategory.FieldID,
-				},
+				IDSpec: sqlgraph.NewFieldSpec(fnetcategory.FieldID, field.TypeInt),
 			},
 		}
 		for _, k := range nodes {
@@ -634,10 +508,7 @@ func (fdc *FnetDocumentCreate) createSpec() (*FnetDocument, *sqlgraph.CreateSpec
 			Columns: []string{fnetdocument.SubCategory1Column},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: &sqlgraph.FieldSpec{
-					Type:   field.TypeInt,
-					Column: fnetsubcategory1.FieldID,
-				},
+				IDSpec: sqlgraph.NewFieldSpec(fnetsubcategory1.FieldID, field.TypeInt),
 			},
 		}
 		for _, k := range nodes {
@@ -654,10 +525,7 @@ func (fdc *FnetDocumentCreate) createSpec() (*FnetDocument, *sqlgraph.CreateSpec
 			Columns: []string{fnetdocument.SubCategory2Column},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: &sqlgraph.FieldSpec{
-					Type:   field.TypeInt,
-					Column: fnetsubcategory2.FieldID,
-				},
+				IDSpec: sqlgraph.NewFieldSpec(fnetsubcategory2.FieldID, field.TypeInt),
 			},
 		}
 		for _, k := range nodes {
@@ -717,24 +585,6 @@ type (
 		*sql.UpdateSet
 	}
 )
-
-// SetFnetID sets the "fnet_id" field.
-func (u *FnetDocumentUpsert) SetFnetID(v int) *FnetDocumentUpsert {
-	u.Set(fnetdocument.FieldFnetID, v)
-	return u
-}
-
-// UpdateFnetID sets the "fnet_id" field to the value that was provided on create.
-func (u *FnetDocumentUpsert) UpdateFnetID() *FnetDocumentUpsert {
-	u.SetExcluded(fnetdocument.FieldFnetID)
-	return u
-}
-
-// AddFnetID adds v to the "fnet_id" field.
-func (u *FnetDocumentUpsert) AddFnetID(v int) *FnetDocumentUpsert {
-	u.Add(fnetdocument.FieldFnetID, v)
-	return u
-}
 
 // SetAdditionalInformation sets the "additional_information" field.
 func (u *FnetDocumentUpsert) SetAdditionalInformation(v string) *FnetDocumentUpsert {
@@ -1037,27 +887,6 @@ func (u *FnetDocumentUpsertOne) Update(set func(*FnetDocumentUpsert)) *FnetDocum
 		set(&FnetDocumentUpsert{UpdateSet: update})
 	}))
 	return u
-}
-
-// SetFnetID sets the "fnet_id" field.
-func (u *FnetDocumentUpsertOne) SetFnetID(v int) *FnetDocumentUpsertOne {
-	return u.Update(func(s *FnetDocumentUpsert) {
-		s.SetFnetID(v)
-	})
-}
-
-// AddFnetID adds v to the "fnet_id" field.
-func (u *FnetDocumentUpsertOne) AddFnetID(v int) *FnetDocumentUpsertOne {
-	return u.Update(func(s *FnetDocumentUpsert) {
-		s.AddFnetID(v)
-	})
-}
-
-// UpdateFnetID sets the "fnet_id" field to the value that was provided on create.
-func (u *FnetDocumentUpsertOne) UpdateFnetID() *FnetDocumentUpsertOne {
-	return u.Update(func(s *FnetDocumentUpsert) {
-		s.UpdateFnetID()
-	})
 }
 
 // SetAdditionalInformation sets the "additional_information" field.
@@ -1397,12 +1226,16 @@ func (u *FnetDocumentUpsertOne) IDX(ctx context.Context) int {
 // FnetDocumentCreateBulk is the builder for creating many FnetDocument entities in bulk.
 type FnetDocumentCreateBulk struct {
 	config
+	err      error
 	builders []*FnetDocumentCreate
 	conflict []sql.ConflictOption
 }
 
 // Save creates the FnetDocument entities in the database.
 func (fdcb *FnetDocumentCreateBulk) Save(ctx context.Context) ([]*FnetDocument, error) {
+	if fdcb.err != nil {
+		return nil, fdcb.err
+	}
 	specs := make([]*sqlgraph.CreateSpec, len(fdcb.builders))
 	nodes := make([]*FnetDocument, len(fdcb.builders))
 	mutators := make([]Mutator, len(fdcb.builders))
@@ -1418,8 +1251,8 @@ func (fdcb *FnetDocumentCreateBulk) Save(ctx context.Context) ([]*FnetDocument, 
 					return nil, err
 				}
 				builder.mutation = mutation
-				nodes[i], specs[i] = builder.createSpec()
 				var err error
+				nodes[i], specs[i] = builder.createSpec()
 				if i < len(mutators)-1 {
 					_, err = mutators[i+1].Mutate(root, fdcb.builders[i+1].mutation)
 				} else {
@@ -1565,27 +1398,6 @@ func (u *FnetDocumentUpsertBulk) Update(set func(*FnetDocumentUpsert)) *FnetDocu
 		set(&FnetDocumentUpsert{UpdateSet: update})
 	}))
 	return u
-}
-
-// SetFnetID sets the "fnet_id" field.
-func (u *FnetDocumentUpsertBulk) SetFnetID(v int) *FnetDocumentUpsertBulk {
-	return u.Update(func(s *FnetDocumentUpsert) {
-		s.SetFnetID(v)
-	})
-}
-
-// AddFnetID adds v to the "fnet_id" field.
-func (u *FnetDocumentUpsertBulk) AddFnetID(v int) *FnetDocumentUpsertBulk {
-	return u.Update(func(s *FnetDocumentUpsert) {
-		s.AddFnetID(v)
-	})
-}
-
-// UpdateFnetID sets the "fnet_id" field to the value that was provided on create.
-func (u *FnetDocumentUpsertBulk) UpdateFnetID() *FnetDocumentUpsertBulk {
-	return u.Update(func(s *FnetDocumentUpsert) {
-		s.UpdateFnetID()
-	})
 }
 
 // SetAdditionalInformation sets the "additional_information" field.
@@ -1891,6 +1703,9 @@ func (u *FnetDocumentUpsertBulk) UpdateVersion() *FnetDocumentUpsertBulk {
 
 // Exec executes the query.
 func (u *FnetDocumentUpsertBulk) Exec(ctx context.Context) error {
+	if u.create.err != nil {
+		return u.create.err
+	}
 	for i, b := range u.create.builders {
 		if len(b.conflict) != 0 {
 			return fmt.Errorf("ent: OnConflict was set for builder %d. Set it on the FnetDocumentCreateBulk instead", i)

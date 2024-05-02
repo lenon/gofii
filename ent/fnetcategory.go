@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"strings"
 
+	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"github.com/lenon/gofii/ent/fnetcategory"
 )
@@ -19,7 +20,8 @@ type FnetCategory struct {
 	Name string `json:"name,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the FnetCategoryQuery when eager-loading is set.
-	Edges FnetCategoryEdges `json:"edges"`
+	Edges        FnetCategoryEdges `json:"edges"`
+	selectValues sql.SelectValues
 }
 
 // FnetCategoryEdges holds the relations/edges for other nodes in the graph.
@@ -41,8 +43,8 @@ func (e FnetCategoryEdges) DocumentsOrErr() ([]*FnetDocument, error) {
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
-func (*FnetCategory) scanValues(columns []string) ([]interface{}, error) {
-	values := make([]interface{}, len(columns))
+func (*FnetCategory) scanValues(columns []string) ([]any, error) {
+	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
 		case fnetcategory.FieldID:
@@ -50,7 +52,7 @@ func (*FnetCategory) scanValues(columns []string) ([]interface{}, error) {
 		case fnetcategory.FieldName:
 			values[i] = new(sql.NullString)
 		default:
-			return nil, fmt.Errorf("unexpected column %q for type FnetCategory", columns[i])
+			values[i] = new(sql.UnknownType)
 		}
 	}
 	return values, nil
@@ -58,7 +60,7 @@ func (*FnetCategory) scanValues(columns []string) ([]interface{}, error) {
 
 // assignValues assigns the values that were returned from sql.Rows (after scanning)
 // to the FnetCategory fields.
-func (fc *FnetCategory) assignValues(columns []string, values []interface{}) error {
+func (fc *FnetCategory) assignValues(columns []string, values []any) error {
 	if m, n := len(values), len(columns); m < n {
 		return fmt.Errorf("mismatch number of scan values: %d != %d", m, n)
 	}
@@ -76,21 +78,29 @@ func (fc *FnetCategory) assignValues(columns []string, values []interface{}) err
 			} else if value.Valid {
 				fc.Name = value.String
 			}
+		default:
+			fc.selectValues.Set(columns[i], values[i])
 		}
 	}
 	return nil
 }
 
+// Value returns the ent.Value that was dynamically selected and assigned to the FnetCategory.
+// This includes values selected through modifiers, order, etc.
+func (fc *FnetCategory) Value(name string) (ent.Value, error) {
+	return fc.selectValues.Get(name)
+}
+
 // QueryDocuments queries the "documents" edge of the FnetCategory entity.
 func (fc *FnetCategory) QueryDocuments() *FnetDocumentQuery {
-	return (&FnetCategoryClient{config: fc.config}).QueryDocuments(fc)
+	return NewFnetCategoryClient(fc.config).QueryDocuments(fc)
 }
 
 // Update returns a builder for updating this FnetCategory.
 // Note that you need to call FnetCategory.Unwrap() before calling this method if this FnetCategory
 // was returned from a transaction, and the transaction was committed or rolled back.
 func (fc *FnetCategory) Update() *FnetCategoryUpdateOne {
-	return (&FnetCategoryClient{config: fc.config}).UpdateOne(fc)
+	return NewFnetCategoryClient(fc.config).UpdateOne(fc)
 }
 
 // Unwrap unwraps the FnetCategory entity that was returned from a transaction after it was closed,
@@ -117,9 +127,3 @@ func (fc *FnetCategory) String() string {
 
 // FnetCategories is a parsable slice of FnetCategory.
 type FnetCategories []*FnetCategory
-
-func (fc FnetCategories) config(cfg config) {
-	for _i := range fc {
-		fc[_i].config = cfg
-	}
-}

@@ -19,11 +19,9 @@ import (
 // FnetCategoryQuery is the builder for querying FnetCategory entities.
 type FnetCategoryQuery struct {
 	config
-	limit         *int
-	offset        *int
-	unique        *bool
-	order         []OrderFunc
-	fields        []string
+	ctx           *QueryContext
+	order         []fnetcategory.OrderOption
+	inters        []Interceptor
 	predicates    []predicate.FnetCategory
 	withDocuments *FnetDocumentQuery
 	// intermediate query (i.e. traversal path).
@@ -37,34 +35,34 @@ func (fcq *FnetCategoryQuery) Where(ps ...predicate.FnetCategory) *FnetCategoryQ
 	return fcq
 }
 
-// Limit adds a limit step to the query.
+// Limit the number of records to be returned by this query.
 func (fcq *FnetCategoryQuery) Limit(limit int) *FnetCategoryQuery {
-	fcq.limit = &limit
+	fcq.ctx.Limit = &limit
 	return fcq
 }
 
-// Offset adds an offset step to the query.
+// Offset to start from.
 func (fcq *FnetCategoryQuery) Offset(offset int) *FnetCategoryQuery {
-	fcq.offset = &offset
+	fcq.ctx.Offset = &offset
 	return fcq
 }
 
 // Unique configures the query builder to filter duplicate records on query.
 // By default, unique is set to true, and can be disabled using this method.
 func (fcq *FnetCategoryQuery) Unique(unique bool) *FnetCategoryQuery {
-	fcq.unique = &unique
+	fcq.ctx.Unique = &unique
 	return fcq
 }
 
-// Order adds an order step to the query.
-func (fcq *FnetCategoryQuery) Order(o ...OrderFunc) *FnetCategoryQuery {
+// Order specifies how the records should be ordered.
+func (fcq *FnetCategoryQuery) Order(o ...fnetcategory.OrderOption) *FnetCategoryQuery {
 	fcq.order = append(fcq.order, o...)
 	return fcq
 }
 
 // QueryDocuments chains the current query on the "documents" edge.
 func (fcq *FnetCategoryQuery) QueryDocuments() *FnetDocumentQuery {
-	query := &FnetDocumentQuery{config: fcq.config}
+	query := (&FnetDocumentClient{config: fcq.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
 		if err := fcq.prepareQuery(ctx); err != nil {
 			return nil, err
@@ -87,7 +85,7 @@ func (fcq *FnetCategoryQuery) QueryDocuments() *FnetDocumentQuery {
 // First returns the first FnetCategory entity from the query.
 // Returns a *NotFoundError when no FnetCategory was found.
 func (fcq *FnetCategoryQuery) First(ctx context.Context) (*FnetCategory, error) {
-	nodes, err := fcq.Limit(1).All(ctx)
+	nodes, err := fcq.Limit(1).All(setContextOp(ctx, fcq.ctx, "First"))
 	if err != nil {
 		return nil, err
 	}
@@ -110,7 +108,7 @@ func (fcq *FnetCategoryQuery) FirstX(ctx context.Context) *FnetCategory {
 // Returns a *NotFoundError when no FnetCategory ID was found.
 func (fcq *FnetCategoryQuery) FirstID(ctx context.Context) (id int, err error) {
 	var ids []int
-	if ids, err = fcq.Limit(1).IDs(ctx); err != nil {
+	if ids, err = fcq.Limit(1).IDs(setContextOp(ctx, fcq.ctx, "FirstID")); err != nil {
 		return
 	}
 	if len(ids) == 0 {
@@ -133,7 +131,7 @@ func (fcq *FnetCategoryQuery) FirstIDX(ctx context.Context) int {
 // Returns a *NotSingularError when more than one FnetCategory entity is found.
 // Returns a *NotFoundError when no FnetCategory entities are found.
 func (fcq *FnetCategoryQuery) Only(ctx context.Context) (*FnetCategory, error) {
-	nodes, err := fcq.Limit(2).All(ctx)
+	nodes, err := fcq.Limit(2).All(setContextOp(ctx, fcq.ctx, "Only"))
 	if err != nil {
 		return nil, err
 	}
@@ -161,7 +159,7 @@ func (fcq *FnetCategoryQuery) OnlyX(ctx context.Context) *FnetCategory {
 // Returns a *NotFoundError when no entities are found.
 func (fcq *FnetCategoryQuery) OnlyID(ctx context.Context) (id int, err error) {
 	var ids []int
-	if ids, err = fcq.Limit(2).IDs(ctx); err != nil {
+	if ids, err = fcq.Limit(2).IDs(setContextOp(ctx, fcq.ctx, "OnlyID")); err != nil {
 		return
 	}
 	switch len(ids) {
@@ -186,10 +184,12 @@ func (fcq *FnetCategoryQuery) OnlyIDX(ctx context.Context) int {
 
 // All executes the query and returns a list of FnetCategories.
 func (fcq *FnetCategoryQuery) All(ctx context.Context) ([]*FnetCategory, error) {
+	ctx = setContextOp(ctx, fcq.ctx, "All")
 	if err := fcq.prepareQuery(ctx); err != nil {
 		return nil, err
 	}
-	return fcq.sqlAll(ctx)
+	qr := querierAll[[]*FnetCategory, *FnetCategoryQuery]()
+	return withInterceptors[[]*FnetCategory](ctx, fcq, qr, fcq.inters)
 }
 
 // AllX is like All, but panics if an error occurs.
@@ -202,9 +202,12 @@ func (fcq *FnetCategoryQuery) AllX(ctx context.Context) []*FnetCategory {
 }
 
 // IDs executes the query and returns a list of FnetCategory IDs.
-func (fcq *FnetCategoryQuery) IDs(ctx context.Context) ([]int, error) {
-	var ids []int
-	if err := fcq.Select(fnetcategory.FieldID).Scan(ctx, &ids); err != nil {
+func (fcq *FnetCategoryQuery) IDs(ctx context.Context) (ids []int, err error) {
+	if fcq.ctx.Unique == nil && fcq.path != nil {
+		fcq.Unique(true)
+	}
+	ctx = setContextOp(ctx, fcq.ctx, "IDs")
+	if err = fcq.Select(fnetcategory.FieldID).Scan(ctx, &ids); err != nil {
 		return nil, err
 	}
 	return ids, nil
@@ -221,10 +224,11 @@ func (fcq *FnetCategoryQuery) IDsX(ctx context.Context) []int {
 
 // Count returns the count of the given query.
 func (fcq *FnetCategoryQuery) Count(ctx context.Context) (int, error) {
+	ctx = setContextOp(ctx, fcq.ctx, "Count")
 	if err := fcq.prepareQuery(ctx); err != nil {
 		return 0, err
 	}
-	return fcq.sqlCount(ctx)
+	return withInterceptors[int](ctx, fcq, querierCount[*FnetCategoryQuery](), fcq.inters)
 }
 
 // CountX is like Count, but panics if an error occurs.
@@ -238,10 +242,15 @@ func (fcq *FnetCategoryQuery) CountX(ctx context.Context) int {
 
 // Exist returns true if the query has elements in the graph.
 func (fcq *FnetCategoryQuery) Exist(ctx context.Context) (bool, error) {
-	if err := fcq.prepareQuery(ctx); err != nil {
-		return false, err
+	ctx = setContextOp(ctx, fcq.ctx, "Exist")
+	switch _, err := fcq.FirstID(ctx); {
+	case IsNotFound(err):
+		return false, nil
+	case err != nil:
+		return false, fmt.Errorf("ent: check existence: %w", err)
+	default:
+		return true, nil
 	}
-	return fcq.sqlExist(ctx)
 }
 
 // ExistX is like Exist, but panics if an error occurs.
@@ -261,22 +270,21 @@ func (fcq *FnetCategoryQuery) Clone() *FnetCategoryQuery {
 	}
 	return &FnetCategoryQuery{
 		config:        fcq.config,
-		limit:         fcq.limit,
-		offset:        fcq.offset,
-		order:         append([]OrderFunc{}, fcq.order...),
+		ctx:           fcq.ctx.Clone(),
+		order:         append([]fnetcategory.OrderOption{}, fcq.order...),
+		inters:        append([]Interceptor{}, fcq.inters...),
 		predicates:    append([]predicate.FnetCategory{}, fcq.predicates...),
 		withDocuments: fcq.withDocuments.Clone(),
 		// clone intermediate query.
-		sql:    fcq.sql.Clone(),
-		path:   fcq.path,
-		unique: fcq.unique,
+		sql:  fcq.sql.Clone(),
+		path: fcq.path,
 	}
 }
 
 // WithDocuments tells the query-builder to eager-load the nodes that are connected to
 // the "documents" edge. The optional arguments are used to configure the query builder of the edge.
 func (fcq *FnetCategoryQuery) WithDocuments(opts ...func(*FnetDocumentQuery)) *FnetCategoryQuery {
-	query := &FnetDocumentQuery{config: fcq.config}
+	query := (&FnetDocumentClient{config: fcq.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
@@ -299,16 +307,11 @@ func (fcq *FnetCategoryQuery) WithDocuments(opts ...func(*FnetDocumentQuery)) *F
 //		Aggregate(ent.Count()).
 //		Scan(ctx, &v)
 func (fcq *FnetCategoryQuery) GroupBy(field string, fields ...string) *FnetCategoryGroupBy {
-	grbuild := &FnetCategoryGroupBy{config: fcq.config}
-	grbuild.fields = append([]string{field}, fields...)
-	grbuild.path = func(ctx context.Context) (prev *sql.Selector, err error) {
-		if err := fcq.prepareQuery(ctx); err != nil {
-			return nil, err
-		}
-		return fcq.sqlQuery(ctx), nil
-	}
+	fcq.ctx.Fields = append([]string{field}, fields...)
+	grbuild := &FnetCategoryGroupBy{build: fcq}
+	grbuild.flds = &fcq.ctx.Fields
 	grbuild.label = fnetcategory.Label
-	grbuild.flds, grbuild.scan = &grbuild.fields, grbuild.Scan
+	grbuild.scan = grbuild.Scan
 	return grbuild
 }
 
@@ -325,15 +328,30 @@ func (fcq *FnetCategoryQuery) GroupBy(field string, fields ...string) *FnetCateg
 //		Select(fnetcategory.FieldName).
 //		Scan(ctx, &v)
 func (fcq *FnetCategoryQuery) Select(fields ...string) *FnetCategorySelect {
-	fcq.fields = append(fcq.fields, fields...)
-	selbuild := &FnetCategorySelect{FnetCategoryQuery: fcq}
-	selbuild.label = fnetcategory.Label
-	selbuild.flds, selbuild.scan = &fcq.fields, selbuild.Scan
-	return selbuild
+	fcq.ctx.Fields = append(fcq.ctx.Fields, fields...)
+	sbuild := &FnetCategorySelect{FnetCategoryQuery: fcq}
+	sbuild.label = fnetcategory.Label
+	sbuild.flds, sbuild.scan = &fcq.ctx.Fields, sbuild.Scan
+	return sbuild
+}
+
+// Aggregate returns a FnetCategorySelect configured with the given aggregations.
+func (fcq *FnetCategoryQuery) Aggregate(fns ...AggregateFunc) *FnetCategorySelect {
+	return fcq.Select().Aggregate(fns...)
 }
 
 func (fcq *FnetCategoryQuery) prepareQuery(ctx context.Context) error {
-	for _, f := range fcq.fields {
+	for _, inter := range fcq.inters {
+		if inter == nil {
+			return fmt.Errorf("ent: uninitialized interceptor (forgotten import ent/runtime?)")
+		}
+		if trv, ok := inter.(Traverser); ok {
+			if err := trv.Traverse(ctx, fcq); err != nil {
+				return err
+			}
+		}
+	}
+	for _, f := range fcq.ctx.Fields {
 		if !fnetcategory.ValidColumn(f) {
 			return &ValidationError{Name: f, err: fmt.Errorf("ent: invalid field %q for query", f)}
 		}
@@ -356,10 +374,10 @@ func (fcq *FnetCategoryQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([
 			fcq.withDocuments != nil,
 		}
 	)
-	_spec.ScanValues = func(columns []string) ([]interface{}, error) {
+	_spec.ScanValues = func(columns []string) ([]any, error) {
 		return (*FnetCategory).scanValues(nil, columns)
 	}
-	_spec.Assign = func(columns []string, values []interface{}) error {
+	_spec.Assign = func(columns []string, values []any) error {
 		node := &FnetCategory{config: fcq.config}
 		nodes = append(nodes, node)
 		node.Edges.loadedTypes = loadedTypes
@@ -396,7 +414,7 @@ func (fcq *FnetCategoryQuery) loadDocuments(ctx context.Context, query *FnetDocu
 	}
 	query.withFKs = true
 	query.Where(predicate.FnetDocument(func(s *sql.Selector) {
-		s.Where(sql.InValues(fnetcategory.DocumentsColumn, fks...))
+		s.Where(sql.InValues(s.C(fnetcategory.DocumentsColumn), fks...))
 	}))
 	neighbors, err := query.All(ctx)
 	if err != nil {
@@ -409,7 +427,7 @@ func (fcq *FnetCategoryQuery) loadDocuments(ctx context.Context, query *FnetDocu
 		}
 		node, ok := nodeids[*fk]
 		if !ok {
-			return fmt.Errorf(`unexpected foreign-key "category_id" returned %v for node %v`, *fk, n.ID)
+			return fmt.Errorf(`unexpected referenced foreign-key "category_id" returned %v for node %v`, *fk, n.ID)
 		}
 		assign(node, n)
 	}
@@ -418,38 +436,22 @@ func (fcq *FnetCategoryQuery) loadDocuments(ctx context.Context, query *FnetDocu
 
 func (fcq *FnetCategoryQuery) sqlCount(ctx context.Context) (int, error) {
 	_spec := fcq.querySpec()
-	_spec.Node.Columns = fcq.fields
-	if len(fcq.fields) > 0 {
-		_spec.Unique = fcq.unique != nil && *fcq.unique
+	_spec.Node.Columns = fcq.ctx.Fields
+	if len(fcq.ctx.Fields) > 0 {
+		_spec.Unique = fcq.ctx.Unique != nil && *fcq.ctx.Unique
 	}
 	return sqlgraph.CountNodes(ctx, fcq.driver, _spec)
 }
 
-func (fcq *FnetCategoryQuery) sqlExist(ctx context.Context) (bool, error) {
-	n, err := fcq.sqlCount(ctx)
-	if err != nil {
-		return false, fmt.Errorf("ent: check existence: %w", err)
-	}
-	return n > 0, nil
-}
-
 func (fcq *FnetCategoryQuery) querySpec() *sqlgraph.QuerySpec {
-	_spec := &sqlgraph.QuerySpec{
-		Node: &sqlgraph.NodeSpec{
-			Table:   fnetcategory.Table,
-			Columns: fnetcategory.Columns,
-			ID: &sqlgraph.FieldSpec{
-				Type:   field.TypeInt,
-				Column: fnetcategory.FieldID,
-			},
-		},
-		From:   fcq.sql,
-		Unique: true,
-	}
-	if unique := fcq.unique; unique != nil {
+	_spec := sqlgraph.NewQuerySpec(fnetcategory.Table, fnetcategory.Columns, sqlgraph.NewFieldSpec(fnetcategory.FieldID, field.TypeInt))
+	_spec.From = fcq.sql
+	if unique := fcq.ctx.Unique; unique != nil {
 		_spec.Unique = *unique
+	} else if fcq.path != nil {
+		_spec.Unique = true
 	}
-	if fields := fcq.fields; len(fields) > 0 {
+	if fields := fcq.ctx.Fields; len(fields) > 0 {
 		_spec.Node.Columns = make([]string, 0, len(fields))
 		_spec.Node.Columns = append(_spec.Node.Columns, fnetcategory.FieldID)
 		for i := range fields {
@@ -465,10 +467,10 @@ func (fcq *FnetCategoryQuery) querySpec() *sqlgraph.QuerySpec {
 			}
 		}
 	}
-	if limit := fcq.limit; limit != nil {
+	if limit := fcq.ctx.Limit; limit != nil {
 		_spec.Limit = *limit
 	}
-	if offset := fcq.offset; offset != nil {
+	if offset := fcq.ctx.Offset; offset != nil {
 		_spec.Offset = *offset
 	}
 	if ps := fcq.order; len(ps) > 0 {
@@ -484,7 +486,7 @@ func (fcq *FnetCategoryQuery) querySpec() *sqlgraph.QuerySpec {
 func (fcq *FnetCategoryQuery) sqlQuery(ctx context.Context) *sql.Selector {
 	builder := sql.Dialect(fcq.driver.Dialect())
 	t1 := builder.Table(fnetcategory.Table)
-	columns := fcq.fields
+	columns := fcq.ctx.Fields
 	if len(columns) == 0 {
 		columns = fnetcategory.Columns
 	}
@@ -493,7 +495,7 @@ func (fcq *FnetCategoryQuery) sqlQuery(ctx context.Context) *sql.Selector {
 		selector = fcq.sql
 		selector.Select(selector.Columns(columns...)...)
 	}
-	if fcq.unique != nil && *fcq.unique {
+	if fcq.ctx.Unique != nil && *fcq.ctx.Unique {
 		selector.Distinct()
 	}
 	for _, p := range fcq.predicates {
@@ -502,12 +504,12 @@ func (fcq *FnetCategoryQuery) sqlQuery(ctx context.Context) *sql.Selector {
 	for _, p := range fcq.order {
 		p(selector)
 	}
-	if offset := fcq.offset; offset != nil {
+	if offset := fcq.ctx.Offset; offset != nil {
 		// limit is mandatory for offset clause. We start
 		// with default value, and override it below if needed.
 		selector.Offset(*offset).Limit(math.MaxInt32)
 	}
-	if limit := fcq.limit; limit != nil {
+	if limit := fcq.ctx.Limit; limit != nil {
 		selector.Limit(*limit)
 	}
 	return selector
@@ -515,13 +517,8 @@ func (fcq *FnetCategoryQuery) sqlQuery(ctx context.Context) *sql.Selector {
 
 // FnetCategoryGroupBy is the group-by builder for FnetCategory entities.
 type FnetCategoryGroupBy struct {
-	config
 	selector
-	fields []string
-	fns    []AggregateFunc
-	// intermediate query (i.e. traversal path).
-	sql  *sql.Selector
-	path func(context.Context) (*sql.Selector, error)
+	build *FnetCategoryQuery
 }
 
 // Aggregate adds the given aggregation functions to the group-by query.
@@ -530,74 +527,77 @@ func (fcgb *FnetCategoryGroupBy) Aggregate(fns ...AggregateFunc) *FnetCategoryGr
 	return fcgb
 }
 
-// Scan applies the group-by query and scans the result into the given value.
-func (fcgb *FnetCategoryGroupBy) Scan(ctx context.Context, v interface{}) error {
-	query, err := fcgb.path(ctx)
-	if err != nil {
+// Scan applies the selector query and scans the result into the given value.
+func (fcgb *FnetCategoryGroupBy) Scan(ctx context.Context, v any) error {
+	ctx = setContextOp(ctx, fcgb.build.ctx, "GroupBy")
+	if err := fcgb.build.prepareQuery(ctx); err != nil {
 		return err
 	}
-	fcgb.sql = query
-	return fcgb.sqlScan(ctx, v)
+	return scanWithInterceptors[*FnetCategoryQuery, *FnetCategoryGroupBy](ctx, fcgb.build, fcgb, fcgb.build.inters, v)
 }
 
-func (fcgb *FnetCategoryGroupBy) sqlScan(ctx context.Context, v interface{}) error {
-	for _, f := range fcgb.fields {
-		if !fnetcategory.ValidColumn(f) {
-			return &ValidationError{Name: f, err: fmt.Errorf("invalid field %q for group-by", f)}
-		}
+func (fcgb *FnetCategoryGroupBy) sqlScan(ctx context.Context, root *FnetCategoryQuery, v any) error {
+	selector := root.sqlQuery(ctx).Select()
+	aggregation := make([]string, 0, len(fcgb.fns))
+	for _, fn := range fcgb.fns {
+		aggregation = append(aggregation, fn(selector))
 	}
-	selector := fcgb.sqlQuery()
+	if len(selector.SelectedColumns()) == 0 {
+		columns := make([]string, 0, len(*fcgb.flds)+len(fcgb.fns))
+		for _, f := range *fcgb.flds {
+			columns = append(columns, selector.C(f))
+		}
+		columns = append(columns, aggregation...)
+		selector.Select(columns...)
+	}
+	selector.GroupBy(selector.Columns(*fcgb.flds...)...)
 	if err := selector.Err(); err != nil {
 		return err
 	}
 	rows := &sql.Rows{}
 	query, args := selector.Query()
-	if err := fcgb.driver.Query(ctx, query, args, rows); err != nil {
+	if err := fcgb.build.driver.Query(ctx, query, args, rows); err != nil {
 		return err
 	}
 	defer rows.Close()
 	return sql.ScanSlice(rows, v)
 }
 
-func (fcgb *FnetCategoryGroupBy) sqlQuery() *sql.Selector {
-	selector := fcgb.sql.Select()
-	aggregation := make([]string, 0, len(fcgb.fns))
-	for _, fn := range fcgb.fns {
-		aggregation = append(aggregation, fn(selector))
-	}
-	// If no columns were selected in a custom aggregation function, the default
-	// selection is the fields used for "group-by", and the aggregation functions.
-	if len(selector.SelectedColumns()) == 0 {
-		columns := make([]string, 0, len(fcgb.fields)+len(fcgb.fns))
-		for _, f := range fcgb.fields {
-			columns = append(columns, selector.C(f))
-		}
-		columns = append(columns, aggregation...)
-		selector.Select(columns...)
-	}
-	return selector.GroupBy(selector.Columns(fcgb.fields...)...)
-}
-
 // FnetCategorySelect is the builder for selecting fields of FnetCategory entities.
 type FnetCategorySelect struct {
 	*FnetCategoryQuery
 	selector
-	// intermediate query (i.e. traversal path).
-	sql *sql.Selector
+}
+
+// Aggregate adds the given aggregation functions to the selector query.
+func (fcs *FnetCategorySelect) Aggregate(fns ...AggregateFunc) *FnetCategorySelect {
+	fcs.fns = append(fcs.fns, fns...)
+	return fcs
 }
 
 // Scan applies the selector query and scans the result into the given value.
-func (fcs *FnetCategorySelect) Scan(ctx context.Context, v interface{}) error {
+func (fcs *FnetCategorySelect) Scan(ctx context.Context, v any) error {
+	ctx = setContextOp(ctx, fcs.ctx, "Select")
 	if err := fcs.prepareQuery(ctx); err != nil {
 		return err
 	}
-	fcs.sql = fcs.FnetCategoryQuery.sqlQuery(ctx)
-	return fcs.sqlScan(ctx, v)
+	return scanWithInterceptors[*FnetCategoryQuery, *FnetCategorySelect](ctx, fcs.FnetCategoryQuery, fcs, fcs.inters, v)
 }
 
-func (fcs *FnetCategorySelect) sqlScan(ctx context.Context, v interface{}) error {
+func (fcs *FnetCategorySelect) sqlScan(ctx context.Context, root *FnetCategoryQuery, v any) error {
+	selector := root.sqlQuery(ctx)
+	aggregation := make([]string, 0, len(fcs.fns))
+	for _, fn := range fcs.fns {
+		aggregation = append(aggregation, fn(selector))
+	}
+	switch n := len(*fcs.selector.flds); {
+	case n == 0 && len(aggregation) > 0:
+		selector.Select(aggregation...)
+	case n != 0 && len(aggregation) > 0:
+		selector.AppendSelect(aggregation...)
+	}
 	rows := &sql.Rows{}
-	query, args := fcs.sql.Query()
+	query, args := selector.Query()
 	if err := fcs.driver.Query(ctx, query, args, rows); err != nil {
 		return err
 	}

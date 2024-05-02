@@ -50,49 +50,7 @@ func (fcc *FnetCategoryCreate) Mutation() *FnetCategoryMutation {
 
 // Save creates the FnetCategory in the database.
 func (fcc *FnetCategoryCreate) Save(ctx context.Context) (*FnetCategory, error) {
-	var (
-		err  error
-		node *FnetCategory
-	)
-	if len(fcc.hooks) == 0 {
-		if err = fcc.check(); err != nil {
-			return nil, err
-		}
-		node, err = fcc.sqlSave(ctx)
-	} else {
-		var mut Mutator = MutateFunc(func(ctx context.Context, m Mutation) (Value, error) {
-			mutation, ok := m.(*FnetCategoryMutation)
-			if !ok {
-				return nil, fmt.Errorf("unexpected mutation type %T", m)
-			}
-			if err = fcc.check(); err != nil {
-				return nil, err
-			}
-			fcc.mutation = mutation
-			if node, err = fcc.sqlSave(ctx); err != nil {
-				return nil, err
-			}
-			mutation.id = &node.ID
-			mutation.done = true
-			return node, err
-		})
-		for i := len(fcc.hooks) - 1; i >= 0; i-- {
-			if fcc.hooks[i] == nil {
-				return nil, fmt.Errorf("ent: uninitialized hook (forgotten import ent/runtime?)")
-			}
-			mut = fcc.hooks[i](mut)
-		}
-		v, err := mut.Mutate(ctx, fcc.mutation)
-		if err != nil {
-			return nil, err
-		}
-		nv, ok := v.(*FnetCategory)
-		if !ok {
-			return nil, fmt.Errorf("unexpected node type %T returned from FnetCategoryMutation", v)
-		}
-		node = nv
-	}
-	return node, err
+	return withHooks(ctx, fcc.sqlSave, fcc.mutation, fcc.hooks)
 }
 
 // SaveX calls Save and panics if Save returns an error.
@@ -126,6 +84,9 @@ func (fcc *FnetCategoryCreate) check() error {
 }
 
 func (fcc *FnetCategoryCreate) sqlSave(ctx context.Context) (*FnetCategory, error) {
+	if err := fcc.check(); err != nil {
+		return nil, err
+	}
 	_node, _spec := fcc.createSpec()
 	if err := sqlgraph.CreateNode(ctx, fcc.driver, _spec); err != nil {
 		if sqlgraph.IsConstraintError(err) {
@@ -135,27 +96,19 @@ func (fcc *FnetCategoryCreate) sqlSave(ctx context.Context) (*FnetCategory, erro
 	}
 	id := _spec.ID.Value.(int64)
 	_node.ID = int(id)
+	fcc.mutation.id = &_node.ID
+	fcc.mutation.done = true
 	return _node, nil
 }
 
 func (fcc *FnetCategoryCreate) createSpec() (*FnetCategory, *sqlgraph.CreateSpec) {
 	var (
 		_node = &FnetCategory{config: fcc.config}
-		_spec = &sqlgraph.CreateSpec{
-			Table: fnetcategory.Table,
-			ID: &sqlgraph.FieldSpec{
-				Type:   field.TypeInt,
-				Column: fnetcategory.FieldID,
-			},
-		}
+		_spec = sqlgraph.NewCreateSpec(fnetcategory.Table, sqlgraph.NewFieldSpec(fnetcategory.FieldID, field.TypeInt))
 	)
 	_spec.OnConflict = fcc.conflict
 	if value, ok := fcc.mutation.Name(); ok {
-		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
-			Type:   field.TypeString,
-			Value:  value,
-			Column: fnetcategory.FieldName,
-		})
+		_spec.SetField(fnetcategory.FieldName, field.TypeString, value)
 		_node.Name = value
 	}
 	if nodes := fcc.mutation.DocumentsIDs(); len(nodes) > 0 {
@@ -166,10 +119,7 @@ func (fcc *FnetCategoryCreate) createSpec() (*FnetCategory, *sqlgraph.CreateSpec
 			Columns: []string{fnetcategory.DocumentsColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: &sqlgraph.FieldSpec{
-					Type:   field.TypeInt,
-					Column: fnetdocument.FieldID,
-				},
+				IDSpec: sqlgraph.NewFieldSpec(fnetdocument.FieldID, field.TypeInt),
 			},
 		}
 		for _, k := range nodes {
@@ -229,18 +179,6 @@ type (
 	}
 )
 
-// SetName sets the "name" field.
-func (u *FnetCategoryUpsert) SetName(v string) *FnetCategoryUpsert {
-	u.Set(fnetcategory.FieldName, v)
-	return u
-}
-
-// UpdateName sets the "name" field to the value that was provided on create.
-func (u *FnetCategoryUpsert) UpdateName() *FnetCategoryUpsert {
-	u.SetExcluded(fnetcategory.FieldName)
-	return u
-}
-
 // UpdateNewValues updates the mutable fields using the new values that were set on create.
 // Using this option is equivalent to using:
 //
@@ -286,20 +224,6 @@ func (u *FnetCategoryUpsertOne) Update(set func(*FnetCategoryUpsert)) *FnetCateg
 	return u
 }
 
-// SetName sets the "name" field.
-func (u *FnetCategoryUpsertOne) SetName(v string) *FnetCategoryUpsertOne {
-	return u.Update(func(s *FnetCategoryUpsert) {
-		s.SetName(v)
-	})
-}
-
-// UpdateName sets the "name" field to the value that was provided on create.
-func (u *FnetCategoryUpsertOne) UpdateName() *FnetCategoryUpsertOne {
-	return u.Update(func(s *FnetCategoryUpsert) {
-		s.UpdateName()
-	})
-}
-
 // Exec executes the query.
 func (u *FnetCategoryUpsertOne) Exec(ctx context.Context) error {
 	if len(u.create.conflict) == 0 {
@@ -336,12 +260,16 @@ func (u *FnetCategoryUpsertOne) IDX(ctx context.Context) int {
 // FnetCategoryCreateBulk is the builder for creating many FnetCategory entities in bulk.
 type FnetCategoryCreateBulk struct {
 	config
+	err      error
 	builders []*FnetCategoryCreate
 	conflict []sql.ConflictOption
 }
 
 // Save creates the FnetCategory entities in the database.
 func (fccb *FnetCategoryCreateBulk) Save(ctx context.Context) ([]*FnetCategory, error) {
+	if fccb.err != nil {
+		return nil, fccb.err
+	}
 	specs := make([]*sqlgraph.CreateSpec, len(fccb.builders))
 	nodes := make([]*FnetCategory, len(fccb.builders))
 	mutators := make([]Mutator, len(fccb.builders))
@@ -357,8 +285,8 @@ func (fccb *FnetCategoryCreateBulk) Save(ctx context.Context) ([]*FnetCategory, 
 					return nil, err
 				}
 				builder.mutation = mutation
-				nodes[i], specs[i] = builder.createSpec()
 				var err error
+				nodes[i], specs[i] = builder.createSpec()
 				if i < len(mutators)-1 {
 					_, err = mutators[i+1].Mutate(root, fccb.builders[i+1].mutation)
 				} else {
@@ -506,22 +434,11 @@ func (u *FnetCategoryUpsertBulk) Update(set func(*FnetCategoryUpsert)) *FnetCate
 	return u
 }
 
-// SetName sets the "name" field.
-func (u *FnetCategoryUpsertBulk) SetName(v string) *FnetCategoryUpsertBulk {
-	return u.Update(func(s *FnetCategoryUpsert) {
-		s.SetName(v)
-	})
-}
-
-// UpdateName sets the "name" field to the value that was provided on create.
-func (u *FnetCategoryUpsertBulk) UpdateName() *FnetCategoryUpsertBulk {
-	return u.Update(func(s *FnetCategoryUpsert) {
-		s.UpdateName()
-	})
-}
-
 // Exec executes the query.
 func (u *FnetCategoryUpsertBulk) Exec(ctx context.Context) error {
+	if u.create.err != nil {
+		return u.create.err
+	}
 	for i, b := range u.create.builders {
 		if len(b.conflict) != 0 {
 			return fmt.Errorf("ent: OnConflict was set for builder %d. Set it on the FnetCategoryCreateBulk instead", i)
